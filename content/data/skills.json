@@ -1,0 +1,20 @@
+{
+  "_description": "Skills Data Structure - Technical skills organized by categories with proficiency levels, experience, and descriptions",
+  "_structure": "Categories contain skills with: name, level (0-100), experience, description, icon, certifications",
+  "_categories": "Frontend Development, Backend Development, Databases, DevOps & Tools, Design & UI/UX",
+  "categories": [
+    {
+      "name": "Frontend Development",
+      "skills": [
+        {
+          "name": "Vue.js",
+          "level": 90,
+          "experience": "3+ years",
+          "description": "Advanced knowledge in Vue 3, Composition API, and ecosystem",
+          "icon": "vue-logo.svg",
+          "certifications": []
+        }
+      ]
+    }
+  ]
+}
