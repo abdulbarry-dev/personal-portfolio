@@ -1,12 +1,7 @@
 <template>
-  <div class="m-0 p-0">
-    <home-view />
-    <app-footer />
-  </div>
+  <HomeView />
 </template>
 
 <script setup>
-
-
+// No need to define layout if using default
 </script>
-

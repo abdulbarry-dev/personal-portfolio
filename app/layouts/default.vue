@@ -1,11 +1,25 @@
 <template>
-    <div>
-        <h1 class="text-4xl font-bold">Error</h1>
-        <p class="mt-4">An unexpected error has occurred. Please try again later.</p>
-    </div>
+  <div class="min-h-screen flex flex-col">
+    <!-- Persistent Navbar -->
+    <NavBar />
+    
+    <!-- Main Content Area - This changes based on route -->
+    <main class="flex-1">
+      <slot />
+    </main>
+    
+    <!-- Persistent Notification Section -->
+    <Notification />
+    
+    <!-- Persistent Footer -->
+    <AppFooter />
+  </div>
 </template>
+
 <script setup>
- defineOptions({
-     name: 'DefaultLayout'
- });
+// Components are auto-imported by Nuxt
 </script>
+
+<style scoped>
+/* Layout-specific styles if needed */
+    </style>
