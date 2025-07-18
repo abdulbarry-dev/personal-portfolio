@@ -32,3 +32,9 @@
 // - SEO meta tags for article
 // - Related posts logic
 </script>
+
+<script>
+export default {
+  name: 'BlogPostSlug'
+}
+</script>

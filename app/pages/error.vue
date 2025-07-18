@@ -6,4 +6,5 @@
 </template>
 
 <script setup>
+defineOptions({ name: 'ErrorPage' })
 </script>

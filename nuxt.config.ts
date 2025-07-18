@@ -2,5 +2,16 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxtjs/tailwindcss']
+  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxtjs/tailwindcss'],
+  
+  // Ensure components are auto-imported
+  components: [
+    {
+      path: '~/components',
+      pathPrefix: false,
+    },
+  ],
+  
+  // Enable CSS processing
+  css: ['~/assets/css/main.css'],
 })
