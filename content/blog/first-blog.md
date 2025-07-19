@@ -1,23 +1,22 @@
 ---
 title: "My First Blog Post"
 description: "A brief description of the post"
-date: "2025-07-17"
+publishedAt: "2025-07-17"  # Change from 'date' to 'publishedAt'
 tags: ["web-development", "nuxt", "vue"]
-author: "Your Name"
+author: "Abdulbarry"  # Update the author name
 image: "/images/blog/post-1-cover.jpg"
+featured: false  # Add this for featured posts
 draft: false
 ---
 
 # Your Blog Post Title
 
-Your blog content goes here in markdown format...
+Your blog content here...
 
-## Sections
-- You can use markdown
-- Add code blocks
-- Include images
-- Create lists
+## Section 1
 
 ```javascript
-// Code examples
 console.log("Hello World");
+```
+
+More content here...
