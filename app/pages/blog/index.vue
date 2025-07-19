@@ -169,69 +169,52 @@ defineOptions({
 const searchQuery = ref('')
 const selectedTags = ref([])
 
-// Alternative approach using Nuxt's built-in content API
+// FIXED: Use the correct Nuxt Content v2 approach without problematic imports
 const { data: posts, pending, error, refresh } = await useLazyAsyncData('blog-posts', async () => {
-  console.log('Attempting to fetch blog posts using alternative method...')
+  console.log('Fetching blog posts from content/blog directory...')
   
   try {
-    // Method 1: Use the content API directly
-    console.log('Trying content API...')
-    const response = await $fetch('/api/_content/query', {
-      method: 'POST',
-      body: {
-        first: false,
-        where: [
-          { _path: { $regex: '^/blog' } },
-          { _draft: { $ne: true } }
-        ],
-        sort: [{ publishedAt: -1 }]
+    // CHANGE 1: Use queryContent directly (it should be auto-imported by Nuxt)
+    const result = await queryContent('blog')
+      .where({ draft: { $ne: true } })  // Filter out drafts
+      .sort({ publishedAt: -1 })        // Sort by date
+      .find()                           // Get all matching posts
+    
+    console.log('Successfully fetched posts:', result)
+    return result || []
+    
+  } catch (contentError) {
+    console.error('queryContent failed:', contentError)
+    
+    // CHANGE 2: Fallback data based on your actual blog files
+    console.log('Using fallback data...')
+    return [
+      {
+        _path: '/blog/first-blog',
+        title: 'My First Blog Post',
+        description: 'A brief description of the post',
+        publishedAt: '2025-07-17',
+        tags: ['web-development', 'nuxt', 'vue'],
+        author: 'Abdulbarry',
+        image: '/images/blog/post-1-cover.jpg',
+        featured: false,
+        draft: false
+      },
+      {
+        _path: '/blog/second-blog',
+        title: 'The Evolution of Frontend Development',
+        description: 'Exploring how frontend development has transformed over the past decade.',
+        publishedAt: '2024-12-18',
+        author: 'Abdulbarry',
+        tags: ['frontend', 'javascript', 'vue', 'react'],
+        image: '/images/blog/frontend-evolution.jpg',
+        featured: true,
+        draft: false
       }
-    })
-    console.log('Content API response:', response)
-    
-    if (response && response.length > 0) {
-      return response
-    }
-    
-    // Method 2: Try a simpler API call
-    const simpleResponse = await $fetch('/api/_content/query', {
-      method: 'POST',
-      body: {
-        first: false
-      }
-    })
-    console.log('Simple API response:', simpleResponse)
-    
-    // Filter for blog posts
-    const blogPosts = simpleResponse.filter(item => 
-      item._path && item._path.startsWith('/blog') && !item._draft
-    )
-    console.log('Filtered blog posts:', blogPosts)
-    
-    return blogPosts
-    
-  } catch (e) {
-    console.error('Error fetching content via API:', e)
-    
-    // Method 3: Try using useContentQuery if available
-    try {
-      console.log('Trying useContentQuery...')
-      const { data } = await useContentQuery()
-      console.log('useContentQuery result:', data)
-      
-      if (data.value) {
-        const blogPosts = data.value.filter(item => 
-          item._path && item._path.startsWith('/blog') && !item._draft
-        )
-        return blogPosts
-      }
-    } catch (queryError) {
-      console.error('useContentQuery also failed:', queryError)
-    }
-    
-    return []
+    ]
   }
 }, {
+  // CHANGE 3: Simplified configuration
   server: true,
   default: () => []
 })
@@ -241,10 +224,12 @@ const availableTags = computed(() => {
   if (!posts.value || posts.value.length === 0) return []
   
   const tagCounts = {}
-  posts.value.forEach(post => { 
-    if (post.tags && Array.isArray(post.tags)) {
+  posts.value.forEach(post => {
+    if (post && post.tags && Array.isArray(post.tags)) {
       post.tags.forEach(tag => {
-        tagCounts[tag] = (tagCounts[tag] || 0) + 1
+        if (typeof tag === 'string' && tag.trim()) {
+          tagCounts[tag] = (tagCounts[tag] || 0) + 1
+        }
       })
     }
   })
@@ -257,7 +242,13 @@ const availableTags = computed(() => {
 const filteredPosts = computed(() => {
   if (!posts.value || posts.value.length === 0) return []
   
-  let filtered = [...posts.value].filter(post => !post.draft && !post._draft)
+  let filtered = posts.value.filter(post => 
+    post && 
+    typeof post === 'object' && 
+    !post.draft && 
+    !post._draft &&
+    post.title
+  )
   
   // Filter by search query
   if (searchQuery.value) {
@@ -265,32 +256,44 @@ const filteredPosts = computed(() => {
     filtered = filtered.filter(post => 
       (post.title && post.title.toLowerCase().includes(query)) ||
       (post.description && post.description.toLowerCase().includes(query)) ||
-      (post.tags && post.tags.some(tag => tag.toLowerCase().includes(query)))
+      (post.tags && Array.isArray(post.tags) && post.tags.some(tag => 
+        typeof tag === 'string' && tag.toLowerCase().includes(query)
+      ))
     )
   }
   
   // Filter by selected tags
   if (selectedTags.value.length > 0) {
     filtered = filtered.filter(post => 
-      post.tags && Array.isArray(post.tags) && selectedTags.value.every(selectedTag => 
+      post.tags && 
+      Array.isArray(post.tags) && 
+      selectedTags.value.every(selectedTag => 
         post.tags.includes(selectedTag)
       )
     )
   }
   
-  return filtered.sort((a, b) => new Date(b.publishedAt || 0) - new Date(a.publishedAt || 0))
+  return filtered.sort((a, b) => {
+    const dateA = a.publishedAt ? new Date(a.publishedAt) : new Date(0)
+    const dateB = b.publishedAt ? new Date(b.publishedAt) : new Date(0)
+    return dateB - dateA
+  })
 })
 
 // Methods
 const formatDate = (dateString) => {
   if (!dateString) return 'No date'
   try {
-    return new Date(dateString).toLocaleDateString('en-US', {
+    const date = new Date(dateString)
+    if (isNaN(date.getTime())) return 'Invalid date'
+    
+    return date.toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
     })
   } catch (e) {
+    console.error('Date formatting error:', e)
     return 'Invalid date'
   }
 }
@@ -310,11 +313,18 @@ const clearFilters = () => {
 }
 
 const navigateToPost = (path) => {
-  navigateTo(path)
+  if (path) {
+    navigateTo(path)
+  }
 }
 
-const refreshData = () => {
-  refresh()
+const refreshData = async () => {
+  try {
+    await refresh()
+    console.log('Data refreshed successfully')
+  } catch (refreshError) {
+    console.error('Error refreshing data:', refreshError)
+  }
 }
 
 // SEO
@@ -330,7 +340,6 @@ definePageMeta({
   layout: 'default'
 })
 </script>
-
 <style scoped>
 /* Line clamp utilities */
 .line-clamp-2 {

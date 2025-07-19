@@ -4,6 +4,19 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['@nuxt/content', '@nuxt/eslint', '@nuxtjs/tailwindcss', '@nuxt/icon'],
 
+  // IMPORTANT: Content module configuration
+  content: {
+    // Highlight configuration for code blocks
+    highlight: {
+      theme: 'github-dark',
+      preload: ['json', 'js', 'ts', 'html', 'css', 'vue', 'diff', 'shell', 'markdown', 'yaml', 'bash', 'ini']
+    },
+    // Markdown configuration
+    markdown: {
+      anchorLinks: false
+    }
+  },
+  
   // Auto-import configuration
   imports: {
     autoImport: true
