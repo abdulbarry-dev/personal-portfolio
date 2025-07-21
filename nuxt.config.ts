@@ -2,21 +2,13 @@
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
-  modules: ['@nuxt/content', '@nuxt/eslint', '@nuxtjs/tailwindcss', '@nuxt/icon'],
+  modules: ['@nuxt/eslint','@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/icon'],
 
-  // IMPORTANT: Content module configuration
-  content: {
-    // Highlight configuration for code blocks
-    highlight: {
-      theme: 'github-dark',
-      preload: ['json', 'js', 'ts', 'html', 'css', 'vue', 'diff', 'shell', 'markdown', 'yaml', 'bash', 'ini']
-    },
-    // Markdown configuration
-    markdown: {
-      anchorLinks: false
+  eslint: {
+    config: {
+      stylistic: true // <---
     }
-  },
-  
+  },  
   // Auto-import configuration
   imports: {
     autoImport: true
