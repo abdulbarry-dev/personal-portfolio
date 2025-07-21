@@ -1,9 +1,10 @@
 ---
 title: "Building a Personal Portfolio with Modern Web Technologies"
-description: "Learn how to create an impressive personal portfolio using modern web technologies like Nuxt.js, TailwindCSS, and TypeScript."
+description: "Learn how to create an impressive personal portfolio using modern web technologies like Nuxt.js, TailwindCSS, and TypeScript"
 date: "2025-01-20"
 tags: ["portfolio", "nuxt", "tailwindcss", "typescript", "design"]
 author: "Your Name"
+cover: "/images/backgrounds/profile-picture.jpeg"
 ---
 
 # Building a Personal Portfolio with Modern Web Technologies
