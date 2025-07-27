@@ -9,7 +9,9 @@ export default defineNuxtConfig({
     }
   },
   
+  // GitHub Pages configuration
   app: {
+    baseURL: '/',
     head: {
       title: 'Abdulbarry - Frontend Developer',
       meta: [
@@ -21,25 +23,15 @@ export default defineNuxtConfig({
   },
   
   modules: [
-    '@nuxtjs/tailwindcss',
     '@nuxtjs/sitemap',
     '@nuxt/eslint', 
     '@nuxt/content', 
+    '@nuxtjs/tailwindcss', 
     '@nuxt/icon', 
     '@nuxtjs/seo'
   ],
   
-  // Tailwind CSS configuration
-  tailwindcss: {
-    cssPath: '~/assets/css/main.css',
-    configPath: 'tailwind.config.js',
-    exposeConfig: false,
-    injectPosition: 0,
-    viewer: true,
-  },
-  
-  css: ['~/assets/css/main.css'],
-  
+  // Content module configuration
   content: {
     highlight: {
       theme: 'github-light'
@@ -50,8 +42,8 @@ export default defineNuxtConfig({
   },
   
   site: {  
-    url: 'https://abdulbarry.me',
-    name: 'Abdulbarry Portfolio',
+    url: process.env.NUXT_SITE_URL,
+    name: process.env.NUXT_SITE_NAME,
   },
   
   imports: {
@@ -63,5 +55,7 @@ export default defineNuxtConfig({
       path: '~/components',
       pathPrefix: false,
     },
-  ]
+  ],
+  
+  css: ['~/assets/css/main.css']
 })
