@@ -33,7 +33,7 @@ jobs:
       - name: Generate static site
         run: npm run generate
         env:
-          NUXT_SITE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+          NUXT_SITE_URL: https://abdulbarry.me
           NUXT_SITE_NAME: "Abdulbarry Portfolio"
 
       - name: Upload artifact

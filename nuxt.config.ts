@@ -10,9 +10,8 @@ export default defineNuxtConfig({
     }
   },
   
-  // GitHub Pages configuration
+  // Custom domain configuration (no baseURL needed)
   app: {
-    baseURL: process.env.NODE_ENV === 'production' ? '/personal-portfolio/' : '/',
     head: {
       title: 'Abdulbarry - Frontend Developer',
       meta: [
@@ -32,6 +31,9 @@ export default defineNuxtConfig({
     '@nuxtjs/seo'
   ],
   
+  // Tailwind CSS configuration
+  css: ['~/assets/css/main.css'],
+  
   // Content module configuration
   content: {
     highlight: {
@@ -44,8 +46,8 @@ export default defineNuxtConfig({
   },
   
   site: {  
-    url: process.env.NUXT_SITE_URL || 'https://yourusername.github.io/personal-portfolio',
-    name: process.env.NUXT_SITE_NAME || 'Abdulbarry Portfolio',
+    url: 'http://abdulbarry.me',
+    name: 'Abdulbarry Portfolio',
   },
   
   imports: {
@@ -57,7 +59,5 @@ export default defineNuxtConfig({
       path: '~/components',
       pathPrefix: false,
     },
-  ],
-  
-  css: ['~/assets/css/main.css']
+  ]
 })
