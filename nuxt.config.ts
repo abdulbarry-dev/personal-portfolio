@@ -9,7 +9,6 @@ export default defineNuxtConfig({
     }
   },
   
-  // GitHub Pages configuration
   app: {
     baseURL: '/',
     head: {
@@ -23,13 +22,21 @@ export default defineNuxtConfig({
   },
   
   modules: [
-    '@nuxtjs/sitemap',
-    '@nuxt/eslint', 
+    '@nuxtjs/tailwindcss',
     '@nuxt/content', 
-    '@nuxtjs/tailwindcss', 
     '@nuxt/icon', 
-    '@nuxtjs/seo'
+    '@nuxtjs/seo',
+    '@nuxtjs/sitemap',
+    '@nuxt/eslint'
   ],
+  
+  // Explicit Tailwind configuration
+  tailwindcss: {
+    cssPath: '~/assets/css/main.css',
+    configPath: 'tailwind.config.js'
+  },
+  
+  css: ['~/assets/css/main.css'],
   
   // Content module configuration
   content: {
@@ -42,8 +49,8 @@ export default defineNuxtConfig({
   },
   
   site: {  
-    url: process.env.NUXT_SITE_URL,
-    name: process.env.NUXT_SITE_NAME,
+    url: 'https://abdulbarry.me',
+    name: 'Abdulbarry Portfolio',
   },
   
   imports: {
@@ -55,7 +62,5 @@ export default defineNuxtConfig({
       path: '~/components',
       pathPrefix: false,
     },
-  ],
-  
-  css: ['~/assets/css/main.css']
+  ]
 })
