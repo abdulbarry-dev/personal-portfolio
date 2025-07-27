@@ -1,8 +1,4 @@
 <template>
-  
-    <!-- Header Section -->
-    
-
     <!-- Contact Form -->
     <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
       <form class="space-y-6" @submit.prevent="handleSubmit">

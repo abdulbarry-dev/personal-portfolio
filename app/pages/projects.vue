@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white border-t border-gray-200">
+  <div class="bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
       <!-- Page Header -->
       <div class="text-center mb-16">
@@ -11,12 +11,66 @@
         </p>
       </div>
 
-      <!-- Projects Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <!-- Loading State -->
+      <div v-if="pending" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
         <div
-          v-for="repo in repos"
+          v-for="n in 6"
+          :key="n"
+          class="bg-white border border-gray-200 rounded-xl p-6 animate-pulse"
+        >
+          <!-- Header Skeleton -->
+          <div class="flex items-start justify-between mb-4">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 bg-gray-200 rounded-lg"></div>
+              <div class="space-y-2">
+                <div class="h-5 bg-gray-200 rounded w-32"></div>
+              </div>
+            </div>
+            <div class="w-6 h-6 bg-gray-200 rounded"></div>
+          </div>
+          
+          <!-- Description Skeleton -->
+          <div class="space-y-2 mb-6">
+            <div class="h-4 bg-gray-200 rounded w-full"></div>
+            <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+          </div>
+          
+          <!-- Stats Skeleton -->
+          <div class="flex items-center space-x-4">
+            <div class="flex items-center space-x-1">
+              <div class="w-3 h-3 bg-gray-200 rounded-full"></div>
+              <div class="h-4 bg-gray-200 rounded w-16"></div>
+            </div>
+            <div class="flex items-center space-x-1">
+              <div class="w-4 h-4 bg-gray-200 rounded"></div>
+              <div class="h-4 bg-gray-200 rounded w-8"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div v-else-if="error" class="text-center py-16">
+        <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-red-300 mx-auto mb-4" />
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">Failed to load projects</h3>
+        <p class="text-gray-600 mb-4">{{ error.message || 'Something went wrong while fetching projects.' }}</p>
+        <button 
+          @click="refresh()" 
+          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+        >
+          <Icon name="heroicons:arrow-path" class="w-4 h-4 mr-2" />
+          Try Again
+        </button>
+      </div>
+
+      <!-- Projects Grid -->
+      <div v-else-if="data && data.length > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div
+          v-for="(repo, index) in data"
           :key="repo.id"
-          class="group bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300 hover:-translate-y-1"
+          class="group bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300 hover:-translate-y-1 opacity-0 animate-fade-in"
+          :style="{ animationDelay: `${index * 100}ms` }"
         >
           <!-- Project Icon & Title -->
           <div class="flex items-start justify-between mb-4">
@@ -78,13 +132,11 @@
               </div>
             </div>
           </div>
-
-          
         </div>
       </div>
 
-      <!-- Loading State -->
-      <div v-if="!repos || repos.length === 0" class="text-center py-16">
+      <!-- Empty State -->
+      <div v-else class="text-center py-16">
         <Icon name="heroicons:cube-transparent" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
         <h3 class="text-lg font-semibold text-gray-900 mb-2">No projects found</h3>
         <p class="text-gray-600">Check back later for new projects!</p>
@@ -94,9 +146,26 @@
 </template>
 
 <script setup>
-// Fetch GitHub repositories
-const repos = await useGithubRepos()
-console.log('Fetched Repositories:', repos)
+// Async data fetching with Nuxt 4 features
+const { data, pending, error, refresh } = await useLazyAsyncData('github-repos', async () => {
+  const userName = 'abdulbarry-dev'
+  const reposApiUrl = `https://api.github.com/users/${userName}/repos`
+  
+  try {
+    const response = await $fetch(reposApiUrl, {
+      params: {
+        sort: 'updated',
+        per_page: 12,
+      }
+    })
+    return response
+  } catch (err) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Failed to fetch GitHub repositories'
+    })
+  }
+})
 
 // Function to get language-specific colors
 const getLanguageColor = (language) => {
@@ -140,6 +209,36 @@ useSeoMeta({
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* Fade in animation for project cards */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out forwards;
+}
+
+/* Pulse animation for loading skeletons */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
 /* Smooth transitions for all interactive elements */

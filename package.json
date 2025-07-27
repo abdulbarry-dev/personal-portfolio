@@ -9,13 +9,14 @@
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "deploy": "npm run generate && gh-pages -d .output/public"
   },
   "dependencies": {
-    "@heroicons/vue": "^2.2.0",
     "@nuxt/content": "^3.6.3",
     "@nuxt/icon": "^1.15.0",
     "@nuxtjs/seo": "^3.1.0",
+    "@nuxtjs/sitemap": "^7.4.3",
     "@supabase/supabase-js": "^2.52.0",
     "better-sqlite3": "^12.2.0",
     "nuxt": "^4.0.0",
@@ -26,6 +27,7 @@
     "@nuxt/eslint": "^1.6.0",
     "@nuxtjs/tailwindcss": "npm:@nuxtjs/tailwindcss@nightly",
     "eslint": "^9.31.0",
+    "markdown-it": "^14.1.0",
     "typescript": "^5.8.3"
   }
 }
