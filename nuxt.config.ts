@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
@@ -10,7 +9,6 @@ export default defineNuxtConfig({
     }
   },
   
-  // Custom domain configuration (no baseURL needed)
   app: {
     head: {
       title: 'Abdulbarry - Frontend Developer',
@@ -23,30 +21,36 @@ export default defineNuxtConfig({
   },
   
   modules: [
+    '@nuxtjs/tailwindcss',
     '@nuxtjs/sitemap',
     '@nuxt/eslint', 
     '@nuxt/content', 
-    '@nuxtjs/tailwindcss', 
     '@nuxt/icon', 
     '@nuxtjs/seo'
   ],
   
   // Tailwind CSS configuration
+  tailwindcss: {
+    cssPath: '~/assets/css/main.css',
+    configPath: 'tailwind.config.js',
+    exposeConfig: false,
+    injectPosition: 0,
+    viewer: true,
+  },
+  
   css: ['~/assets/css/main.css'],
   
-  // Content module configuration
   content: {
     highlight: {
       theme: 'github-light'
     },
     markdown: {
-      // Ensure safe rendering
       sanitize: true
     }
   },
   
   site: {  
-    url: 'http://abdulbarry.me',
+    url: 'https://abdulbarry.me',
     name: 'Abdulbarry Portfolio',
   },
   

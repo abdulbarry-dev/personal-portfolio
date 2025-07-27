@@ -58,7 +58,7 @@
             </NuxtLink>
             
             <NuxtLink 
-              to="/resume"
+              to="/"
               class="inline-flex items-center justify-center px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:border-gray-400 hover:text-gray-900 transition-colors duration-200 group"
             >
               <span>Resume</span>
