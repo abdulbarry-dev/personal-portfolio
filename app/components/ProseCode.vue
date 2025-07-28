@@ -92,17 +92,17 @@ const languageLabel = computed(() => {
 
 <template>
   <div class="not-prose my-8">
-    <div class="bg-white rounded-xl overflow-hidden border border-gray-200">
+    <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-sm dark:shadow-gray-900/50 transition-colors duration-200">
       <!-- Header -->
-      <div class="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200">
+      <div class="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-600 border-b border-gray-200 dark:border-gray-600">
         <div class="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
           
           <!-- Language/Filename -->
           <div class="flex items-center gap-2 min-w-0">
-            <span v-if="filename" class="text-xs sm:text-sm text-gray-700 font-mono bg-white px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border truncate">
+            <span v-if="filename" class="text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-mono bg-white dark:bg-gray-800 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded border border-gray-200 dark:border-gray-600 truncate">
               {{ filename }}
             </span>
-            <span v-else-if="language" class="text-xs px-2 sm:px-3 py-1 sm:py-1 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full font-medium">
+            <span v-else-if="language" class="text-xs px-2 sm:px-3 py-1 sm:py-1 bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-blue-400 dark:to-indigo-400 text-white rounded-full font-medium">
               {{ languageLabel }}
             </span>
           </div>
@@ -111,8 +111,8 @@ const languageLabel = computed(() => {
         <!-- Copy Button - Responsive -->
         <button
           @click="copyCode"
-          class="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm text-gray-600 hover:text-gray-900 hover:bg-white/80 rounded-md sm:rounded-lg border border-transparent hover:border-gray-200 flex-shrink-0"
-          :class="{ 'text-green-600 bg-green-50 border-green-200': copied }"
+          class="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 text-xs sm:text-sm text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-white/80 dark:hover:bg-gray-700/80 rounded-md sm:rounded-lg border border-transparent hover:border-gray-200 dark:hover:border-gray-500 flex-shrink-0 transition-all duration-200"
+          :class="{ 'text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/50 border-green-200 dark:border-green-700': copied }"
         >
           <Icon 
             v-if="copied" 
@@ -131,10 +131,10 @@ const languageLabel = computed(() => {
       </div>
 
       <!-- Code Content -->
-      <div class="overflow-x-auto bg-gray-50">
+      <div class="overflow-x-auto bg-gray-50 dark:bg-gray-900">
         <pre 
           ref="codeElement" 
-          class="p-3 sm:p-4 text-xs sm:text-sm leading-relaxed text-gray-800 font-mono"
+          class="p-3 sm:p-4 text-xs sm:text-sm leading-relaxed text-gray-800 dark:text-gray-200 font-mono"
         ><slot /></pre>
       </div>
     </div>
@@ -154,23 +154,23 @@ pre::-webkit-scrollbar {
 }
 
 pre::-webkit-scrollbar-track {
-  background: #f9fafb;
+  @apply bg-gray-100 dark:bg-gray-800;
   border-radius: 4px;
 }
 
 pre::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  @apply bg-gray-300 dark:bg-gray-600;
   border-radius: 4px;
 }
 
 pre::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  @apply bg-gray-400 dark:bg-gray-500;
 }
 
-/* Enhanced syntax highlighting for light theme */
+/* Enhanced syntax highlighting for both themes */
 pre code {
   background: transparent;
-  color: #374151;
+  @apply text-gray-800 dark:text-gray-200;
 }
 
 /* Ensure code content is properly formatted */
@@ -193,5 +193,15 @@ button {
   .xs\:hidden {
     display: none;
   }
+}
+
+/* Dark mode specific enhancements */
+.dark pre {
+  color-scheme: dark;
+}
+
+/* Ensure proper contrast in dark mode */
+.dark .bg-gradient-to-r.from-gray-50.to-gray-100 {
+  background: linear-gradient(to right, rgb(55 65 81), rgb(75 85 99));
 }
 </style>

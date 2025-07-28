@@ -43,12 +43,114 @@
       </div>
     </div>
   </section>
+
+  <div v-if="notifications.length" class="fixed bottom-4 right-4 z-50 space-y-2">
+    <TransitionGroup
+      enter-active-class="transition-all duration-300 ease-out"
+      enter-from-class="opacity-0 transform translate-x-full"
+      enter-to-class="opacity-100 transform translate-x-0"
+      leave-active-class="transition-all duration-300 ease-in"
+      leave-from-class="opacity-100 transform translate-x-0"
+      leave-to-class="opacity-0 transform translate-x-full"
+    >
+      <div
+        v-for="notification in notifications"
+        :key="notification.id"
+        class="max-w-sm w-full bg-white dark:bg-gray-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 dark:ring-gray-700 overflow-hidden"
+      >
+        <div class="p-4">
+          <div class="flex items-start">
+            <div class="flex-shrink-0">
+              <Icon 
+                v-if="notification.type === 'success'" 
+                name="heroicons:check-circle" 
+                class="h-6 w-6 text-green-400 dark:text-green-300" 
+              />
+              <Icon 
+                v-else-if="notification.type === 'error'" 
+                name="heroicons:x-circle" 
+                class="h-6 w-6 text-red-400 dark:text-red-300" 
+              />
+              <Icon 
+                v-else-if="notification.type === 'warning'" 
+                name="heroicons:exclamation-triangle" 
+                class="h-6 w-6 text-yellow-400 dark:text-yellow-300" 
+              />
+              <Icon 
+                v-else 
+                name="heroicons:information-circle" 
+                class="h-6 w-6 text-blue-400 dark:text-blue-300" 
+              />
+            </div>
+            <div class="ml-3 w-0 flex-1 pt-0.5">
+              <p class="text-sm font-medium text-gray-900 dark:text-white">
+                {{ notification.title }}
+              </p>
+              <p v-if="notification.message" class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                {{ notification.message }}
+              </p>
+            </div>
+            <div class="ml-4 flex-shrink-0 flex">
+              <button
+                @click="removeNotification(notification.id)"
+                class="bg-white dark:bg-gray-800 rounded-md inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-800"
+              >
+                <span class="sr-only">Close</span>
+                <Icon name="heroicons:x-mark" class="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </TransitionGroup>
+  </div>
 </template>
 
 <script setup>
 defineOptions({
   name: 'NewsletterSubscription'
 })
+
+// Notification store
+const notifications = ref([])
+
+// Add notification function
+const addNotification = (notification) => {
+  const id = Date.now()
+  const newNotification = {
+    id,
+    type: 'info',
+    title: '',
+    message: '',
+    duration: 5000,
+    ...notification
+  }
+  
+  notifications.value.push(newNotification)
+  
+  // Auto remove after duration
+  if (newNotification.duration > 0) {
+    setTimeout(() => {
+      removeNotification(id)
+    }, newNotification.duration)
+  }
+}
+
+// Remove notification function
+const removeNotification = (id) => {
+  const index = notifications.value.findIndex(n => n.id === id)
+  if (index > -1) {
+    notifications.value.splice(index, 1)
+  }
+}
+
+// Expose functions globally
+if (process.client) {
+  window.$notify = addNotification
+}
+
+// Provide to child components
+provide('notify', addNotification)
 </script>
 
 <style scoped>

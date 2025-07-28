@@ -1,12 +1,12 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
       <!-- Page Header -->
       <div class="text-center mb-16">
-        <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+        <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
           My Projects
         </h1>
-        <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
           A collection of my open-source projects and contributions on GitHub
         </p>
       </div>
@@ -16,35 +16,35 @@
         <div
           v-for="n in 6"
           :key="n"
-          class="bg-white border border-gray-200 rounded-xl p-6 animate-pulse"
+          class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 animate-pulse"
         >
           <!-- Header Skeleton -->
           <div class="flex items-start justify-between mb-4">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gray-200 rounded-lg"></div>
+              <div class="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
               <div class="space-y-2">
-                <div class="h-5 bg-gray-200 rounded w-32"></div>
+                <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
               </div>
             </div>
-            <div class="w-6 h-6 bg-gray-200 rounded"></div>
+            <div class="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
           </div>
           
           <!-- Description Skeleton -->
           <div class="space-y-2 mb-6">
-            <div class="h-4 bg-gray-200 rounded w-full"></div>
-            <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-            <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
           </div>
           
           <!-- Stats Skeleton -->
           <div class="flex items-center space-x-4">
             <div class="flex items-center space-x-1">
-              <div class="w-3 h-3 bg-gray-200 rounded-full"></div>
-              <div class="h-4 bg-gray-200 rounded w-16"></div>
+              <div class="w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
             </div>
             <div class="flex items-center space-x-1">
-              <div class="w-4 h-4 bg-gray-200 rounded"></div>
-              <div class="h-4 bg-gray-200 rounded w-8"></div>
+              <div class="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
+              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-8"></div>
             </div>
           </div>
         </div>
@@ -52,12 +52,12 @@
 
       <!-- Error State -->
       <div v-else-if="error" class="text-center py-16">
-        <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-red-300 mx-auto mb-4" />
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">Failed to load projects</h3>
-        <p class="text-gray-600 mb-4">{{ error.message || 'Something went wrong while fetching projects.' }}</p>
+        <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-red-400 dark:text-red-300 mx-auto mb-4" />
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Failed to load projects</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">{{ error.message || 'Something went wrong while fetching projects.' }}</p>
         <button 
           @click="refresh()" 
-          class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+          class="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200"
         >
           <Icon name="heroicons:arrow-path" class="w-4 h-4 mr-2" />
           Try Again
@@ -69,20 +69,20 @@
         <div
           v-for="(repo, index) in data"
           :key="repo.id"
-          class="group bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg hover:border-gray-300 transition-all duration-300 hover:-translate-y-1 opacity-0 animate-fade-in"
+          class="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:shadow-lg dark:hover:shadow-2xl hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 hover:-translate-y-1 opacity-0 animate-fade-in"
           :style="{ animationDelay: `${index * 100}ms` }"
         >
           <!-- Project Icon & Title -->
           <div class="flex items-start justify-between mb-4">
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center group-hover:bg-gray-200 transition-colors duration-200">
+              <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors duration-200">
                 <Icon 
                   name="heroicons:cube" 
-                  class="w-6 h-6 text-gray-600"
+                  class="w-6 h-6 text-gray-600 dark:text-gray-300"
                 />
               </div>
               <div>
-                <h3 class="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors duration-200">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
                   {{ repo.name }}
                 </h3>
               </div>
@@ -93,22 +93,22 @@
               :href="repo.html_url"
               target="_blank"
               rel="noopener noreferrer"
-              class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-2 hover:bg-gray-100 rounded-lg"
+              class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
             >
               <Icon 
                 name="heroicons:arrow-top-right-on-square" 
-                class="w-4 h-4 text-gray-500 hover:text-gray-700"
+                class="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
               />
             </a>
           </div>
 
           <!-- Description -->
-          <p class="text-gray-600 text-sm leading-relaxed mb-6 line-clamp-3">
+          <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6 line-clamp-3">
             {{ repo.description || 'No description available for this repository.' }}
           </p>
 
           <!-- Project Stats -->
-          <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
+          <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
             <div class="flex items-center space-x-4">
               <!-- Language -->
               <div v-if="repo.language" class="flex items-center space-x-1">
@@ -137,9 +137,9 @@
 
       <!-- Empty State -->
       <div v-else class="text-center py-16">
-        <Icon name="heroicons:cube-transparent" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">No projects found</h3>
-        <p class="text-gray-600">Check back later for new projects!</p>
+        <Icon name="heroicons:cube-transparent" class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No projects found</h3>
+        <p class="text-gray-600 dark:text-gray-400">Check back later for new projects!</p>
       </div>
     </div>
   </div>

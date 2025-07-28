@@ -1,6 +1,6 @@
 <template>
     <!-- Contact Form -->
-    <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-8 md:p-12 transition-colors duration-200">
       <form class="space-y-6" @submit.prevent="handleSubmit">
         <!-- Name and Email Row -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -8,9 +8,9 @@
           <div class="space-y-2">
             <label 
               for="name" 
-              class="block text-sm font-semibold text-gray-900"
+              class="block text-sm font-semibold text-gray-900 dark:text-white"
             >
-              Name <span class="text-red-500">*</span>
+              Name <span class="text-red-500 dark:text-red-400">*</span>
             </label>
             <input
               id="name"
@@ -19,19 +19,19 @@
               name="name"
               required
               placeholder="John Doe"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 placeholder-gray-400"
-              :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': errors.name }"
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 hover:bg-white dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+              :class="{ 'border-red-500 dark:border-red-400 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-red-50/30 dark:bg-red-900/30': errors.name }"
             >
-            <p v-if="errors.name" class="text-sm text-red-600">{{ errors.name }}</p>
+            <p v-if="errors.name" class="text-sm text-red-600 dark:text-red-400">{{ errors.name }}</p>
           </div>
 
           <!-- Email Field -->
           <div class="space-y-2">
             <label 
               for="email" 
-              class="block text-sm font-semibold text-gray-900"
+              class="block text-sm font-semibold text-gray-900 dark:text-white"
             >
-              Email <span class="text-red-500">*</span>
+              Email <span class="text-red-500 dark:text-red-400">*</span>
             </label>
             <input
               id="email"
@@ -40,10 +40,10 @@
               name="email"
               required
               placeholder="john@doe.com"
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 placeholder-gray-400"
-              :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': errors.email }"
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 hover:bg-white dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+              :class="{ 'border-red-500 dark:border-red-400 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-red-50/30 dark:bg-red-900/30': errors.email }"
             >
-            <p v-if="errors.email" class="text-sm text-red-600">{{ errors.email }}</p>
+            <p v-if="errors.email" class="text-sm text-red-600 dark:text-red-400">{{ errors.email }}</p>
           </div>
         </div>
 
@@ -51,9 +51,9 @@
         <div class="space-y-2">
           <label 
             for="query" 
-            class="block text-sm font-semibold text-gray-900"
+            class="block text-sm font-semibold text-gray-900 dark:text-white"
           >
-            Query <span class="text-red-500">*</span>
+            Query <span class="text-red-500 dark:text-red-400">*</span>
           </label>
           <div class="relative">
             <select
@@ -61,34 +61,34 @@
               v-model="form.query"
               name="query"
               required
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 appearance-none bg-white"
-              :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': errors.query }"
+              class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 appearance-none hover:bg-white dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+              :class="{ 'border-red-500 dark:border-red-400 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-red-50/30 dark:bg-red-900/30': errors.query }"
             >
-              <option value="" disabled>Pick one</option>
-              <option value="general">General Inquiry</option>
-              <option value="project">Project Collaboration</option>
-              <option value="freelance">Freelance Work</option>
-              <option value="job">Job Opportunity</option>
-              <option value="consultation">Consultation</option>
-              <option value="other">Other</option>
+              <option value="" disabled class="text-gray-400 dark:text-gray-500">Pick one</option>
+              <option value="general" class="text-gray-900 dark:text-white">General Inquiry</option>
+              <option value="project" class="text-gray-900 dark:text-white">Project Collaboration</option>
+              <option value="freelance" class="text-gray-900 dark:text-white">Freelance Work</option>
+              <option value="job" class="text-gray-900 dark:text-white">Job Opportunity</option>
+              <option value="consultation" class="text-gray-900 dark:text-white">Consultation</option>
+              <option value="other" class="text-gray-900 dark:text-white">Other</option>
             </select>
             <!-- Custom dropdown arrow -->
             <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-              <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
               </svg>
             </div>
           </div>
-          <p v-if="errors.query" class="text-sm text-red-600">{{ errors.query }}</p>
+          <p v-if="errors.query" class="text-sm text-red-600 dark:text-red-400">{{ errors.query }}</p>
         </div>
 
         <!-- Message Field -->
         <div class="space-y-2">
           <label 
             for="message" 
-            class="block text-sm font-semibold text-gray-900"
+            class="block text-sm font-semibold text-gray-900 dark:text-white"
           >
-            Message <span class="text-red-500">*</span>
+            Message <span class="text-red-500 dark:text-red-400">*</span>
           </label>
           <textarea
             id="message"
@@ -97,11 +97,11 @@
             required
             rows="6"
             placeholder="Your message"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200 placeholder-gray-400 resize-vertical"
-            :class="{ 'border-red-500 focus:ring-red-500 focus:border-red-500': errors.message }"
+            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 resize-vertical hover:bg-white dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
+            :class="{ 'border-red-500 dark:border-red-400 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-red-50/30 dark:bg-red-900/30': errors.message }"
           ></textarea>
-          <p v-if="errors.message" class="text-sm text-red-600">{{ errors.message }}</p>
-          <p class="text-sm text-gray-500">{{ form.message.length }}/500 characters</p>
+          <p v-if="errors.message" class="text-sm text-red-600 dark:text-red-400">{{ errors.message }}</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">{{ form.message.length }}/500 characters</p>
         </div>
 
         <!-- Submit Button -->
@@ -109,11 +109,11 @@
           <button
             type="submit"
             :disabled="isLoading"
-            class="w-full md:w-auto px-8 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+            class="w-full md:w-auto px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transform hover:scale-[1.02] active:scale-[0.98]"
           >
             <svg 
               v-if="isLoading" 
-              class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" 
+              class="animate-spin -ml-1 mr-3 h-5 w-5 text-white dark:text-gray-900" 
               xmlns="http://www.w3.org/2000/svg" 
               fill="none" 
               viewBox="0 0 24 24"
@@ -126,23 +126,23 @@
         </div>
 
         <!-- Success/Error Messages -->
-        <div v-if="submitStatus === 'success'" class="p-4 bg-green-50 border border-green-200 rounded-lg">
+        <div v-if="submitStatus === 'success'" class="p-4 bg-green-50 dark:bg-green-900/50 border border-green-200 dark:border-green-700 rounded-lg">
           <div class="flex">
-            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-green-400 dark:text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
-            <p class="ml-3 text-sm text-green-700">
+            <p class="ml-3 text-sm text-green-700 dark:text-green-200">
               Thank you! Your message has been sent successfully. I'll get back to you soon.
             </p>
           </div>
         </div>
 
-        <div v-if="submitStatus === 'error'" class="p-4 bg-red-50 border border-red-200 rounded-lg">
+        <div v-if="submitStatus === 'error'" class="p-4 bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-700 rounded-lg">
           <div class="flex">
-            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-5 h-5 text-red-400 dark:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
-            <p class="ml-3 text-sm text-red-700">
+            <p class="ml-3 text-sm text-red-700 dark:text-red-200">
               Sorry, there was an error sending your message. Please try again or contact me directly.
             </p>
           </div>

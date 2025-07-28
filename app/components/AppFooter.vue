@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-white border-t border-gray-200">
+  <footer class="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
@@ -9,11 +9,11 @@
             <img 
               :src="profileData.avatar || '/images/logos/AGS-logo-v1.png'" 
               :alt="profileData.name"
-              class="w-14 h-14 rounded-full object-cover border-2 border-gray-200"
+              class="w-14 h-14 rounded-full object-cover border-2 border-gray-200 dark:border-gray-700"
             >
             <div>
-              <h3 class="text-xl font-bold text-gray-900">{{ profileData.name }}</h3>
-              <p class="text-base text-gray-600 font-medium">{{ profileData.title }}</p>
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ profileData.name }}</h3>
+              <p class="text-base text-gray-600 dark:text-gray-400 font-medium">{{ profileData.title }}</p>
             </div>
           </div>
           
@@ -26,14 +26,25 @@
               :aria-label="social.name"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-gray-800 hover:text-black transition-colors duration-200 transform hover:scale-110"
+              class="text-gray-800 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 transform hover:scale-110"
             >
               <component :is="social.icon" class="w-7 h-7" />
             </a>
           </div>
+
+          <!-- Theme Toggle Button - Simple Circle -->
+          <div class="mb-6">
+            <button
+              @click="toggleTheme"
+              class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-md hover:shadow-lg flex items-center justify-center"
+              :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            >
+              <Icon :name="getThemeIcon" class="w-5 h-5" />
+            </button>
+          </div>
           
           <!-- Copyright -->
-          <p class="text-sm text-gray-600 font-medium leading-relaxed">
+          <p class="text-sm text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
             {{ currentYear }} - {{ profileData.name }}.<br>
             All Rights Reserved.
           </p>
@@ -41,14 +52,14 @@
 
         <!-- General Navigation -->
         <div class="md:col-span-1">
-          <h4 class="text-base font-bold text-gray-900 uppercase tracking-wider mb-5">
+          <h4 class="text-base font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5">
             General
           </h4>
           <ul class="space-y-4">
             <li v-for="link in generalLinks" :key="link.name">
               <NuxtLink 
                 :to="link.to"
-                class="text-gray-700 hover:text-black transition-colors duration-200 text-base font-medium hover:underline"
+                class="text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 text-base font-medium hover:underline"
               >
                 {{ link.name }}
               </NuxtLink>
@@ -58,14 +69,14 @@
 
         <!-- Writing Section -->
         <div class="md:col-span-1">
-          <h4 class="text-base font-bold text-gray-900 uppercase tracking-wider mb-5">
+          <h4 class="text-base font-bold text-gray-900 dark:text-white uppercase tracking-wider mb-5">
             Writing
           </h4>
           <ul class="space-y-4">
             <li v-for="link in writingLinks" :key="link.name">
               <NuxtLink 
                 :to="link.to"
-                class="text-gray-700 hover:text-black transition-colors duration-200 text-base font-medium hover:underline"
+                class="text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition-colors duration-200 text-base font-medium hover:underline"
               >
                 {{ link.name }}
               </NuxtLink>
@@ -92,7 +103,7 @@ const currentYear = computed(() => new Date().getFullYear())
 const socialLinks = [
   {
     name: 'LinkedIn',
-    url: 'https://linkedin.com/in/abdulbarry-dev',
+    url: 'https://www.linkedin.com/in/guenichi-abdulbarry/',
     icon: markRaw(() => h('svg', {
       class: 'w-7 h-7',
       fill: 'currentColor',
@@ -105,7 +116,7 @@ const socialLinks = [
   },
   {
     name: 'Instagram',
-    url: 'https://instagram.com/abdulbarry-dev',
+    url: 'https://www.instagram.com/abdulbarry.guenichi/',
     icon: markRaw(() => h('svg', {
       class: 'w-7 h-7',
       fill: 'currentColor',
@@ -143,8 +154,12 @@ const generalLinks = [
 const writingLinks = [
   { name: 'Blog', to: '/blog' }
 ]
+
+// Theme composable
+const { 
+  isDark, 
+  toggleTheme, 
+  getThemeIcon
+} = useTheme()
 </script>
 
-<style scoped>
-/* Additional styles if needed */
-</style>

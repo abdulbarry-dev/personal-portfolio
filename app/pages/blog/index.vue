@@ -1,9 +1,9 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
     <!-- Page Header -->
     <div class="mb-12">
-      <h1 class="text-5xl font-bold text-gray-900 mb-4">Blog</h1>
-      <p class="text-lg text-gray-600">
+      <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-4">Blog</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300">
         Discover valuable insights on web development, design, and more.
       </p>
     </div>
@@ -12,27 +12,27 @@
     <div v-if="pending" class="space-y-8">
       <!-- Search Bar Skeleton -->
       <div class="relative">
-        <div class="w-full h-12 bg-gray-200 rounded-lg animate-pulse"></div>
+        <div class="w-full h-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
       </div>
       
       <!-- Tags Skeleton -->
       <div class="flex items-center flex-wrap gap-2">
-        <div class="h-4 w-24 bg-gray-200 rounded animate-pulse"></div>
-        <div v-for="n in 4" :key="n" class="h-6 w-16 bg-gray-200 rounded-full animate-pulse"></div>
+        <div class="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+        <div v-for="n in 4" :key="n" class="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
       </div>
       
       <!-- Blog Cards Skeleton -->
       <div class="space-y-12">
         <div v-for="n in 3" :key="n" class="animate-pulse">
           <div class="flex flex-col sm:flex-row gap-6">
-            <div class="w-full sm:w-48 h-32 bg-gray-200 rounded-lg flex-shrink-0"></div>
+            <div class="w-full sm:w-48 h-32 bg-gray-200 dark:bg-gray-700 rounded-lg flex-shrink-0"></div>
             <div class="flex-1 space-y-3">
-              <div class="h-6 bg-gray-200 rounded w-3/4"></div>
-              <div class="h-4 bg-gray-200 rounded w-full"></div>
-              <div class="h-4 bg-gray-200 rounded w-2/3"></div>
+              <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
               <div class="flex gap-2 mt-4">
-                <div class="h-6 w-16 bg-gray-200 rounded-full"></div>
-                <div class="h-6 w-20 bg-gray-200 rounded-full"></div>
+                <div class="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                <div class="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
               </div>
             </div>
           </div>
@@ -42,12 +42,12 @@
 
     <!-- Error State -->
     <div v-else-if="error" class="text-center py-16">
-      <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-red-300 mx-auto mb-4" />
-      <h3 class="text-lg font-semibold text-gray-900 mb-2">Failed to load blog posts</h3>
-      <p class="text-gray-600 mb-4">{{ error.message || 'Something went wrong while fetching blog posts.' }}</p>
+      <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-red-400 dark:text-red-300 mx-auto mb-4" />
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Failed to load blog posts</h3>
+      <p class="text-gray-600 dark:text-gray-400 mb-4">{{ error.message || 'Something went wrong while fetching blog posts.' }}</p>
       <button 
         @click="refresh()" 
-        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+        class="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200"
       >
         <Icon name="heroicons:arrow-path" class="w-4 h-4 mr-2" />
         Try Again
@@ -62,9 +62,9 @@
           v-model="searchQuery"
           type="text"
           placeholder="Search blog posts..."
-          class="w-full pl-4 pr-10 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition-all duration-200"
+          class="w-full pl-4 pr-10 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200"
         />
-        <Icon name="heroicons:magnifying-glass" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+        <Icon name="heroicons:magnifying-glass" class="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 dark:text-gray-500" />
       </div>
 
       <!-- Tags Filter -->
@@ -73,7 +73,7 @@
         class="flex items-center flex-wrap gap-2 mb-12 opacity-0 animate-fade-in" 
         style="animation-delay: 200ms"
       >
-        <span class="text-sm font-medium text-gray-700 mr-2">Filter by tag(s):</span>
+        <span class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Filter by tag(s):</span>
         <button
           v-for="[tag, count] in allTags"
           :key="tag"
@@ -81,8 +81,8 @@
           :class="[
             'px-3 py-1 text-sm font-medium rounded-full transition-all duration-200 hover:scale-105',
             selectedTags.includes(tag)
-              ? 'bg-blue-600 text-white shadow-md'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              ? 'bg-blue-600 dark:bg-blue-500 text-white shadow-md'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
           ]"
         >
           {{ tag }} ({{ count }})
@@ -92,7 +92,7 @@
         <button
           v-if="selectedTags.length > 0"
           @click="selectedTags = []"
-          class="px-3 py-1 text-sm font-medium text-red-600 bg-red-50 hover:bg-red-100 rounded-full transition-colors duration-200"
+          class="px-3 py-1 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/70 rounded-full transition-colors duration-200"
         >
           Clear all
         </button>
@@ -112,9 +112,9 @@
 
       <!-- Empty State -->
       <div v-else class="text-center py-16 opacity-0 animate-fade-in" style="animation-delay: 300ms">
-        <Icon name="heroicons:document-magnifying-glass" class="w-16 h-16 text-gray-300 mx-auto mb-4" />
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">No blog posts found</h3>
-        <p class="text-gray-600 mb-4">
+        <Icon name="heroicons:document-magnifying-glass" class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No blog posts found</h3>
+        <p class="text-gray-600 dark:text-gray-400 mb-4">
           {{ searchQuery || selectedTags.length > 0 
             ? 'Try adjusting your search criteria or filters.' 
             : 'Check back later for new content!' 
@@ -126,14 +126,14 @@
           <button
             @click="searchQuery = ''"
             v-if="searchQuery"
-            class="px-4 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200"
+            class="px-4 py-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50 hover:bg-blue-100 dark:hover:bg-blue-900/70 rounded-lg transition-colors duration-200"
           >
             Clear search
           </button>
           <button
             @click="selectedTags = []"
             v-if="selectedTags.length > 0"
-            class="px-4 py-2 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200"
+            class="px-4 py-2 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/50 hover:bg-blue-100 dark:hover:bg-blue-900/70 rounded-lg transition-colors duration-200"
           >
             Clear filters
           </button>

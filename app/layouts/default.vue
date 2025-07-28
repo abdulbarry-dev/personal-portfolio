@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white">
+  <div class="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200">
     <!-- Persistent Navbar with floating behavior -->
     <NavBar />
     

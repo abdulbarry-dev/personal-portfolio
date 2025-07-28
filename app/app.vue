@@ -1,18 +1,22 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <div class="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200">
+    <NuxtLayout>
+      <div class="flex-1">
+        <NuxtPage />
+      </div>
+    </NuxtLayout>
+  </div>
 </template>
 
 <style scoped>
 /* Custom prose enhancements for better readability */
 .prose {
-  color: #374151;
+  @apply text-gray-700 dark:text-gray-300;
   line-height: 1.7;
 }
 
 .prose code:not(pre code) {
-  @apply bg-gray-100 text-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+  @apply bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-1.5 py-0.5 rounded text-sm font-mono;
   font-weight: 500;
 }
 
@@ -22,30 +26,30 @@
 
 /* Better blockquote styling */
 .prose blockquote {
-  @apply border-l-4 border-blue-500 bg-blue-50 py-2 px-4 my-6 italic;
+  @apply border-l-4 border-blue-500 dark:border-blue-400 bg-blue-50 dark:bg-blue-900/20 py-2 px-4 my-6 italic;
 }
 
 .prose blockquote p {
-  @apply text-blue-900 mb-0;
+  @apply text-blue-900 dark:text-blue-100 mb-0;
 }
 
 /* Table styling */
 .prose table {
-  @apply w-full border-collapse border border-gray-300 my-6;
+  @apply w-full border-collapse border border-gray-300 dark:border-gray-700 my-6;
 }
 
 .prose th,
 .prose td {
-  @apply border border-gray-300 px-4 py-2;
+  @apply border border-gray-300 dark:border-gray-700 px-4 py-2;
 }
 
 .prose th {
-  @apply bg-gray-50 font-semibold text-gray-900;
+  @apply bg-gray-50 dark:bg-gray-800 font-semibold text-gray-900 dark:text-gray-100;
 }
 
 /* Link styling */
 .prose a {
-  @apply text-blue-600 no-underline hover:text-blue-700 hover:underline;
+  @apply text-blue-600 dark:text-blue-400 no-underline hover:text-blue-700 dark:hover:text-blue-300 hover:underline;
   font-weight: 500;
 }
 

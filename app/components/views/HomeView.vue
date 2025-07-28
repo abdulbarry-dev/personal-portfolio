@@ -1,17 +1,17 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         
         <!-- Left side - Text Content -->
         <div class="space-y-6">
           <!-- Welcome Text -->
-          <p class="text-lg text-gray-600 font-medium">
+          <p class="text-lg text-gray-600 dark:text-gray-400 font-medium">
             Welcome to my site,
           </p>
           
           <!-- Main Heading -->
-          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white leading-tight">
             I'm Abdulbarry, a<br>
             Frontend Developer<br>
             based in Tunisia.
@@ -20,7 +20,7 @@
           <!-- Tech Icons -->
           <div class="flex items-center space-x-6">
             <!-- Vue Icon -->
-            <div class="flex items-center space-x-2 text-gray-600">
+            <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
               <Icon 
                 name="logos:vue" 
                 class="w-8 h-8"
@@ -29,7 +29,7 @@
             </div>
             
             <!-- Nuxt Icon -->
-            <div class="flex items-center space-x-2 text-gray-600">
+            <div class="flex items-center space-x-2 text-gray-600 dark:text-gray-400">
               <Icon 
                 name="logos:nuxt-icon" 
                 class="w-8 h-8"
@@ -39,16 +39,16 @@
           </div>
           
           <!-- Description -->
-          <p class="text-lg text-gray-600 leading-relaxed max-w-lg">
+          <p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed max-w-lg">
             I'm passionate about creating meaningful digital experiences and currently serve as a senior web developer at 
-            <span class="font-semibold text-gray-900">KEMIK.com</span> – Guatemala's leading e-commerce platform.
+            <span class="font-semibold text-gray-900 dark:text-white">KEMIK.com</span> – Guatemala's leading e-commerce platform.
           </p>
           
           <!-- Action Buttons -->
           <div class="flex flex-col sm:flex-row gap-4">
             <NuxtLink 
               to="/blog"
-              class="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200 group"
+              class="inline-flex items-center justify-center px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors duration-200 group"
             >
               <span>Read the blog</span>
               <Icon 
@@ -59,7 +59,7 @@
             
             <NuxtLink 
               to="/"
-              class="inline-flex items-center justify-center px-6 py-3 border-2 border-gray-300 text-gray-700 font-medium rounded-lg hover:border-gray-400 hover:text-gray-900 transition-colors duration-200 group"
+              class="inline-flex items-center justify-center px-6 py-3 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-medium rounded-lg hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors duration-200 group"
             >
               <span>Resume</span>
               <Icon 
@@ -73,7 +73,7 @@
         <!-- Right side - Profile Image -->
         <div class="flex justify-center lg:justify-end">
           <div class="relative">
-            <div class="w-80 h-80 lg:w-96 lg:h-96 overflow-hidden shadow-2xl profile-image-container">
+            <div class="w-80 h-80 lg:w-96 lg:h-96 overflow-hidden shadow-2xl dark:shadow-gray-900/50 profile-image-container">
               <img 
                 src="./../../assets/images/backgrounds/profile-picture.jpeg" 
                 alt="Abdulbarry - Frontend Developer" 
@@ -81,8 +81,8 @@
               />
             </div>
             <!-- Decorative elements -->
-            <div class="absolute -top-4 -right-4 w-24 h-24 bg-blue-500 rounded-full opacity-20 animate-pulse-slow"></div>
-            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-purple-500 rounded-full opacity-10 animate-pulse-slower"></div>
+            <div class="absolute -top-4 -right-4 w-24 h-24 bg-blue-500 dark:bg-blue-400 rounded-full opacity-20 dark:opacity-30 animate-pulse-slow"></div>
+            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-purple-500 dark:bg-purple-400 rounded-full opacity-10 dark:opacity-20 animate-pulse-slower"></div>
           </div>
         </div>
       </div>
@@ -190,5 +190,29 @@ defineOptions({
 
 .animate-pulse-slower {
   animation: pulse-slower 6s ease-in-out infinite, float 12s ease-in-out infinite reverse;
+}
+
+/* Enhanced shadow for dark mode */
+.profile-image-container {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .profile-image-container {
+  box-shadow: 
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.profile-image-container:hover {
+  transform: scale(1.02);
+}
+
+.dark .profile-image-container:hover {
+  box-shadow: 
+    0 35px 60px -12px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 </style>

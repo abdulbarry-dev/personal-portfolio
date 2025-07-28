@@ -2,4 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @import './blog-card.css';
+@import './blog-page.css';
+@import './blog-list.css'; */
 
+/* Dark mode base styles */
+@layer base {
+  html {
+    @apply transition-colors duration-200;
+  }
+  
+  .dark {
+    color-scheme: dark;
+  }
+}
