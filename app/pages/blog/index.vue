@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
     <!-- Page Header -->
     <div class="mb-12">
       <h1 class="text-5xl font-bold text-gray-900 dark:text-white mb-4">Blog</h1>
@@ -22,17 +22,18 @@
       </div>
       
       <!-- Blog Cards Skeleton -->
-      <div class="space-y-12">
-        <div v-for="n in 3" :key="n" class="animate-pulse">
-          <div class="flex flex-col sm:flex-row gap-6">
-            <div class="w-full sm:w-48 h-32 bg-gray-200 dark:bg-gray-700 rounded-lg flex-shrink-0"></div>
-            <div class="flex-1 space-y-3">
-              <div class="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-2/3"></div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+        <div v-for="n in 6" :key="n" class="animate-pulse">
+          <div class="bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden">
+            <div class="h-48 bg-gray-300 dark:bg-gray-600"></div>
+            <div class="p-6 space-y-3">
+              <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-1/4"></div>
+              <div class="h-6 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
+              <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
+              <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
               <div class="flex gap-2 mt-4">
-                <div class="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-                <div class="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
+                <div class="h-6 w-16 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                <div class="h-6 w-20 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
               </div>
             </div>
           </div>
@@ -78,10 +79,10 @@
           v-for="[tag, count] in allTags"
           :key="tag"
           @click="toggleTag(tag)"
-          :class="[
+          :class=" [
             'px-3 py-1 text-sm font-medium rounded-full transition-all duration-200 hover:scale-105',
             selectedTags.includes(tag)
-              ? 'bg-blue-600 dark:bg-blue-500 text-white shadow-md'
+              ? 'bg-blue-600 dark:bg-blue-500 text-white'
               : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
           ]"
         >
@@ -98,12 +99,12 @@
         </button>
       </div>
 
-      <!-- Blog Posts -->
-      <div v-if="filteredPosts.length" class="space-y-12">
+      <!-- Blog Posts Grid -->
+      <div v-if="filteredPosts.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-stretch">
         <div
           v-for="(post, index) in filteredPosts"
           :key="post.path || post.id"
-          class="opacity-0 animate-fade-in hover:transform hover:scale-[1.02] transition-all duration-300"
+          class="opacity-0 animate-fade-in hover:transform hover:scale-[1.02] transition-all duration-300 flex"
           :style="{ animationDelay: `${300 + index * 100}ms` }"
         >
           <BlogCard :post="post" />

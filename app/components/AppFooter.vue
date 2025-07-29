@@ -35,11 +35,11 @@
           <!-- Theme Toggle Button - Simple Circle -->
           <div class="mb-6">
             <button
-              @click="toggleTheme"
+              @click="handleThemeToggle"
               class="w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 shadow-md hover:shadow-lg flex items-center justify-center"
-              :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+              :title="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
             >
-              <Icon :name="getThemeIcon" class="w-5 h-5" />
+              <Icon :name="currentThemeIcon" class="w-5 h-5" />
             </button>
           </div>
           
@@ -89,7 +89,6 @@
 </template>
 
 <script setup>
-
 const profileData = {
   name: 'Abdelbari Guenichi',
   title: 'Frontend Developer',
@@ -98,6 +97,60 @@ const profileData = {
 
 // Current year for copyright
 const currentYear = computed(() => new Date().getFullYear())
+
+// Theme state management without using the composable initially
+const isDarkMode = ref(false)
+const currentThemeIcon = ref('heroicons:moon')
+
+// Check theme from document class directly
+const checkCurrentTheme = () => {
+  if (process.client) {
+    isDarkMode.value = document.documentElement.classList.contains('dark')
+    currentThemeIcon.value = isDarkMode.value ? 'heroicons:sun' : 'heroicons:moon'
+  }
+}
+
+// Handle theme toggle without composable
+const handleThemeToggle = () => {
+  if (process.client) {
+    const newTheme = !isDarkMode.value
+    
+    // Update document class directly
+    document.documentElement.classList.toggle('dark', newTheme)
+    
+    // Update localStorage
+    localStorage.setItem('theme', newTheme ? 'dark' : 'light')
+    
+    // Update meta theme color
+    const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+    if (metaThemeColor) {
+      metaThemeColor.content = newTheme ? '#1f2937' : '#ffffff'
+    }
+    
+    // Update local state
+    isDarkMode.value = newTheme
+    currentThemeIcon.value = newTheme ? 'heroicons:sun' : 'heroicons:moon'
+  }
+}
+
+// Initialize theme state on mount
+onMounted(() => {
+  checkCurrentTheme()
+  
+  // Watch for external theme changes (from other components)
+  const observer = new MutationObserver(() => {
+    checkCurrentTheme()
+  })
+  
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  })
+  
+  onUnmounted(() => {
+    observer.disconnect()
+  })
+})
 
 // Social media links - LinkedIn, Instagram, GitHub
 const socialLinks = [
@@ -154,12 +207,4 @@ const generalLinks = [
 const writingLinks = [
   { name: 'Blog', to: '/blog' }
 ]
-
-// Theme composable
-const { 
-  isDark, 
-  toggleTheme, 
-  getThemeIcon
-} = useTheme()
 </script>
-

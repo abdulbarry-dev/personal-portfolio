@@ -2,7 +2,7 @@
   <div class="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
-        
+
         <!-- Left side - Text Content -->
         <div class="space-y-6 sm:space-y-8 lg:pr-8 order-2 lg:order-1">
           <!-- Welcome Badge -->
@@ -13,7 +13,7 @@
           
           <!-- Main Heading with Animation -->
           <div class="space-y-3 sm:space-y-4">
-            <p class="text-sm sm:text-lg text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase opacity-80 opacity-0 animate-fade-in-up" style="animation-delay: 150ms;">
+            <p class="text-sm sm:text-lg text-gray-600 dark:text-gray-400 font-medium tracking-wide uppercase opacity-0 animate-fade-in-up" style="animation-delay: 150ms;">
               Welcome to my digital space
             </p>
             
