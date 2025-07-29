@@ -2,6 +2,14 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-07-15',
   devtools: { enabled: true },
   
+  // Runtime configuration for environment variables
+  runtimeConfig: {
+    public: {
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseAnonKey: process.env.SUPABASE_ANON_KEY
+    }
+  },
+  
   // Enable static site generation
   nitro: {
     prerender: {
@@ -38,15 +46,6 @@ export default defineNuxtConfig({
   
   css: ['~/assets/css/main.css'],
   
-  // Content module configuration
-  content: {
-    highlight: {
-      theme: 'github-light'
-    },
-    markdown: {
-      sanitize: true
-    }
-  },
   
   site: {  
     url: 'https://abdulbarry.me',

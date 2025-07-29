@@ -21,30 +21,23 @@
  * - setTheme: Function
  */
 
-import { ref, computed, onMounted, readonly } from 'vue'
+import { computed, onMounted, readonly, watch } from 'vue'
 
 export const useTheme = () => {
-  // Reactive theme state - only 'light' or 'dark'
-  const isDark = ref(false)
-
-  // Initialize theme on client side
-  const initTheme = () => {
-    if (process.client) {
-      // Get saved theme from localStorage or detect system preference
-      const savedTheme = localStorage.getItem('theme')
-      
-      if (savedTheme) {
-        isDark.value = savedTheme === 'dark'
-      } else {
-        // Detect system preference
-        isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
-        // Save the detected preference
-        localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
-      }
-      
-      updateDocumentClass(isDark.value)
+  // Use useState to create a global reactive state that persists across components
+  const isDark = useState('theme-isDark', () => {
+    // Initialize theme on server side as false (light mode default)
+    if (process.server) return false
+    
+    // Client-side initialization
+    const savedTheme = localStorage.getItem('theme')
+    if (savedTheme) {
+      return savedTheme === 'dark'
     }
-  }
+    
+    // Detect system preference
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+  })
 
   // Update document class and meta theme-color
   const updateDocumentClass = (dark) => {
@@ -63,13 +56,15 @@ export const useTheme = () => {
 
   // Update meta theme-color
   const updateMetaThemeColor = (color) => {
-    let metaThemeColor = document.querySelector('meta[name="theme-color"]')
-    if (!metaThemeColor) {
-      metaThemeColor = document.createElement('meta')
-      metaThemeColor.name = 'theme-color'
-      document.head.appendChild(metaThemeColor)
+    if (process.client) {
+      let metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      if (!metaThemeColor) {
+        metaThemeColor = document.createElement('meta')
+        metaThemeColor.name = 'theme-color'
+        document.head.appendChild(metaThemeColor)
+      }
+      metaThemeColor.content = color
     }
-    metaThemeColor.content = color
   }
 
   // Toggle between light and dark
@@ -88,9 +83,20 @@ export const useTheme = () => {
     return isDark.value ? 'heroicons:sun' : 'heroicons:moon'
   })
 
-  // Initialize theme when composable is used
+  // Watch for theme changes and update document class
+  watch(isDark, (newValue) => {
+    updateDocumentClass(newValue)
+  }, { immediate: true })
+
+  // Initialize theme on client side
   onMounted(() => {
-    initTheme()
+    // Apply the initial theme to the document
+    updateDocumentClass(isDark.value)
+    
+    // Save initial theme to localStorage if not already saved
+    if (!localStorage.getItem('theme')) {
+      localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
+    }
   })
 
   return {

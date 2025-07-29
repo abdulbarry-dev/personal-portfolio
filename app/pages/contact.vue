@@ -35,7 +35,7 @@
 <script setup>
 defineOptions({
   name: 'ContactPage'
-});
+})
 
 // SEO
 useSeoMeta({

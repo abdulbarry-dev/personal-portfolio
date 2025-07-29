@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200">
+  <div class="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200 relative">
     <!-- Persistent Navbar with floating behavior -->
     <NavBar />
     
@@ -8,8 +8,11 @@
       <slot />
     </main>
     
-    <!-- Persistent Notification Section -->
+    <!-- Newsletter Component (if on home page) -->
     <Notification />
+    
+    <!-- Global Notifications - lazy loaded to prevent import errors -->
+    <LazyGlobalNotifications />
     
     <!-- Persistent Footer -->
     <AppFooter />
