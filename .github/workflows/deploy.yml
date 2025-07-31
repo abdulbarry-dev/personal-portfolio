@@ -42,6 +42,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuxt-build-
 
+      - name: Clean install dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+
       - name: Install dependencies
         run: npm ci
 
