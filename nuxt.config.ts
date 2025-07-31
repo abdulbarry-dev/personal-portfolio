@@ -50,6 +50,15 @@ export default defineNuxtConfig({
     configPath: 'tailwind.config.js'
   },
   
+  // PostCSS configuration for better CSS processing
+  postcss: {
+    plugins: {
+      'tailwindcss/nesting': {},
+      tailwindcss: {},
+      autoprefixer: {},
+    }
+  },
+  
   css: ['~/assets/css/main.css'],
   
   // Site configuration for SEO and Sitemap
