@@ -21,7 +21,6 @@ export default defineNuxtConfig({
   
   // Static Site Generation settings
   ssr: true,
-  target: 'static',
   
   app: {
     baseURL: '/',
