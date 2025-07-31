@@ -6,16 +6,22 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       supabaseUrl: process.env.SUPABASE_URL,
-      supabaseAnonKey: process.env.SUPABASE_ANON_KEY
+      supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
+      siteUrl: process.env.NUXT_SITE_URL || 'https://abdulbarry.me'
     }
   },
   
   // Enable static site generation
   nitro: {
     prerender: {
-      routes: ['/sitemap.xml']
+      routes: ['/sitemap.xml'],
+      crawlLinks: true
     }
   },
+  
+  // Static Site Generation settings
+  ssr: true,
+  target: 'static',
   
   app: {
     baseURL: '/',
@@ -46,10 +52,32 @@ export default defineNuxtConfig({
   
   css: ['~/assets/css/main.css'],
   
-  
+  // Site configuration for SEO and Sitemap
   site: {  
     url: 'https://abdulbarry.me',
     name: 'Abdulbarry Portfolio',
+    description: 'Personal portfolio of Abdulbarry, Frontend Developer based in Tunisia',
+    defaultLocale: 'en'
+  },
+  
+  // Sitemap configuration
+  sitemap: {
+    sources: [
+      // Define static routes
+      '/',
+      '/about',
+      '/contact',
+      '/projects',
+      '/blog',
+      '/blog/building-personal-portfolio',
+      '/blog/first-personal-blog',
+      '/blog/understanding-nuxt'
+    ]
+  },
+  
+  // SEO configuration
+  seo: {
+    redirectToCanonicalSiteUrl: true
   },
   
   imports: {

@@ -104,8 +104,7 @@
             </NuxtLink>
             
             <a 
-              href="/resume.pdf"
-              target="_blank"
+              href="/home"
               rel="noopener noreferrer"
               class="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transform hover:scale-105 active:scale-95 transition-all duration-200 text-sm sm:text-base"
             >
@@ -130,7 +129,7 @@
               <!-- Profile Image -->
               <div class="w-full h-full overflow-hidden shadow-xl sm:shadow-2xl dark:shadow-gray-900/50 profile-image-container relative z-10">
                 <img 
-                  src="./../../assets/images/backgrounds/profile-picture.jpeg" 
+                  src="./../assets/images/backgrounds/profile-picture.jpeg" 
                   alt="Abdulbarry - Frontend Developer" 
                   class="w-full h-full object-cover"
                   style="image-rendering: -webkit-optimize-contrast;"

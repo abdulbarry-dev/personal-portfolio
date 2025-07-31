@@ -39,14 +39,23 @@
             <!-- Privacy Policy Text -->
             <p class="text-gray-300 text-sm text-center sm:text-left">
               No spam, just useful updates. 
-              <a href="#privacy-policy" class="text-white font-semibold hover:underline focus:underline transition-all duration-200">
+              <button 
+                @click="showPrivacyModal = true"
+                class="text-white font-semibold hover:underline focus:underline transition-all duration-200 cursor-pointer bg-transparent border-none p-0"
+              >
                 Read privacy policy.
-              </a>
+              </button>
             </p>
           </form>
         </div>
       </div>
     </div>
+    
+    <!-- Privacy Policy Modal -->
+    <PrivacyPolicy 
+      :is-visible="showPrivacyModal" 
+      @close="showPrivacyModal = false" 
+    />
   </section>
 </template>
 
@@ -61,6 +70,7 @@ const { addNotification } = useNotifications()
 // Reactive variables
 const email = ref('')
 const isLoading = ref(false)
+const showPrivacyModal = ref(false)
 
 // Get Supabase instance
 const { $supabase } = useNuxtApp()

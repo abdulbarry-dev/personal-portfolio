@@ -27,17 +27,33 @@ jobs:
           node-version: '18'
           cache: 'npm'
 
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        with:
+          static_site_generator: nuxt
+
+      - name: Restore cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            dist
+            .nuxt
+          key: ${{ runner.os }}-nuxt-build-${{ hashFiles('dist') }}
+          restore-keys: |
+            ${{ runner.os }}-nuxt-build-
+
       - name: Install dependencies
         run: npm ci
 
       - name: Build and generate static site
-        run: |
-          npm run build
-          npm run generate
+        run: npm run generate
         env:
           NODE_ENV: production
           NUXT_SITE_URL: https://abdulbarry.me
           NUXT_SITE_NAME: "Abdulbarry Portfolio"
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          NUXT_FORMSPREE_ENDPOINT: ${{ secrets.NUXT_FORMSPREE_ENDPOINT }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
