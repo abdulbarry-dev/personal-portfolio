@@ -1,0 +1,39 @@
+````
+
+## Step 6: Update Environment Configuration
+
+````bash
+<vscode_codeblock_uri>file:///c%3A/Users/chappie/Documents/work-space/projects/personal-portfolio/.env.example</vscode_codeblock_uri># Environment Variables Example
+# Copy this file to .env and fill in your actual values
+
+# Site Configuration for GitHub Pages
+NUXT_SITE_URL=https://abdulbarry-dev.github.io/personal-portfolio
+NUXT_SITE_NAME=Your Portfolio Website Name
+
+# Formspree Configuration
+# Get your endpoint from https://formspree.io/
+NUXT_FORMSPREE_ENDPOINT=https://formspree.io/f/your-form-id
+
+# Supabase Configuration
+# Create a project at https://supabase.com/ and get these values from your project settings
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_ANON_KEY=your-supabase-anon-key-here````
+
+## Step 6: Update Environment Configuration
+
+````bash
+<vscode_codeblock_uri>file:///c%3A/Users/chappie/Documents/work-space/projects/personal-portfolio/.env.example</vscode_codeblock_uri># Environment Variables Example
+# Copy this file to .env and fill in your actual values
+
+# Site Configuration for GitHub Pages
+NUXT_SITE_URL=https://abdulbarry-dev.github.io/personal-portfolio
+NUXT_SITE_NAME=Your Portfolio Website Name
+
+# Formspree Configuration
+# Get your endpoint from https://formspree.io/
+NUXT_FORMSPREE_ENDPOINT=https://formspree.io/f/your-form-id
+
+# Supabase Configuration
+# Create a project at https://supabase.com/ and get these values from your project settings
+SUPABASE_URL=https://your-project-id.supabase.co
+SUPABASE_ANON_KEY=your-supabase-anon-key-here

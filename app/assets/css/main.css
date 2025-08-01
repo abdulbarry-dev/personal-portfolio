@@ -2,11 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-/* @import './blog-card.css';
-@import './blog-page.css';
-@import './blog-list.css'; */
-
-/* Dark mode base styles */
 @layer base {
   html {
     @apply transition-colors duration-200;
@@ -14,5 +9,65 @@
   
   .dark {
     color-scheme: dark;
+  }
+  
+  /* Ensure proper font loading */
+  body {
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  }
+}
+
+@layer components {
+  /* Prevent CSS purging issues */
+  .notification-success,
+  .notification-error,
+  .notification-warning,
+  .notification-info,
+  .progress-success,
+  .progress-error,
+  .progress-warning,
+  .progress-info {
+    /* Safelist classes */
+  }
+}
+
+/* Animation definitions to prevent runtime issues */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounceGentle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
   }
 }

@@ -9,10 +9,12 @@
     </main>
     
     <!-- Newsletter Component (if on home page) -->
-    <Notification />
+      <Notification />
     
-    <!-- Global Notifications - lazy loaded to prevent import errors -->
-    <LazyGlobalNotifications />
+    <!-- Global Notifications -->
+    <ClientOnly>
+      <GlobalNotifications />
+    </ClientOnly>
     
     <!-- Persistent Footer -->
     <AppFooter />
@@ -22,7 +24,3 @@
 <script setup>
 // Components are auto-imported by Nuxt
 </script>
-
-<style scoped>
-/* Layout-specific styles if needed */
-</style>

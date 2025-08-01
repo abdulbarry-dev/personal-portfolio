@@ -1,101 +1,111 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  
-  // Runtime configuration for environment variables
-  runtimeConfig: {
-    public: {
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseAnonKey: process.env.SUPABASE_ANON_KEY,
-      siteUrl: process.env.NUXT_SITE_URL || 'https://abdulbarry.me'
-    }
-  },
-  
-  // Enable static site generation
+  // SSG Configuration for GitHub Pages
   nitro: {
     prerender: {
-      routes: ['/sitemap.xml'],
-      crawlLinks: true
+      routes: ['/sitemap.xml']
     }
   },
-  
-  // Static Site Generation settings
-  ssr: true,
-  
+
+  // GitHub Pages deployment settings
   app: {
-    baseURL: '/',
+    baseURL: process.env.NODE_ENV === 'production' ? '/personal-portfolio/' : '/',
+    buildAssetsDir: 'assets/',
     head: {
-      title: 'Abdulbarry - Frontend Developer',
+      htmlAttrs: {
+        lang: 'en'
+      },
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'description', content: 'Personal portfolio of Abdulbarry, Frontend Developer based in Tunisia' }
+        { name: 'format-detection', content: 'telephone=no' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
       ]
     }
   },
-  
-  modules: [
-    '@nuxtjs/tailwindcss',
-    '@nuxt/content', 
-    '@nuxt/icon', 
-    '@nuxtjs/seo',
-    '@nuxtjs/sitemap',
-    '@nuxt/eslint'
-  ],
-  
-  // Explicit Tailwind configuration
-  tailwindcss: {
-    cssPath: '~/assets/css/main.css',
-    configPath: 'tailwind.config.js'
+
+  // Enhanced build configuration
+  build: {
+    transpile: ['@nuxt/icon']
   },
-  
-  // PostCSS configuration for better CSS processing
+
+  // CSS Configuration
+  css: ['~/assets/css/main.css'],
+
+  // PostCSS configuration to prevent Tailwind crashes
   postcss: {
     plugins: {
-      'tailwindcss/nesting': {},
-      tailwindcss: {},
-      autoprefixer: {},
+      '@tailwindcss/nesting': {},
+      'tailwindcss': {},
+      'autoprefixer': {},
+      ...(process.env.NODE_ENV === 'production' && {
+        'cssnano': {
+          preset: ['default', {
+            discardComments: { removeAll: true },
+            normalizeWhitespace: false,
+            colormin: false,
+            minifySelectors: false
+          }]
+        }
+      })
     }
   },
-  
-  css: ['~/assets/css/main.css'],
-  
-  // Site configuration for SEO and Sitemap
-  site: {  
-    url: 'https://abdulbarry.me',
-    name: 'Abdulbarry Portfolio',
-    description: 'Personal portfolio of Abdulbarry, Frontend Developer based in Tunisia',
-    defaultLocale: 'en'
-  },
-  
-  // Sitemap configuration
-  sitemap: {
-    sources: [
-      // Define static routes
-      '/',
-      '/about',
-      '/contact',
-      '/projects',
-      '/blog',
-      '/blog/building-personal-portfolio',
-      '/blog/first-personal-blog',
-      '/blog/understanding-nuxt'
-    ]
-  },
-  
-  // SEO configuration
-  seo: {
-    redirectToCanonicalSiteUrl: true
-  },
-  
-  imports: {
-    autoImport: true
-  },
-  
-  components: [
-    {
-      path: '~/components',
-      pathPrefix: false,
+
+  // Vite configuration for GitHub Pages
+  vite: {
+    css: {
+      postcss: {
+        plugins: [
+          require('@tailwindcss/nesting'),
+          require('tailwindcss'),
+          require('autoprefixer'),
+          ...(process.env.NODE_ENV === 'production' ? [
+            require('cssnano')({
+              preset: ['default', {
+                discardComments: { removeAll: true },
+                normalizeWhitespace: false,
+                colormin: false,
+                minifySelectors: false
+              }]
+            })
+          ] : [])
+        ]
+      }
     },
-  ]
+    build: {
+      assetsInlineLimit: 0,
+      rollupOptions: {
+        external: [],
+        output: {
+          manualChunks: undefined
+        }
+      }
+    }
+  },
+
+  // Modules
+  modules: [
+    '@nuxt/content',
+    '@nuxt/icon',
+    '@nuxtjs/sitemap'
+  ],
+
+
+
+  // Runtime config
+  runtimeConfig: {
+    public: {
+      siteUrl: process.env.NUXT_SITE_URL || 'https://abdulbarry-dev.github.io',
+      siteName: process.env.NUXT_SITE_NAME || 'Abdulbarry Portfolio',
+      formspreeEndpoint: process.env.NUXT_FORMSPREE_ENDPOINT || ''
+    }
+  },
+
+  // Compatibility settings
+  compatibilityDate: '2024-04-03',
+  devtools: { enabled: false },
+  
+  // SSG Settings
+  ssr: false,
 })

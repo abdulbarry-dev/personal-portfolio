@@ -14,7 +14,10 @@
     "postinstall": "nuxt prepare",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "deploy": "npm run generate && gh-pages -d .output/public"
+    "predeploy": "npm run generate",
+    "deploy": "gh-pages -d .output/public -b gh-pages",
+    "deploy:clean": "gh-pages -d .output/public -b gh-pages --remove '**/*'",
+    "vercel-build": "nuxt build"
   },
   "dependencies": {
     "@nuxt/content": "^3.6.3",

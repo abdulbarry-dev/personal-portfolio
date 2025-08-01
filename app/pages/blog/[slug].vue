@@ -1,34 +1,27 @@
 <script setup lang="ts">
+import { 
+  formatDate, 
+  calculateReadingTime, 
+  getPostSlug, 
+  isValidPost, 
+  sortPostsByDate 
+} from '~/utils/blog'
+
 // Get the current URL slug
 const route = useRoute()
 const slug = route.params.slug as string
 
-// Async data fetching with Nuxt 4 features
+// Async data fetching with optimized logic
 const { data: blogData, pending, error, refresh } = await useLazyAsyncData(`blog-data-${slug}`, async () => {
   try {
     const allPosts = await queryCollection('blog').all()
     
-    // Filter out empty or invalid posts
-    const validPosts = allPosts.filter(post => {
-      // Check if post has required fields and content
-      return post && 
-             post.title && 
-             post.title.trim().length > 0 &&
-             post.body && 
-             post.body.toString().trim().length > 0 &&
-             post.date &&
-             post.path
-    })
-    
-    // Sort valid posts by date (newest first)
-    const sortedPosts = validPosts.sort((a, b) => {
-      const dateA = new Date(a.date || '').getTime()
-      const dateB = new Date(b.date || '').getTime()
-      return dateB - dateA
-    })
+    // Filter and sort posts using utility functions
+    const validPosts = allPosts.filter(isValidPost)
+    const sortedPosts = sortPostsByDate(validPosts)
     
     const currentIndex = sortedPosts.findIndex(p => {
-      const postSlug = p.path?.split('/').pop()
+      const postSlug = getPostSlug(p.path)
       return postSlug === slug
     })
     
@@ -41,8 +34,8 @@ const { data: blogData, pending, error, refresh } = await useLazyAsyncData(`blog
     
     const currentPost = sortedPosts[currentIndex]
     
-    // Check if current post is valid (has content)
-    if (!currentPost || !currentPost.title || !currentPost.body || currentPost.body.toString().trim().length === 0) {
+    // Double-check current post validity
+    if (!isValidPost(currentPost)) {
       throw createError({
         statusCode: 404,
         statusMessage: 'Blog post is empty or invalid'
@@ -75,6 +68,10 @@ const post = computed(() => blogData.value?.currentPost)
 const previousPost = computed(() => blogData.value?.previousPost)
 const nextPost = computed(() => blogData.value?.nextPost)
 
+// Computed values using utility functions
+const formattedDate = computed(() => formatDate(post.value?.date || ''))
+const readingTime = computed(() => calculateReadingTime(post.value?.body?.toString() || ''))
+
 // Set SEO Metadata
 useSeoMeta({
   title: () => post.value?.title || 'Post Not Found',
@@ -85,30 +82,6 @@ useSeoMeta({
   twitterCard: 'summary_large_image',
 })
 
-// Helper functions
-const formatDate = (dateString: string) => {
-  if (!dateString) return ''
-  const date = new Date(dateString)
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-const calculateReadingTime = (content: string) => {
-  if (!content) return '5 min read'
-  const words = content.split(/\s+/).length
-  const wordsPerMinute = 200
-  const minutes = Math.ceil(words / wordsPerMinute)
-  return `${minutes} min read`
-}
-
-// Get slug from post path
-const getPostSlug = (postPath: string) => {
-  return postPath?.split('/').pop() || ''
-}
-
 // Progress bar for reading
 const scrollProgress = ref(0)
 
@@ -116,7 +89,7 @@ onMounted(() => {
   const updateScrollProgress = () => {
     const scrollTop = window.scrollY
     const docHeight = document.documentElement.scrollHeight - window.innerHeight
-    const progress = (scrollTop / docHeight) * 100
+    const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0
     scrollProgress.value = Math.min(Math.max(progress, 0), 100)
   }
 
@@ -241,12 +214,12 @@ definePageMeta({
           <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-sm text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-800 rounded-lg px-6 py-3 border border-gray-200 dark:border-gray-700 max-w-md mx-auto">
             <div class="flex items-center gap-2">
               <Icon name="heroicons:calendar-days" class="w-4 h-4 text-blue-600 dark:text-blue-400" />
-              <time :datetime="post.date" class="font-medium">{{ formatDate(post.date) }}</time>
+              <time :datetime="post.date" class="font-medium">{{ formattedDate }}</time>
             </div>
             <div class="hidden sm:block w-px h-4 bg-gray-300 dark:bg-gray-600"></div>
             <div class="flex items-center gap-2">
               <Icon name="heroicons:clock" class="w-4 h-4 text-green-600 dark:text-green-400" />
-              <span class="font-medium">{{ calculateReadingTime(post.body?.toString() || '') }}</span>
+              <span class="font-medium">{{ readingTime }}</span>
             </div>
           </div>
         </header>
@@ -301,125 +274,17 @@ definePageMeta({
           </div>
         </div>
 
-        <!-- Simplified Next/Previous Navigation -->
-        <footer class="border-t border-gray-200 dark:border-gray-700 pt-8 pb-8 px-4 sm:px-6 lg:px-8">
-          <div class="max-w-4xl mx-auto">
-            <!-- Navigation Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <!-- Previous Post -->
-              <div>
-                <NuxtLink 
-                  v-if="previousPost"
-                  :to="`/blog/${getPostSlug(previousPost.path)}`"
-                  class="group block p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded hover:shadow-md transition-all duration-200"
-                >
-                  <div class="flex items-center gap-3">
-                    <div class="flex-shrink-0 w-8 h-8 bg-blue-100 dark:bg-blue-900/50 rounded-full flex items-center justify-center">
-                      <Icon name="heroicons:arrow-left" class="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="text-xs font-medium text-blue-600 dark:text-blue-400 mb-1">
-                        Previous Post
-                      </p>
-                      <h3 class="text-sm font-semibold text-gray-900 dark:text-white leading-tight line-clamp-2">
-                        {{ previousPost.title }}
-                      </h3>
-                    </div>
-                  </div>
-                </NuxtLink>
-                
-                <!-- Disabled Previous Button -->
-                <div 
-                  v-else 
-                  class="p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 rounded opacity-50"
-                >
-                  <div class="flex items-center gap-3">
-                    <div class="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                      <Icon name="heroicons:arrow-left" class="w-4 h-4 text-gray-400" />
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="text-xs font-medium text-gray-400 mb-1">
-                        Previous Post
-                      </p>
-                      <h3 class="text-sm font-semibold text-gray-400">
-                        No previous post
-                      </h3>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Next Post -->
-              <div>
-                <NuxtLink 
-                  v-if="nextPost"
-                  :to="`/blog/${getPostSlug(nextPost.path)}`"
-                  class="group block p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded hover:shadow-md transition-all duration-200"
-                >
-                  <div class="flex items-center gap-3">
-                    <div class="flex-1 min-w-0 text-right">
-                      <p class="text-xs font-medium text-green-600 dark:text-green-400 mb-1">
-                        Next Post
-                      </p>
-                      <h3 class="text-sm font-semibold text-gray-900 dark:text-white leading-tight line-clamp-2">
-                        {{ nextPost.title }}
-                      </h3>
-                    </div>
-                    <div class="flex-shrink-0 w-8 h-8 bg-green-100 dark:bg-green-900/50 rounded-full flex items-center justify-center">
-                      <Icon name="heroicons:arrow-right" class="w-4 h-4 text-green-600 dark:text-green-400" />
-                    </div>
-                  </div>
-                </NuxtLink>
-                
-                <!-- Disabled Next Button -->
-                <div 
-                  v-else 
-                  class="p-4 bg-gray-50 dark:bg-gray-800/50 border border-gray-200/50 dark:border-gray-700/50 rounded opacity-50"
-                >
-                  <div class="flex items-center gap-3">
-                    <div class="flex-1 min-w-0 text-right">
-                      <p class="text-xs font-medium text-gray-400 mb-1">
-                        Next Post
-                      </p>
-                      <h3 class="text-sm font-semibold text-gray-400">
-                        No next post
-                      </h3>
-                    </div>
-                    <div class="flex-shrink-0 w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center">
-                      <Icon name="heroicons:arrow-right" class="w-4 h-4 text-gray-400" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Back to Blog Link -->
-            <div class="text-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-              <NuxtLink 
-                to="/blog" 
-                class="inline-flex items-center gap-2 px-6 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded hover:shadow-sm transition-all duration-200"
-              >
-                <Icon name="heroicons:squares-2x2" class="w-4 h-4" />
-                <span class="font-medium">View All Posts</span>
-              </NuxtLink>
-            </div>
-          </div>
-        </footer>
+        <!-- Blog Post Navigation Component -->
+        <BlogPostNavigation 
+          :previous-post="previousPost" 
+          :next-post="nextPost" 
+        />
       </article>
     </main>
   </div>
 </template>
 
 <style scoped>
-/* Line clamp utility */
-.line-clamp-2 {
-  display: -webkit-box;
-  line-clamp: 2;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
 /* Simplified link hover effects */
 :deep(.prose a) {
   transition: all 0.2s ease;

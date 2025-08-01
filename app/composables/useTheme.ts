@@ -1,29 +1,39 @@
 import { computed, onMounted, readonly, watch, onUnmounted } from 'vue'
 
 export const useTheme = () => {
-  // Use useState with simplified initialization
   const isDark = useState('theme-isDark', () => {
-    // On server side, return false to prevent hydration mismatch
     if (process.server) return false
     
-    // On client side, check sessionStorage for plugin's decision
     if (process.client) {
-      const initialTheme = sessionStorage.getItem('__INITIAL_THEME__')
-      if (initialTheme !== null) {
-        return initialTheme === 'true'
+      const sessionTheme = sessionStorage.getItem('__INITIAL_THEME__')
+      if (sessionTheme !== null) {
+        return sessionTheme === 'true'
       }
       
-      // Fallback logic
       const savedTheme = localStorage.getItem('theme')
-      if (savedTheme === 'light') return false
-      if (savedTheme === 'dark') return true
+      if (savedTheme !== null) {
+        return savedTheme === 'dark'
+      }
+      
+      const storedPreference = sessionStorage.getItem('user-theme-preference')
+      if (storedPreference !== null) {
+        return storedPreference === 'dark'
+      }
+      
       return window.matchMedia('(prefers-color-scheme: dark)').matches
     }
     
     return false
   })
 
-  // Get system preference
+  const hasUserPreference = computed(() => {
+    if (process.client) {
+      return localStorage.getItem('theme') !== null || 
+             sessionStorage.getItem('user-theme-preference') !== null
+    }
+    return false
+  })
+
   const getSystemPreference = (): boolean => {
     if (process.client) {
       return window.matchMedia('(prefers-color-scheme: dark)').matches
@@ -31,7 +41,6 @@ export const useTheme = () => {
     return false
   }
 
-  // Update document class and meta theme-color
   const updateDocumentClass = (dark: boolean): void => {
     if (process.client) {
       const html = document.documentElement
@@ -40,7 +49,6 @@ export const useTheme = () => {
     }
   }
 
-  // Update meta theme-color
   const updateMetaThemeColor = (color: string): void => {
     if (process.client) {
       let metaThemeColor: HTMLMetaElement | null = document.querySelector('meta[name="theme-color"]')
@@ -53,37 +61,53 @@ export const useTheme = () => {
     }
   }
 
-  // Simple toggle between light and dark
-  const toggleTheme = (): void => {
+  const saveUserPreference = (theme: 'light' | 'dark'): void => {
     if (process.client) {
-      isDark.value = !isDark.value
-      localStorage.setItem('theme', isDark.value ? 'dark' : 'light')
-      updateDocumentClass(isDark.value)
+      localStorage.setItem('theme', theme)
+      sessionStorage.setItem('user-theme-preference', theme)
+      sessionStorage.setItem('__INITIAL_THEME__', theme === 'dark' ? 'true' : 'false')
     }
   }
 
-  // Set specific theme
+  const toggleTheme = (): void => {
+    if (process.client) {
+      const newTheme = !isDark.value
+      isDark.value = newTheme
+      saveUserPreference(newTheme ? 'dark' : 'light')
+      updateDocumentClass(newTheme)
+    }
+  }
+
   const setTheme = (theme: 'light' | 'dark'): void => {
     if (process.client) {
       isDark.value = theme === 'dark'
-      localStorage.setItem('theme', theme)
+      saveUserPreference(theme)
       updateDocumentClass(isDark.value)
     }
   }
 
-  // Computed properties
+  const followSystemTheme = (): void => {
+    if (process.client) {
+      localStorage.removeItem('theme')
+      sessionStorage.removeItem('user-theme-preference')
+      sessionStorage.removeItem('__INITIAL_THEME__')
+      
+      const systemPreference = getSystemPreference()
+      isDark.value = systemPreference
+      updateDocumentClass(isDark.value)
+    }
+  }
+
   const getCurrentTheme = computed(() => isDark.value ? 'dark' : 'light')
   const getThemeIcon = computed(() => isDark.value ? 'heroicons:sun' : 'heroicons:moon')
   const getThemeLabel = computed(() => isDark.value ? 'Light' : 'Dark')
 
-  // System theme listener
   const setupSystemThemeListener = () => {
     if (process.client) {
       const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
       
       const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-        const savedTheme = localStorage.getItem('theme')
-        if (!savedTheme) {
+        if (!hasUserPreference.value) {
           isDark.value = e.matches
           updateDocumentClass(isDark.value)
         }
@@ -95,10 +119,8 @@ export const useTheme = () => {
     return undefined
   }
 
-  // Watch for theme changes (only after initialization)
-  let isInitialized = false
   watch(isDark, (newValue) => {
-    if (isInitialized && process.client) {
+    if (process.client) {
       updateDocumentClass(newValue)
     }
   })
@@ -106,8 +128,8 @@ export const useTheme = () => {
   let cleanup: (() => void) | undefined
 
   onMounted(() => {
+    updateDocumentClass(isDark.value)
     cleanup = setupSystemThemeListener()
-    isInitialized = true
   })
 
   onUnmounted(() => {
@@ -116,11 +138,13 @@ export const useTheme = () => {
 
   return {
     isDark: readonly(isDark),
+    hasUserPreference,
     getCurrentTheme,
     getThemeIcon,
     getThemeLabel,
     toggleTheme,
     setTheme,
+    followSystemTheme,
     getSystemPreference
   }
 }

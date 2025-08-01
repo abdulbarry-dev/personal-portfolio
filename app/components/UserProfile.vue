@@ -104,7 +104,8 @@
             </NuxtLink>
             
             <a 
-              href="/home"
+              :href="resumeUrl"
+              target="_blank"
               rel="noopener noreferrer"
               class="group inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-4 border-2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:border-gray-400 dark:hover:border-gray-500 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-gray-800 transform hover:scale-105 active:scale-95 transition-all duration-200 text-sm sm:text-base"
             >
@@ -163,6 +164,8 @@
 </template>
 
 <script setup>
+const resumeUrl = "https://drive.google.com/file/d/1zkrPXhRKt2WevTkKMRDIOD_tel6tLvuc/view?usp=sharing"
+
 defineOptions({
   name: 'HomeView'
 })

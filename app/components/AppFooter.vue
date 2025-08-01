@@ -89,6 +89,8 @@
 </template>
 
 <script setup>
+import { h, markRaw } from 'vue'
+
 const profileData = {
   name: 'Abdelbari Guenichi',
   title: 'Frontend Developer',

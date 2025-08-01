@@ -1,53 +1,57 @@
 <script setup lang="ts">
-defineProps({
-  post: {
-    type: Object,
-    required: true,
-    default: () => ({})
-  }
-});
+import { formatDate, calculateReadingTime } from '~/utils/blog'
 
-const formatDate = (dateString: string) => {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-};
+// Component props with proper typing
+interface BlogPost {
+  title: string
+  description?: string
+  date?: string
+  tags?: string[]
+  author?: string
+  path?: string
+  _path?: string
+  readingTime?: string
+  body?: any
+}
 
-const getReadingTime = (post: any) => {
-  if (post.readingTime) return post.readingTime;
-  
-  // Estimate reading time based on description or default
-  const wordCount = post.description ? post.description.split(' ').length : 100;
-  const readingTimeMinutes = Math.ceil(wordCount / 200);
-  return `${readingTimeMinutes} min read`;
-};
+interface Props {
+  post: BlogPost
+}
+
+const props = defineProps<Props>()
+
+// Computed values for better performance
+const formattedDate = computed(() => formatDate(props.post.date || ''))
+const readingTime = computed(() => {
+  if (props.post.readingTime) return props.post.readingTime
+  return calculateReadingTime(props.post.body || props.post.description || '', 200)
+})
+const postUrl = computed(() => props.post._path || props.post.path || '')
+const displayTags = computed(() => props.post.tags?.slice(0, 4) || [])
+const extraTagsCount = computed(() => Math.max(0, (props.post.tags?.length || 0) - 4))
 </script>
 
 <template>
   <NuxtLink 
-    :to="post._path || post.path" 
+    :to="postUrl" 
     class="group block bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-blue-300 dark:hover:border-blue-600 hover:shadow-lg dark:hover:shadow-2xl transition-all duration-300 ease-in-out overflow-hidden h-full"
   >
     <article class="flex flex-col h-full p-6 sm:p-8">
       <!-- Header Section -->
-      <div class="flex items-start justify-between mb-4">
+      <header class="flex items-start justify-between mb-4">
         <div class="flex items-center space-x-3">
           <!-- Date Badge -->
           <div class="flex items-center px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium">
             <Icon name="heroicons:calendar-days" class="w-3 h-3 mr-1" />
             <time v-if="post.date" :datetime="post.date">
-              {{ formatDate(post.date) }}
+              {{ formattedDate }}
             </time>
           </div>
           
           <!-- Reading Time -->
           <div class="flex items-center px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium">
             <Icon name="heroicons:clock" class="w-3 h-3 mr-1" />
-            {{ getReadingTime(post) }}
+            {{ readingTime }}
           </div>
         </div>
         
@@ -55,7 +59,7 @@ const getReadingTime = (post: any) => {
         <div class="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <Icon name="heroicons:arrow-up-right" class="w-5 h-5 text-blue-500 dark:text-blue-400" />
         </div>
-      </div>
+      </header>
 
       <!-- Main Content -->
       <div class="flex-grow">
@@ -65,7 +69,7 @@ const getReadingTime = (post: any) => {
         </h2>
         
         <!-- Description -->
-        <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6 line-clamp-4">
+        <p v-if="post.description" class="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-6 line-clamp-4">
           {{ post.description }}
         </p>
         
@@ -81,24 +85,24 @@ const getReadingTime = (post: any) => {
         </div>
       </div>
 
-      <!-- Footer Section -->
-      <div class="mt-auto pt-6 border-t border-gray-100 dark:border-gray-700">
+      <!-- Footer Section with Tags and Read More -->
+      <footer class="mt-auto pt-6 border-t border-gray-100 dark:border-gray-700">
         <!-- Tags -->
-        <div class="mb-4" v-if="post.tags && post.tags.length">
+        <div v-if="displayTags.length > 0" class="mb-4">
           <div class="flex items-center flex-wrap gap-2">
             <span class="text-xs font-medium text-gray-500 dark:text-gray-400 mr-1">Topics:</span>
             <span 
-              v-for="tag in post.tags.slice(0, 4)" 
+              v-for="tag in displayTags" 
               :key="tag" 
               class="inline-flex items-center px-2.5 py-1 text-xs font-medium text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-900/30 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors duration-200"
             >
               #{{ tag }}
             </span>
             <span 
-              v-if="post.tags.length > 4" 
+              v-if="extraTagsCount > 0" 
               class="inline-flex items-center px-2.5 py-1 text-xs font-medium text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded-full"
             >
-              +{{ post.tags.length - 4 }} more
+              +{{ extraTagsCount }} more
             </span>
           </div>
         </div>
@@ -117,7 +121,7 @@ const getReadingTime = (post: any) => {
             <Icon name="heroicons:arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
           </div>
         </div>
-      </div>
+      </footer>
     </article>
   </NuxtLink>
 </template>
