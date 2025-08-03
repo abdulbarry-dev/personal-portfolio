@@ -5,7 +5,7 @@
         <!-- Navigation - Icons with text only when active -->
         <div class="flex items-center space-x-4 sm:space-x-6 md:space-x-8">
           <NuxtLink 
-            to="/" 
+            to="/home" 
             class="flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors duration-150 ease-out"
             active-class="text-gray-900 dark:text-white"
           >

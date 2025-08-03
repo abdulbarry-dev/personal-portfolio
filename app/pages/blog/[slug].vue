@@ -1,11 +1,4 @@
 <script setup lang="ts">
-import { 
-  formatDate, 
-  calculateReadingTime, 
-  getPostSlug, 
-  isValidPost, 
-  sortPostsByDate 
-} from '~/utils/blog'
 
 // Get the current URL slug
 const route = useRoute()

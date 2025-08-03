@@ -96,13 +96,6 @@
 </template>
 
 <script setup lang="ts">
-import { 
-  isValidPost,
-  extractTagsWithCounts,
-  filterPostsBySearch,
-  filterPostsByTags
-} from '~/utils/blog'
-
 definePageMeta({
   layout: 'default'
 })

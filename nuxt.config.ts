@@ -1,3 +1,5 @@
+import tsconfigPaths from 'vite-tsconfig-paths'
+
 export default defineNuxtConfig({
   // SSG Configuration for GitHub Pages
   nitro: {
@@ -8,7 +10,7 @@ export default defineNuxtConfig({
 
   // GitHub Pages deployment settings
   app: {
-    baseURL: process.env.NODE_ENV === 'production' ? '/personal-portfolio/' : '/',
+    baseURL: process.env.NODE_ENV === 'production' ? '/' : '/',
     buildAssetsDir: 'assets/',
     head: {
       htmlAttrs: {
@@ -30,10 +32,7 @@ export default defineNuxtConfig({
     transpile: ['@nuxt/icon']
   },
 
-  // CSS Configuration
-  css: ['~/assets/css/main.css'],
-
-  // PostCSS configuration to prevent Tailwind crashes
+  // PostCSS configuration
   postcss: {
     plugins: {
       '@tailwindcss/nesting': {},
@@ -52,52 +51,80 @@ export default defineNuxtConfig({
     }
   },
 
-  // Vite configuration for GitHub Pages
+  // Vite configuration to handle custom paths
   vite: {
-    css: {
-      postcss: {
-        plugins: [
-          require('@tailwindcss/nesting'),
-          require('tailwindcss'),
-          require('autoprefixer'),
-          ...(process.env.NODE_ENV === 'production' ? [
-            require('cssnano')({
-              preset: ['default', {
-                discardComments: { removeAll: true },
-                normalizeWhitespace: false,
-                colormin: false,
-                minifySelectors: false
-              }]
-            })
-          ] : [])
-        ]
-      }
-    },
-    build: {
-      assetsInlineLimit: 0,
-      rollupOptions: {
-        external: [],
-        output: {
-          manualChunks: undefined
-        }
+    plugins: [tsconfigPaths()],
+    resolve: {
+      alias: {
+        '@': '.',
+        '~': '.',
+        'assets': './app/assets'
       }
     }
   },
 
   // Modules
   modules: [
+    '@nuxtjs/tailwindcss',
     '@nuxt/content',
     '@nuxt/icon',
-    '@nuxtjs/sitemap'
+    '@nuxtjs/seo',
+    '@nuxtjs/sitemap',
+    '@nuxt/eslint'
   ],
 
+  // ESLint module configuration
+  eslint: {
+    config: {
+      stylistic: {
+        indent: 2,
+        quotes: 'single'
+      }
+    }
+  },
 
+  // Content module configuration
+  content: {
+    highlight: {
+      theme: {
+        default: 'github-light',
+        dark: 'github-dark'
+      },
+      preload: ['json', 'js', 'ts', 'html', 'css', 'vue', 'diff', 'shell', 'markdown', 'yaml', 'bash', 'ini']
+    },
+    markdown: {
+      anchorLinks: false
+    }
+  },
+
+  // SEO module configuration
+  seo: {
+    redirectToCanonicalSiteUrl: true
+  },
+
+  // Site configuration
+  site: {
+    url: 'https://abdulbarry.me',
+    name: 'Abdulbarry Personal Portfolio'
+  },
+
+  // Sitemap configuration
+  sitemap: {
+    hostname: 'https://abdulbarry.me',
+    routes: [
+      '/',
+      '/about',
+      '/contact',
+      '/projects',
+      '/blog'
+    ]
+  },
 
   // Runtime config
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_SITE_URL || 'https://abdulbarry-dev.github.io',
-      siteName: process.env.NUXT_SITE_NAME || 'Abdulbarry Portfolio',
+      siteUrl: process.env.NUXT_SITE_URL || 'https://abdulbarry.me',
+      siteName: process.env.NUXT_SITE_NAME || 'Abdulbarry Personal Portfolio',
       formspreeEndpoint: process.env.NUXT_FORMSPREE_ENDPOINT || ''
     }
   },
@@ -107,5 +134,5 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   
   // SSG Settings
-  ssr: false,
+  ssr: true
 })

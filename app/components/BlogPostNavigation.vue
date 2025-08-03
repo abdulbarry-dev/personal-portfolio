@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { getPostSlug } from '~/utils/blog'
 
 interface BlogPost {
   title: string

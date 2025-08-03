@@ -3,13 +3,6 @@
  * Provides common blog operations and state management
  */
 
-import { 
-  isValidPost,
-  extractTagsWithCounts,
-  filterPostsBySearch,
-  filterPostsByTags,
-  sortPostsByDate
-} from '~/utils/blog'
 
 export const useBlog = () => {
   /**

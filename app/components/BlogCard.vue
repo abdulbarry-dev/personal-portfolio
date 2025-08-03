@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { formatDate, calculateReadingTime } from '~/utils/blog'
 
 // Component props with proper typing
 interface BlogPost {

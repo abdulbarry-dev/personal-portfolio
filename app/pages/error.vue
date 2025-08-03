@@ -9,7 +9,7 @@
       
       <div class="space-y-4">
         <NuxtLink 
-          to="/"
+          to="/home"
           class="inline-flex items-center justify-center px-6 py-3 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition-colors duration-200"
         >
           Go Home

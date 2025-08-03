@@ -201,7 +201,7 @@ const socialLinks = [
 
 // Navigation links
 const generalLinks = [
-  { name: 'Home', to: '/' },
+  { name: 'Home', to: '/home' },
   { name: 'Projects', to: '/projects' },
   { name: 'Contact', to: '/contact' }
 ]
