@@ -1,17 +1,18 @@
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineNuxtConfig({
-  // SSG Configuration for GitHub Pages
+  // Vercel deployment configuration
   nitro: {
+    preset: 'vercel',
     prerender: {
       routes: ['/sitemap.xml']
     }
   },
 
-  // GitHub Pages deployment settings
+  // App configuration for Vercel
   app: {
-    baseURL: process.env.NODE_ENV === 'production' ? '/' : '/',
-    buildAssetsDir: 'assets/',
+    baseURL: '/',
+    buildAssetsDir: '_nuxt/',
     head: {
       htmlAttrs: {
         lang: 'en'
@@ -32,13 +33,14 @@ export default defineNuxtConfig({
     transpile: ['@nuxt/icon']
   },
 
-  // PostCSS configuration
+  // PostCSS configuration - More conservative approach
   postcss: {
     plugins: {
       '@tailwindcss/nesting': {},
       'tailwindcss': {},
       'autoprefixer': {},
-      ...(process.env.NODE_ENV === 'production' && {
+      // Only enable cssnano in actual production builds
+      ...(process.env.VERCEL_ENV === 'production' && {
         'cssnano': {
           preset: ['default', {
             discardComments: { removeAll: true },
@@ -51,7 +53,7 @@ export default defineNuxtConfig({
     }
   },
 
-  // Vite configuration to handle custom paths
+  // Vite configuration
   vite: {
     plugins: [tsconfigPaths()],
     resolve: {
@@ -72,6 +74,14 @@ export default defineNuxtConfig({
     '@nuxtjs/sitemap',
     '@nuxt/eslint'
   ],
+
+  // TailwindCSS configuration - Ensure it works in all environments
+  tailwindcss: {
+    cssPath: '~/app/assets/css/main.css',
+    configPath: 'tailwind.config.js',
+    exposeConfig: false,
+    viewer: true
+  },
 
   // ESLint module configuration
   eslint: {
@@ -104,13 +114,13 @@ export default defineNuxtConfig({
 
   // Site configuration
   site: {
-    url: 'https://abdulbarry.me',
-    name: 'Abdulbarry Personal Portfolio'
+    url: process.env.NUXT_SITE_URL || 'https://abdulbarry.me',
+    name: process.env.NUXT_SITE_NAME || 'Abdulbarry Personal Portfolio'
   },
 
   // Sitemap configuration
   sitemap: {
-    hostname: 'https://abdulbarry.me',
+    hostname: process.env.NUXT_SITE_URL || 'https://abdulbarry.me',
     routes: [
       '/',
       '/about',
