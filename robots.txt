@@ -1,0 +1,7 @@
+# START nuxt-robots (indexable)
+User-agent: *
+Allow: /
+
+Sitemap: https://abdulbarry.me/sitemap.xml
+Sitemap: https://abdulbarry-dev.github.io/personal-portfolio/sitemap.xml
+# END nuxt-robots
