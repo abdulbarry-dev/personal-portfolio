@@ -1,0 +1,650 @@
+/* === CONTACT FORM COMPONENT STYLES === */
+
+/* Main Form Container */
+.contact-form-container {
+  background-color: white;
+  border: 1px solid #f3f4f6; /* border-gray-100 */
+  border-radius: 1rem; /* rounded-2xl */
+  padding: 2rem; /* p-8 */
+  transition: colors 0.2s ease;
+}
+
+@media (min-width: 768px) {
+  .contact-form-container {
+    padding: 3rem; /* md:p-12 */
+  }
+}
+
+.dark .contact-form-container {
+  background-color: #1f2937; /* dark:bg-gray-800 */
+  border-color: #374151; /* dark:border-gray-700 */
+}
+
+/* Form Layout */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; /* space-y-6 */
+}
+
+/* === GRID LAYOUT === */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem; /* gap-6 */
+}
+
+@media (min-width: 768px) {
+  .form-row {
+    grid-template-columns: repeat(2, 1fr); /* md:grid-cols-2 */
+  }
+}
+
+/* === FIELD WRAPPER === */
+.field-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* space-y-2 */
+}
+
+/* === LABELS === */
+.field-label {
+  display: block;
+  font-size: var(--text-sm);
+  font-weight: var(--font-semibold);
+  color: #111827; /* text-gray-900 */
+}
+
+.dark .field-label {
+  color: white; /* dark:text-white */
+}
+
+.required-asterisk {
+  color: #ef4444; /* text-red-500 */
+}
+
+.dark .required-asterisk {
+  color: #f87171; /* dark:text-red-400 */
+}
+
+/* === INPUT FIELDS === */
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem; /* px-4 py-3 */
+  border: 1px solid #e5e7eb; /* border-gray-200 */
+  background-color: rgba(249, 250, 251, 0.5); /* bg-gray-50/50 */
+  color: #111827; /* text-gray-900 */
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+  font-size: var(--text-base);
+}
+
+.form-input::placeholder {
+  color: #9ca3af; /* placeholder-gray-400 */
+}
+
+.dark .form-input {
+  border-color: #4b5563; /* dark:border-gray-600 */
+  background-color: #374151; /* dark:bg-gray-700 */
+  color: white; /* dark:text-white */
+}
+
+.dark .form-input::placeholder {
+  color: #6b7280; /* dark:placeholder-gray-500 */
+}
+
+/* Input Focus States */
+.form-input:focus {
+  outline: none;
+  ring: 2px solid #3b82f6; /* focus:ring-2 focus:ring-blue-500 */
+  border-color: #3b82f6; /* focus:border-blue-500 */
+}
+
+.dark .form-input:focus {
+  ring-color: #60a5fa; /* dark:focus:ring-blue-400 */
+  border-color: #60a5fa; /* dark:focus:border-blue-400 */
+}
+
+/* Input Hover States */
+.form-input:hover {
+  background-color: white; /* hover:bg-white */
+  border-color: #d1d5db; /* hover:border-gray-300 */
+}
+
+.dark .form-input:hover {
+  background-color: #4b5563; /* dark:hover:bg-gray-600 */
+  border-color: #6b7280; /* dark:hover:border-gray-500 */
+}
+
+/* Error States */
+.form-input.error {
+  border-color: #ef4444; /* border-red-500 */
+  background-color: rgba(254, 242, 242, 0.3); /* bg-red-50/30 */
+}
+
+.form-input.error:focus {
+  ring-color: #ef4444; /* focus:ring-red-500 */
+  border-color: #ef4444; /* focus:border-red-500 */
+}
+
+.dark .form-input.error {
+  border-color: #f87171; /* dark:border-red-400 */
+  background-color: rgba(153, 27, 27, 0.3); /* dark:bg-red-900/30 */
+}
+
+.dark .form-input.error:focus {
+  ring-color: #f87171; /* dark:focus:ring-red-400 */
+  border-color: #f87171; /* dark:focus:border-red-400 */
+}
+
+/* === SELECT FIELD === */
+.form-select-wrapper {
+  position: relative;
+}
+
+.form-select {
+  width: 100%;
+  padding: 0.75rem 1rem; /* px-4 py-3 */
+  border: 1px solid #e5e7eb; /* border-gray-200 */
+  background-color: rgba(249, 250, 251, 0.5); /* bg-gray-50/50 */
+  color: #111827; /* text-gray-900 */
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+  appearance: none; /* appearance-none */
+  font-size: var(--text-base);
+  cursor: pointer;
+}
+
+.dark .form-select {
+  border-color: #4b5563; /* dark:border-gray-600 */
+  background-color: #374151; /* dark:bg-gray-700 */
+  color: white; /* dark:text-white */
+}
+
+/* Select Focus States */
+.form-select:focus {
+  outline: none;
+  ring: 2px solid #3b82f6; /* focus:ring-2 focus:ring-blue-500 */
+  border-color: #3b82f6; /* focus:border-blue-500 */
+}
+
+.dark .form-select:focus {
+  ring-color: #60a5fa; /* dark:focus:ring-blue-400 */
+  border-color: #60a5fa; /* dark:focus:border-blue-400 */
+}
+
+/* Select Hover States */
+.form-select:hover {
+  background-color: white; /* hover:bg-white */
+  border-color: #d1d5db; /* hover:border-gray-300 */
+}
+
+.dark .form-select:hover {
+  background-color: #4b5563; /* dark:hover:bg-gray-600 */
+  border-color: #6b7280; /* dark:hover:border-gray-500 */
+}
+
+/* Select Options */
+.form-select option {
+  color: #111827; /* text-gray-900 */
+  background-color: white;
+}
+
+.dark .form-select option {
+  color: white; /* dark:text-white */
+  background-color: #374151;
+}
+
+.form-select option:disabled {
+  color: #9ca3af; /* text-gray-400 */
+}
+
+.dark .form-select option:disabled {
+  color: #6b7280; /* dark:text-gray-500 */
+}
+
+/* Custom Dropdown Arrow */
+.select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem; /* px-2 */
+  pointer-events: none;
+}
+
+.select-arrow-icon {
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+  color: #9ca3af; /* text-gray-400 */
+}
+
+.dark .select-arrow-icon {
+  color: #6b7280; /* dark:text-gray-500 */
+}
+
+/* === TEXTAREA === */
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem; /* px-4 py-3 */
+  border: 1px solid #e5e7eb; /* border-gray-200 */
+  background-color: rgba(249, 250, 251, 0.5); /* bg-gray-50/50 */
+  color: #111827; /* text-gray-900 */
+  border-radius: var(--radius-lg);
+  transition: all 0.2s ease;
+  resize: vertical; /* resize-vertical */
+  font-size: var(--text-base);
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.form-textarea::placeholder {
+  color: #9ca3af; /* placeholder-gray-400 */
+}
+
+.dark .form-textarea {
+  border-color: #4b5563; /* dark:border-gray-600 */
+  background-color: #374151; /* dark:bg-gray-700 */
+  color: white; /* dark:text-white */
+}
+
+.dark .form-textarea::placeholder {
+  color: #6b7280; /* dark:placeholder-gray-500 */
+}
+
+/* Textarea Focus States */
+.form-textarea:focus {
+  outline: none;
+  ring: 2px solid #3b82f6; /* focus:ring-2 focus:ring-blue-500 */
+  border-color: #3b82f6; /* focus:border-blue-500 */
+}
+
+.dark .form-textarea:focus {
+  ring-color: #60a5fa; /* dark:focus:ring-blue-400 */
+  border-color: #60a5fa; /* dark:focus:border-blue-400 */
+}
+
+/* Textarea Hover States */
+.form-textarea:hover {
+  background-color: white; /* hover:bg-white */
+  border-color: #d1d5db; /* hover:border-gray-300 */
+}
+
+.dark .form-textarea:hover {
+  background-color: #4b5563; /* dark:hover:bg-gray-600 */
+  border-color: #6b7280; /* dark:hover:border-gray-500 */
+}
+
+/* === ERROR MESSAGES === */
+.error-message {
+  font-size: var(--text-sm);
+  color: #dc2626; /* text-red-600 */
+  margin-top: 0.25rem;
+}
+
+.dark .error-message {
+  color: #f87171; /* dark:text-red-400 */
+}
+
+/* === HELPER TEXT === */
+.helper-text {
+  font-size: var(--text-sm);
+  color: #6b7280; /* text-gray-500 */
+  margin-top: 0.25rem;
+}
+
+.dark .helper-text {
+  color: #9ca3af; /* dark:text-gray-400 */
+}
+
+/* === SUBMIT BUTTON SECTION === */
+.submit-section {
+  padding-top: 1rem; /* pt-4 */
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem 2rem; /* px-8 py-3 */
+  background-color: #111827; /* bg-gray-900 */
+  color: white;
+  font-weight: var(--font-semibold);
+  border-radius: var(--radius-lg);
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  transform-origin: center;
+}
+
+@media (min-width: 768px) {
+  .submit-button {
+    width: auto; /* md:w-auto */
+  }
+}
+
+.dark .submit-button {
+  background-color: white; /* dark:bg-white */
+  color: #111827; /* dark:text-gray-900 */
+}
+
+/* Button Hover States */
+.submit-button:hover {
+  background-color: #1f2937; /* hover:bg-gray-800 */
+  transform: scale(1.02); /* hover:scale-[1.02] */
+}
+
+.dark .submit-button:hover {
+  background-color: #f3f4f6; /* dark:hover:bg-gray-100 */
+}
+
+/* Button Focus States */
+.submit-button:focus {
+  outline: none;
+  ring: 2px solid #6b7280; /* focus:ring-2 focus:ring-gray-500 */
+  ring-offset: 2px; /* focus:ring-offset-2 */
+}
+
+.dark .submit-button:focus {
+  ring-color: #9ca3af; /* dark:focus:ring-gray-400 */
+  ring-offset-color: #1f2937; /* dark:focus:ring-offset-gray-800 */
+}
+
+/* Button Active State */
+.submit-button:active {
+  transform: scale(0.98); /* active:scale-[0.98] */
+}
+
+/* Button Disabled State */
+.submit-button:disabled {
+  opacity: 0.5; /* disabled:opacity-50 */
+  cursor: not-allowed; /* disabled:cursor-not-allowed */
+  transform: none;
+}
+
+.submit-button:disabled:hover {
+  transform: none;
+  background-color: #111827;
+}
+
+.dark .submit-button:disabled:hover {
+  background-color: white;
+}
+
+/* Button Loading Icon */
+.button-icon {
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+  margin-right: 0.5rem; /* mr-2 */
+}
+
+/* === FOCUS RINGS === */
+.form-input,
+.form-select,
+.form-textarea,
+.submit-button {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.dark .form-input:focus,
+.dark .form-select:focus,
+.dark .form-textarea:focus {
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5);
+}
+
+.form-input.error:focus,
+.form-select.error:focus,
+.form-textarea.error:focus {
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5);
+}
+
+.dark .form-input.error:focus,
+.dark .form-select.error:focus,
+.dark .form-textarea.error:focus {
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.5);
+}
+
+.submit-button:focus {
+  box-shadow: 0 0 0 2px rgba(107, 114, 128, 0.5), 0 0 0 4px rgba(107, 114, 128, 0.1);
+}
+
+.dark .submit-button:focus {
+  box-shadow: 0 0 0 2px rgba(156, 163, 175, 0.5), 0 0 0 4px rgba(31, 41, 55, 1);
+}
+
+/* === RESPONSIVE ADJUSTMENTS === */
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+  .contact-form-container {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    gap: 1rem;
+  }
+  
+  .contact-form {
+    gap: 1rem;
+  }
+  
+  .submit-button {
+    padding: 0.875rem 1.5rem;
+  }
+}
+
+/* === ACCESSIBILITY ENHANCEMENTS === */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .form-input,
+  .form-select,
+  .form-textarea {
+    border-width: 2px;
+  }
+  
+  .submit-button {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .form-input,
+  .form-select,
+  .form-textarea,
+  .submit-button,
+  .contact-form-container {
+    transition: none;
+  }
+  
+  .submit-button:hover,
+  .submit-button:active {
+    transform: none;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+.form-input:focus-visible,
+.form-select:focus-visible,
+.form-textarea:focus-visible,
+.submit-button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* === UTILITY CLASSES === */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Custom transition classes */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+}
+
+.transition-colors {
+  transition-property: background-color, border-color, color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+}
+
+.transition-transform {
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* === MANUAL VALIDATION STATES === */
+/* Success states - only show when manually validated */
+.form-input.success {
+  border-color: #10b981; /* border-green-500 */
+  background-color: rgba(236, 253, 245, 0.3); /* bg-green-50/30 */
+}
+
+.form-input.success:focus {
+  /* focus:ring-green-500 */
+  border-color: #10b981; /* focus:border-green-500 */
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
+}
+
+.dark .form-input.success {
+  border-color: #34d399; /* dark:border-green-400 */
+  background-color: rgba(6, 78, 59, 0.3); /* dark:bg-green-900/30 */
+}
+
+.dark .form-input.success:focus {
+  ring-color: #34d399; /* dark:focus:ring-green-400 */
+  border-color: #34d399; /* dark:focus:border-green-400 */
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.5);
+}
+
+/* Apply success state to select and textarea too */
+.form-select.success,
+.form-textarea.success {
+  border-color: #10b981;
+  background-color: rgba(236, 253, 245, 0.3);
+}
+
+.form-select.success:focus,
+.form-textarea.success:focus {
+  ring-color: #10b981;
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
+}
+
+.dark .form-select.success,
+.dark .form-textarea.success {
+  border-color: #34d399;
+  background-color: rgba(6, 78, 59, 0.3);
+}
+
+.dark .form-select.success:focus,
+.dark .form-textarea.success:focus {
+  ring-color: #34d399;
+  border-color: #34d399;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.5);
+}
+
+/* Success message styles */
+.success-message {
+  font-size: var(--text-sm);
+  color: #059669; /* text-green-600 */
+  margin-top: 0.25rem;
+}
+
+.dark .success-message {
+  color: #34d399; /* dark:text-green-400 */
+}
+
+/* Make sure error states override everything */
+.form-input.error,
+.form-select.error,
+.form-textarea.error {
+  border-color: #ef4444 !important; /* border-red-500 */
+  background-color: rgba(254, 242, 242, 0.3) !important; /* bg-red-50/30 */
+}
+
+.form-input.error:focus,
+.form-select.error:focus,
+.form-textarea.error:focus {
+  ring-color: #ef4444 !important; /* focus:ring-red-500 */
+  border-color: #ef4444 !important; /* focus:border-red-500 */
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5) !important;
+}
+
+.dark .form-input.error,
+.dark .form-select.error,
+.dark .form-textarea.error {
+  border-color: #f87171 !important; /* dark:border-red-400 */
+  background-color: rgba(153, 27, 27, 0.3) !important; /* dark:bg-red-900/30 */
+}
+
+.dark .form-input.error:focus,
+.dark .form-select.error:focus,
+.dark .form-textarea.error:focus {
+  ring-color: #f87171 !important; /* dark:focus:ring-red-400 */
+  border-color: #f87171 !important; /* dark:focus:border-red-400 */
+  box-shadow: 0 0 0 2px rgba(248, 113, 113, 0.5) !important;
+}
+
+/* Remove any default validation styling from HTML5 */
+.form-input:invalid,
+.form-select:invalid,
+.form-textarea:invalid {
+  box-shadow: none;
+  border-color: inherit;
+}
+
+/* Prevent browser default validation styles */
+.form-input,
+.form-select,
+.form-textarea {
+  box-shadow: none;
+}
+
+.form-input:focus:invalid,
+.form-select:focus:invalid,
+.form-textarea:focus:invalid {
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+}
+
+.dark .form-input:focus:invalid,
+.dark .form-select:focus:invalid,
+.dark .form-textarea:focus:invalid {
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5);
+}

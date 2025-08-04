@@ -1,0 +1,289 @@
+/* === ERROR PAGE STYLES === */
+
+/* Main Container */
+.error-container {
+  min-height: 100vh; /* min-h-screen */
+  display: flex;
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
+  background-color: #f9fafb; /* bg-gray-50 */
+  padding: 1rem; /* p-4 */
+}
+
+.dark .error-container {
+  background-color: #111827; /* dark:bg-gray-900 */
+}
+
+/* Content Container */
+.error-content {
+  max-width: 28rem; /* max-w-md */
+  width: 100%; /* w-full */
+  text-align: center; /* text-center */
+}
+
+/* Error Section */
+.error-section {
+  margin-bottom: 2rem; /* mb-8 */
+}
+
+/* Error Code */
+.error-code {
+  font-size: 3.75rem; /* text-6xl */
+  font-weight: var(--font-bold); /* font-bold */
+  color: #111827; /* text-gray-900 */
+  margin-bottom: 1rem; /* mb-4 */
+  line-height: 1; /* leading-none */
+}
+
+.dark .error-code {
+  color: white; /* dark:text-white */
+}
+
+/* Error Title */
+.error-title {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: var(--font-semibold); /* font-semibold */
+  color: #374151; /* text-gray-700 */
+  margin-bottom: 0.5rem; /* mb-2 */
+  margin-top: 0;
+}
+
+.dark .error-title {
+  color: #d1d5db; /* dark:text-gray-300 */
+}
+
+/* Error Description */
+.error-description {
+  color: #4b5563; /* text-gray-600 */
+  line-height: 1.5; /* leading-relaxed */
+  margin: 0;
+}
+
+.dark .error-description {
+  color: #9ca3af; /* dark:text-gray-400 */
+}
+
+/* Actions Container */
+.error-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* space-y-4 */
+}
+
+/* Primary Action Button */
+.error-primary-button {
+  display: inline-flex;
+  align-items: center; /* items-center */
+  justify-content: center; /* justify-center */
+  padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  background-color: #111827; /* bg-gray-900 */
+  color: white; /* text-white */
+  font-weight: var(--font-medium); /* font-medium */
+  border-radius: 0.5rem; /* rounded-lg */
+  transition: all 0.2s ease; /* transition-colors duration-200 */
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-base);
+}
+
+.error-primary-button:hover {
+  background-color: #1f2937; /* hover:bg-gray-800 */
+}
+
+.dark .error-primary-button {
+  background-color: #3b82f6; /* dark:bg-blue-600 */
+}
+
+.dark .error-primary-button:hover {
+  background-color: #2563eb; /* dark:hover:bg-blue-700 */
+}
+
+/* Secondary Action Button */
+.error-secondary-button {
+  display: block;
+  width: 100%; /* w-full */
+  padding: 0.75rem 1.5rem; /* px-6 py-3 */
+  border: 1px solid #d1d5db; /* border border-gray-300 */
+  color: #374151; /* text-gray-700 */
+  font-weight: var(--font-medium); /* font-medium */
+  border-radius: 0.5rem; /* rounded-lg */
+  transition: all 0.2s ease; /* transition-colors duration-200 */
+  background-color: white; /* bg-white */
+  cursor: pointer;
+  font-size: var(--text-base);
+  text-decoration: none;
+}
+
+.error-secondary-button:hover {
+  border-color: #9ca3af; /* hover:border-gray-400 */
+  color: #111827; /* hover:text-gray-900 */
+}
+
+.dark .error-secondary-button {
+  background-color: #1f2937; /* dark:bg-gray-800 */
+  border-color: #4b5563; /* dark:border-gray-600 */
+  color: #d1d5db; /* dark:text-gray-300 */
+}
+
+.dark .error-secondary-button:hover {
+  border-color: #6b7280; /* dark:hover:border-gray-500 */
+  color: white; /* dark:hover:text-white */
+}
+
+/* === ANIMATIONS === */
+
+/* Fade in animation for the error page */
+.error-container {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Button hover animations */
+.error-primary-button,
+.error-secondary-button {
+  transform: translateY(0);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.error-primary-button:hover,
+.error-secondary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.dark .error-primary-button:hover,
+.dark .error-secondary-button:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+/* === RESPONSIVE ADJUSTMENTS === */
+
+/* Mobile */
+@media (max-width: 640px) {
+  .error-container {
+    padding: 0.5rem;
+  }
+  
+  .error-code {
+    font-size: 3rem; /* text-5xl on mobile */
+  }
+  
+  .error-title {
+    font-size: 1.25rem; /* text-xl on mobile */
+  }
+  
+  .error-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .error-actions {
+    gap: 0.75rem;
+  }
+  
+  .error-primary-button,
+  .error-secondary-button {
+    padding: 0.625rem 1.25rem;
+    font-size: var(--text-sm);
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .error-content {
+    max-width: 24rem;
+  }
+}
+
+/* === ACCESSIBILITY ENHANCEMENTS === */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .error-primary-button,
+  .error-secondary-button {
+    border-width: 2px;
+  }
+  
+  .error-primary-button {
+    border: 2px solid #111827;
+  }
+  
+  .dark .error-primary-button {
+    border: 2px solid #3b82f6;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .error-container {
+    animation: none;
+  }
+  
+  .error-primary-button,
+  .error-secondary-button {
+    transition: none;
+  }
+  
+  .error-primary-button:hover,
+  .error-secondary-button:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+.error-primary-button:focus-visible,
+.error-secondary-button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* === UTILITY CLASSES === */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+}
+
+.transition-colors {
+  transition-property: background-color, border-color, color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+}
+
+/* === ERROR CODE VARIANTS === */
+
+/* Different colors for different error codes */
+.error-code-404 {
+  color: #f59e0b; /* text-amber-500 */
+}
+
+.dark .error-code-404 {
+  color: #fbbf24; /* dark:text-amber-400 */
+}
+
+.error-code-500 {
+  color: #ef4444; /* text-red-500 */
+}
+
+.dark .error-code-500 {
+  color: #f87171; /* dark:text-red-400 */
+}
+
+.error-code-403 {
+  color: #8b5cf6; /* text-violet-500 */
+}
+
+.dark .error-code-403 {
+  color: #a78bfa; /* dark:text-violet-400 */
+}

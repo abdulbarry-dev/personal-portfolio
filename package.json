@@ -20,7 +20,7 @@
     "vercel-build": "nuxt build",
     "clean": "rm -rf .nuxt .output node_modules package-lock.json",
     "fresh-install": "npm run clean && npm install",
-    "verify-deps": "npm list @nuxtjs/tailwindcss @nuxt/content @nuxt/icon @nuxtjs/seo @nuxtjs/sitemap"
+    "verify-deps": "npm list @nuxt/content @nuxt/icon @nuxtjs/seo @nuxtjs/sitemap"
   },
   "dependencies": {
     "@nuxt/content": "^3.6.3",
@@ -34,15 +34,14 @@
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@iconify-json/heroicons": "^1.2.2",
+    "@iconify-json/logos": "^1.2.5",
+    "@iconify-json/mdi": "^1.2.3",
     "@nuxt/eslint": "^1.6.0",
-    "@nuxtjs/tailwindcss": "^6.12.1",
-    "@tailwindcss/nesting": "^0.0.0-insiders.565cd3e",
-    "autoprefixer": "^10.4.21",
     "cssnano": "^7.1.0",
     "eslint": "^9.31.0",
     "gh-pages": "^6.3.0",
     "markdown-it": "^14.1.0",
-    "tailwindcss": "^3.4.1",
     "typescript": "^5.8.3",
     "vite-tsconfig-paths": "^5.1.4"
   }

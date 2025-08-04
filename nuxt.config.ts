@@ -1,15 +1,5 @@
-import tsconfigPaths from 'vite-tsconfig-paths'
-
 export default defineNuxtConfig({
-  // Vercel deployment configuration
-  nitro: {
-    preset: 'vercel',
-    prerender: {
-      routes: ['/sitemap.xml']
-    }
-  },
-
-  // App configuration for Vercel
+  // App configuration
   app: {
     baseURL: '/',
     buildAssetsDir: '_nuxt/',
@@ -33,14 +23,11 @@ export default defineNuxtConfig({
     transpile: ['@nuxt/icon']
   },
 
-  // PostCSS configuration - More conservative approach
+  // PostCSS configuration
   postcss: {
     plugins: {
-      '@tailwindcss/nesting': {},
-      'tailwindcss': {},
-      'autoprefixer': {},
-      // Only enable cssnano in actual production builds
-      ...(process.env.VERCEL_ENV === 'production' && {
+      // Only enable cssnano in production builds
+      ...(process.env.NODE_ENV === 'production' && {
         'cssnano': {
           preset: ['default', {
             discardComments: { removeAll: true },
@@ -53,9 +40,13 @@ export default defineNuxtConfig({
     }
   },
 
+  // CSS configuration
+  css: [
+    '~/app/assets/css/main.css'
+  ],
+
   // Vite configuration
   vite: {
-    plugins: [tsconfigPaths()],
     resolve: {
       alias: {
         '@': '.',
@@ -67,21 +58,12 @@ export default defineNuxtConfig({
 
   // Modules
   modules: [
-    '@nuxtjs/tailwindcss',
     '@nuxt/content',
     '@nuxt/icon',
     '@nuxtjs/seo',
     '@nuxtjs/sitemap',
     '@nuxt/eslint'
   ],
-
-  // TailwindCSS configuration - Ensure it works in all environments
-  tailwindcss: {
-    cssPath: '~/app/assets/css/main.css',
-    configPath: 'tailwind.config.js',
-    exposeConfig: false,
-    viewer: true
-  },
 
   // ESLint module configuration
   eslint: {
@@ -132,10 +114,16 @@ export default defineNuxtConfig({
 
   // Runtime config
   runtimeConfig: {
+    // Private keys (only available on server-side)
+    // These are automatically prefixed with NUXT_
+    
+    // Public keys (exposed to client-side)
     public: {
       siteUrl: process.env.NUXT_SITE_URL || 'https://abdulbarry.me',
-      siteName: process.env.NUXT_SITE_NAME || 'Abdulbarry Personal Portfolio',
-      formspreeEndpoint: process.env.NUXT_FORMSPREE_ENDPOINT || ''
+      siteName: process.env.NUXT_SITE_NAME || 'My Awesome Portfolio Website',
+      formspreeEndpoint: process.env.NUXT_FORMSPREE_ENDPOINT || 'https://formspree.io/f/manbjooj',
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseAnonKey: process.env.SUPABASE_ANON_KEY
     }
   },
 
@@ -143,6 +131,6 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: false },
   
-  // SSG Settings
+  // SSR Settings
   ssr: true
 })

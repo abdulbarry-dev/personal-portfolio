@@ -1,10 +1,10 @@
 <template>
   <section class="newsletter-section">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12">
+    <div class="newsletter-container">
+      <div class="newsletter-flex">
         <!-- Left side - Heading -->
-        <div class="flex-1 text-center lg:text-left lg:pr-8">
-          <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+        <div class="newsletter-heading-section">
+          <h1 class="newsletter-heading">
             Enjoy my content?<br>
             Stay updated with<br>
             my newsletter.
@@ -12,10 +12,10 @@
         </div>
         
         <!-- Right side - Form -->
-        <div class="flex-1 max-w-md mx-auto lg:mx-0">
-          <form @submit.prevent="handleSubmit" class="flex flex-col space-y-4">
+        <div class="newsletter-form-section">
+          <form @submit.prevent="handleSubmit" class="newsletter-form" :class="{ loading: isLoading }">
             <!-- Email Input and Button -->
-            <div class="flex flex-col sm:flex-row gap-3">
+            <div class="newsletter-input-container">
               <input 
                 v-model="email"
                 type="email" 
@@ -24,24 +24,29 @@
                 placeholder="Enter your email"
                 required
                 :disabled="isLoading"
-                class="flex-1 px-4 py-3 bg-gray-800/80 backdrop-blur-sm border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                class="newsletter-email-input"
+                :class="{ 
+                  error: emailError, 
+                  success: emailSuccess 
+                }"
               />
               <button 
                 type="submit"
                 :disabled="isLoading || !email"
-                class="px-6 py-3 bg-white text-gray-900 font-medium rounded-lg hover:bg-gray-100 focus:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 whitespace-nowrap shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center min-w-[120px]"
+                class="newsletter-submit-button"
               >
-                <Icon v-if="isLoading" name="svg-spinners:8-dots-rotate" class="w-5 h-5 mr-2" />
+                <Icon v-if="isLoading" name="svg-spinners:8-dots-rotate" class="newsletter-loading-icon" />
                 <span>{{ isLoading ? 'Adding...' : 'Notify me' }}</span>
               </button>
             </div>
             
             <!-- Privacy Policy Text -->
-            <p class="text-gray-300 text-sm text-center sm:text-left">
+            <p class="newsletter-privacy-text">
               No spam, just useful updates. 
               <button 
                 @click="showPrivacyModal = true"
-                class="text-white font-semibold hover:underline focus:underline transition-all duration-200 cursor-pointer bg-transparent border-none p-0"
+                class="newsletter-privacy-link"
+                type="button"
               >
                 Read privacy policy.
               </button>
@@ -71,6 +76,8 @@ const { addNotification } = useNotifications()
 const email = ref('')
 const isLoading = ref(false)
 const showPrivacyModal = ref(false)
+const emailError = ref(false)
+const emailSuccess = ref(false)
 
 // Get Supabase instance
 const { $supabase } = useNuxtApp()
@@ -155,8 +162,13 @@ const subscribeEmail = async (email) => {
 const handleSubmit = async () => {
   if (!email.value || isLoading.value) return
 
+  // Reset states
+  emailError.value = false
+  emailSuccess.value = false
+
   // Validate email format
   if (!isValidEmail(email.value)) {
+    emailError.value = true
     addNotification({
       type: 'error',
       title: 'Invalid Email',
@@ -184,6 +196,7 @@ const handleSubmit = async () => {
       // Subscribe new email
       await subscribeEmail(email.value)
       
+      emailSuccess.value = true
       addNotification({
         type: 'success',
         title: 'Successfully Subscribed! 🎉',
@@ -191,11 +204,15 @@ const handleSubmit = async () => {
         duration: 5000
       })
 
-      // Clear the email input
-      email.value = ''
+      // Clear the email input after a delay
+      setTimeout(() => {
+        email.value = ''
+        emailSuccess.value = false
+      }, 2000)
     }
   } catch (error) {
     console.error('Subscription error:', error)
+    emailError.value = true
     addNotification({
       type: 'error',
       title: 'Subscription Failed',
@@ -207,87 +224,3 @@ const handleSubmit = async () => {
   }
 }
 </script>
-
-<style scoped>
-.newsletter-section {
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #3730a3 75%, #7c3aed 100%);
-  min-height: 60vh;
-  position: relative;
-  overflow: hidden;
-}
-
-.newsletter-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    radial-gradient(circle at 20% 80%, rgba(99, 102, 241, 0.4) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.3) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(59, 130, 246, 0.2) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.newsletter-section::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: 
-    linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.02) 50%, transparent 70%);
-  pointer-events: none;
-}
-
-/* Mobile First Responsive Design */
-@media (max-width: 640px) {
-  .newsletter-section {
-    min-height: 50vh;
-  }
-  
-  .newsletter-section h1 {
-    font-size: 2rem;
-    line-height: 1.2;
-  }
-  
-  .newsletter-section .flex-col.space-y-4 {
-    gap: 1rem;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 768px) {
-  .newsletter-section h1 {
-    font-size: 2.5rem;
-  }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .newsletter-section h1 {
-    font-size: 3rem;
-  }
-}
-
-@media (min-width: 1025px) {
-  .newsletter-section {
-    min-height: 60vh;
-  }
-}
-
-/* Enhanced focus states for accessibility */
-.newsletter-section input:focus,
-.newsletter-section button:focus {
-  transform: translateY(-1px);
-}
-
-.newsletter-section button:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
-}
-
-/* Animation for smooth transitions */
-.newsletter-section * {
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Loading state styles */
-.newsletter-section button:disabled {
-  transform: none;
-}
-</style>

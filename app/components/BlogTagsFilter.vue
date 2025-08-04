@@ -47,19 +47,17 @@ const isTagSelected = (tag: string) => props.selectedTags.includes(tag)
  * Get button classes for a tag
  */
 const getTagButtonClasses = (tag: string) => [
-  'px-3 py-1 text-sm font-medium rounded-full transition-all duration-200 hover:scale-105',
-  isTagSelected(tag)
-    ? 'bg-blue-600 dark:bg-blue-500 text-white'
-    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+  'tag-button',
+  isTagSelected(tag) ? 'tag-button-selected' : 'tag-button-unselected'
 ]
 </script>
 
 <template>
   <div 
     v-if="allTags.size > 0" 
-    class="flex items-center flex-wrap gap-2"
+    class="tags-filter-container"
   >
-    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">
+    <span class="tags-filter-label">
       Filter by tag(s):
     </span>
     
@@ -79,10 +77,14 @@ const getTagButtonClasses = (tag: string) => [
     <button
       v-if="selectedTags.length > 0"
       @click="clearAllTags"
-      class="px-3 py-1 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/70 rounded-full transition-colors duration-200"
+      class="clear-all-button"
       title="Clear all tag filters"
     >
       Clear all
     </button>
   </div>
 </template>
+
+<style scoped>
+@import './../assets/css/BlogTagsFilter.css';
+</style>

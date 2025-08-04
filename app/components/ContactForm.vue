@@ -1,15 +1,15 @@
 <template>
-  <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-8 md:p-12 transition-colors duration-200">
-    <form class="space-y-6" @submit.prevent="handleSubmit">
+  <div class="contact-form-container">
+    <form class="contact-form" @submit.prevent="handleSubmit">
       <!-- Name and Email Row -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="form-row">
         <!-- Name Field -->
-        <div class="space-y-2">
+        <div class="field-wrapper">
           <label 
             for="name" 
-            class="block text-sm font-semibold text-gray-900 dark:text-white"
+            class="field-label"
           >
-            Name <span class="text-red-500 dark:text-red-400">*</span>
+            Name <span class="required-asterisk">*</span>
           </label>
           <input
             id="name"
@@ -18,19 +18,22 @@
             name="name"
             required
             placeholder="John Doe"
-            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 hover:bg-white dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-            :class="{ 'border-red-500 dark:border-red-400 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-red-50/30 dark:bg-red-900/30': errors.name }"
+            class="form-input"
+            :class="getFieldClass('name')"
+            @blur="validateField('name')"
+            @input="handleNameInput"
           >
-          <p v-if="errors.name" class="text-sm text-red-600 dark:text-red-400">{{ errors.name }}</p>
+          <p v-if="errors.name" class="error-message">{{ errors.name }}</p>
+          <p v-if="successMessages.name" class="success-message">{{ successMessages.name }}</p>
         </div>
 
         <!-- Email Field -->
-        <div class="space-y-2">
+        <div class="field-wrapper">
           <label 
             for="email" 
-            class="block text-sm font-semibold text-gray-900 dark:text-white"
+            class="field-label"
           >
-            Email <span class="text-red-500 dark:text-red-400">*</span>
+            Email <span class="required-asterisk">*</span>
           </label>
           <input
             id="email"
@@ -39,55 +42,59 @@
             name="email"
             required
             placeholder="john@doe.com"
-            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 hover:bg-white dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-            :class="{ 'border-red-500 dark:border-red-400 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-red-50/30 dark:bg-red-900/30': errors.email }"
+            class="form-input"
+            :class="getFieldClass('email')"
+            @blur="validateField('email')"
           >
-          <p v-if="errors.email" class="text-sm text-red-600 dark:text-red-400">{{ errors.email }}</p>
+          <p v-if="errors.email" class="error-message">{{ errors.email }}</p>
+          <p v-if="successMessages.email" class="success-message">{{ successMessages.email }}</p>
         </div>
       </div>
 
       <!-- Query/Subject Field -->
-      <div class="space-y-2">
+      <div class="field-wrapper">
         <label 
           for="query" 
-          class="block text-sm font-semibold text-gray-900 dark:text-white"
+          class="field-label"
         >
-          Query <span class="text-red-500 dark:text-red-400">*</span>
+          Query <span class="required-asterisk">*</span>
         </label>
-        <div class="relative">
+        <div class="form-select-wrapper">
           <select
             id="query"
             v-model="form.query"
             name="query"
             required
-            class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 appearance-none hover:bg-white dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-            :class="{ 'border-red-500 dark:border-red-400 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-red-50/30 dark:bg-red-900/30': errors.query }"
+            class="form-select"
+            :class="getFieldClass('query')"
+            @change="validateField('query')"
           >
-            <option value="" disabled class="text-gray-400 dark:text-gray-500">Pick one</option>
-            <option value="general" class="text-gray-900 dark:text-white">General Inquiry</option>
-            <option value="project" class="text-gray-900 dark:text-white">Project Collaboration</option>
-            <option value="freelance" class="text-gray-900 dark:text-white">Freelance Work</option>
-            <option value="job" class="text-gray-900 dark:text-white">Job Opportunity</option>
-            <option value="consultation" class="text-gray-900 dark:text-white">Consultation</option>
-            <option value="other" class="text-gray-900 dark:text-white">Other</option>
+            <option value="" disabled>Pick one</option>
+            <option value="general">General Inquiry</option>
+            <option value="project">Project Collaboration</option>
+            <option value="freelance">Freelance Work</option>
+            <option value="job">Job Opportunity</option>
+            <option value="consultation">Consultation</option>
+            <option value="other">Other</option>
           </select>
           <!-- Custom dropdown arrow -->
-          <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-            <svg class="w-5 h-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="select-arrow">
+            <svg class="select-arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </div>
         </div>
-        <p v-if="errors.query" class="text-sm text-red-600 dark:text-red-400">{{ errors.query }}</p>
+        <p v-if="errors.query" class="error-message">{{ errors.query }}</p>
+        <p v-if="successMessages.query" class="success-message">{{ successMessages.query }}</p>
       </div>
 
       <!-- Message Field -->
-      <div class="space-y-2">
+      <div class="field-wrapper">
         <label 
           for="message" 
-          class="block text-sm font-semibold text-gray-900 dark:text-white"
+          class="field-label"
         >
-          Message <span class="text-red-500 dark:text-red-400">*</span>
+          Message <span class="required-asterisk">*</span>
         </label>
         <textarea
           id="message"
@@ -96,24 +103,26 @@
           required
           rows="6"
           placeholder="Your message"
-          class="w-full px-4 py-3 border border-gray-200 dark:border-gray-600 bg-gray-50/50 dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-lg focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-blue-500 dark:focus:border-blue-400 transition-all duration-200 resize-vertical hover:bg-white dark:hover:bg-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
-          :class="{ 'border-red-500 dark:border-red-400 focus:ring-red-500 dark:focus:ring-red-400 focus:border-red-500 dark:focus:border-red-400 bg-red-50/30 dark:bg-red-900/30': errors.message }"
+          class="form-textarea"
+          :class="getFieldClass('message')"
+          @blur="validateField('message')"
         ></textarea>
-        <p v-if="errors.message" class="text-sm text-red-600 dark:text-red-400">{{ errors.message }}</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400">{{ form.message.length }}/500 characters</p>
+        <p v-if="errors.message" class="error-message">{{ errors.message }}</p>
+        <p v-if="successMessages.message" class="success-message">{{ successMessages.message }}</p>
+        <p class="helper-text">{{ form.message.length }}/500 characters</p>
       </div>
 
       <!-- Submit Button -->
-      <div class="pt-4">
+      <div class="submit-section">
         <button
           type="submit"
           :disabled="isLoading"
-          class="w-full md:w-auto px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold rounded-lg hover:bg-gray-800 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 dark:focus:ring-gray-400 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transform hover:scale-[1.02] active:scale-[0.98]"
+          class="submit-button"
         >
           <Icon 
             v-if="isLoading" 
             name="svg-spinners:8-dots-rotate" 
-            class="w-5 h-5 mr-2" 
+            class="button-icon" 
           />
           {{ isLoading ? 'Sending...' : 'Send message' }}
         </button>
@@ -121,6 +130,10 @@
     </form>
   </div>
 </template>
+
+<style scoped>
+@import './../assets/css/ContactForm.css';
+</style>
 
 <script setup>
 defineOptions({
@@ -140,6 +153,7 @@ const form = reactive({
 
 // Form state
 const isLoading = ref(false)
+const hasSubmitted = ref(false)
 const errors = reactive({
   name: '',
   email: '',
@@ -147,55 +161,170 @@ const errors = reactive({
   message: ''
 })
 
-// Formspree endpoint
-const FORMSPREE_ENDPOINT = 'https://formspree.io/f/manbjooj'
+const successMessages = reactive({
+  name: '',
+  email: '',
+  query: '',
+  message: ''
+})
 
-// Validation function
+// Get Formspree endpoint from environment variables
+const config = useRuntimeConfig()
+const FORMSPREE_ENDPOINT = config.public.formspreeEndpoint
+
+// Name validation regex - only alphabetic characters, spaces, hyphens, and apostrophes
+const nameRegex = /^[a-zA-ZÀ-ÿ\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF\s\-'\.]+$/
+
+// Get field class based on validation state
+const getFieldClass = (fieldName) => {
+  if (errors[fieldName]) {
+    return 'error'
+  }
+  
+  // Only show success state after first validation attempt or blur
+  if (hasSubmitted.value || successMessages[fieldName]) {
+    if (isFieldValid(fieldName)) {
+      return 'success'
+    }
+  }
+  
+  return ''
+}
+
+// Check if individual field is valid
+const isFieldValid = (fieldName) => {
+  switch (fieldName) {
+    case 'name':
+      return form.name.trim().length >= 2 && 
+             form.name.trim().length <= 50 && 
+             nameRegex.test(form.name.trim())
+    case 'email':
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      return form.email.trim() && emailRegex.test(form.email)
+    case 'query':
+      return form.query !== ''
+    case 'message':
+      return form.message.trim().length >= 10 && form.message.length <= 500
+    default:
+      return false
+  }
+}
+
+// Validate individual field
+const validateField = (fieldName) => {
+  // Clear previous states
+  errors[fieldName] = ''
+  successMessages[fieldName] = ''
+  
+  let isValid = true
+  
+  switch (fieldName) {
+    case 'name':
+      const trimmedName = form.name.trim()
+      
+      if (!trimmedName) {
+        errors.name = 'Name is required'
+        isValid = false
+      } else if (trimmedName.length < 2) {
+        errors.name = 'Name must be at least 2 characters'
+        isValid = false
+      } else if (trimmedName.length > 50) {
+        errors.name = 'Name must be less than 50 characters'
+        isValid = false
+      } else if (!nameRegex.test(trimmedName)) {
+        errors.name = 'Name can only contain letters, spaces, hyphens, and apostrophes'
+        isValid = false
+      } else {
+        successMessages.name = 'Looks good!'
+      }
+      break
+      
+    case 'email':
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!form.email.trim()) {
+        errors.email = 'Email is required'
+        isValid = false
+      } else if (!emailRegex.test(form.email)) {
+        errors.email = 'Please enter a valid email address'
+        isValid = false
+      } else {
+        successMessages.email = 'Valid email address!'
+      }
+      break
+      
+    case 'query':
+      if (!form.query) {
+        errors.query = 'Please select a query type'
+        isValid = false
+      } else {
+        successMessages.query = 'Query type selected!'
+      }
+      break
+      
+    case 'message':
+      if (!form.message.trim()) {
+        errors.message = 'Message is required'
+        isValid = false
+      } else if (form.message.trim().length < 10) {
+        errors.message = 'Message must be at least 10 characters'
+        isValid = false
+      } else if (form.message.length > 500) {
+        errors.message = 'Message must be less than 500 characters'
+        isValid = false
+      } else {
+        successMessages.message = 'Message looks great!'
+      }
+      break
+  }
+  
+  return isValid
+}
+
+// Real-time input filtering for name field
+const handleNameInput = (event) => {
+  const value = event.target.value
+  const filteredValue = value.replace(/[^a-zA-ZÀ-ÿ\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF\s\-'\.]/g, '')
+  
+  if (value !== filteredValue) {
+    form.name = filteredValue
+    // Show a brief warning if invalid characters were filtered
+    if (!errors.name) {
+      errors.name = 'Only letters, spaces, hyphens, and apostrophes are allowed'
+      setTimeout(() => {
+        if (errors.name === 'Only letters, spaces, hyphens, and apostrophes are allowed') {
+          errors.name = ''
+        }
+      }, 2000)
+    }
+  } else {
+    form.name = value
+  }
+}
+
+// Validation function for full form
 const validateForm = () => {
+  // Clear all previous states
   Object.keys(errors).forEach(key => {
     errors[key] = ''
+    successMessages[key] = ''
   })
 
   let isValid = true
-
-  if (!form.name.trim()) {
-    errors.name = 'Name is required'
-    isValid = false
-  } else if (form.name.trim().length < 2) {
-    errors.name = 'Name must be at least 2 characters'
-    isValid = false
-  }
-
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  if (!form.email.trim()) {
-    errors.email = 'Email is required'
-    isValid = false
-  } else if (!emailRegex.test(form.email)) {
-    errors.email = 'Please enter a valid email address'
-    isValid = false
-  }
-
-  if (!form.query) {
-    errors.query = 'Please select a query type'
-    isValid = false
-  }
-
-  if (!form.message.trim()) {
-    errors.message = 'Message is required'
-    isValid = false
-  } else if (form.message.trim().length < 10) {
-    errors.message = 'Message must be at least 10 characters'
-    isValid = false
-  } else if (form.message.length > 500) {
-    errors.message = 'Message must be less than 500 characters'
-    isValid = false
-  }
+  
+  // Validate all fields
+  Object.keys(form).forEach(fieldName => {
+    if (!validateField(fieldName)) {
+      isValid = false
+    }
+  })
 
   return isValid
 }
 
 // Form submission handler with Formspree integration
 const handleSubmit = async () => {
+  hasSubmitted.value = true
+  
   if (!validateForm()) {
     addNotification({
       type: 'error',
@@ -206,19 +335,31 @@ const handleSubmit = async () => {
     return
   }
 
+  // Check if Formspree endpoint is configured
+  if (!FORMSPREE_ENDPOINT) {
+    addNotification({
+      type: 'error',
+      title: 'Configuration Error',
+      message: 'Contact form is not properly configured. Please try again later.',
+      duration: 5000
+    })
+    console.error('FORMSPREE_ENDPOINT is not configured in environment variables')
+    return
+  }
+
   isLoading.value = true
 
   try {
     // Prepare form data for Formspree
     const formData = new FormData()
-    formData.append('name', form.name)
-    formData.append('email', form.email)
+    formData.append('name', form.name.trim())
+    formData.append('email', form.email.trim())
     formData.append('query', form.query)
-    formData.append('message', form.message)
+    formData.append('message', form.message.trim())
     
     // Add additional metadata
     formData.append('_subject', `New contact form submission: ${form.query}`)
-    formData.append('_replyto', form.email)
+    formData.append('_replyto', form.email.trim())
 
     // Submit to Formspree
     const response = await fetch(FORMSPREE_ENDPOINT, {
@@ -241,6 +382,16 @@ const handleSubmit = async () => {
       Object.keys(form).forEach(key => {
         form[key] = ''
       })
+      
+      // Clear all states
+      Object.keys(errors).forEach(key => {
+        errors[key] = ''
+        successMessages[key] = ''
+      })
+      
+      // Reset submission state
+      hasSubmitted.value = false
+      
     } else {
       // Handle Formspree error responses
       const errorData = await response.json()
@@ -274,8 +425,12 @@ const handleSubmit = async () => {
       message: errorMessage,
       duration: 5000
     })
+    
+    // Log error for debugging
+    console.error('Contact form submission error:', error)
   } finally {
     isLoading.value = false
   }
 }
 </script>
+

@@ -1,88 +1,88 @@
 <template>
-  <div class="bg-white dark:bg-gray-900 min-h-screen transition-colors duration-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+  <div class="projects-page">
+    <div class="projects-container">
       <!-- Page Header -->
-      <div class="text-center mb-16">
-        <h1 class="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+      <div class="projects-header">
+        <h1 class="projects-title">
           My Projects
         </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+        <p class="projects-subtitle">
           A collection of my open-source projects and contributions on GitHub
         </p>
       </div>
 
       <!-- Loading State -->
-      <div v-if="pending" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div v-if="pending" class="projects-grid">
         <div
           v-for="n in 6"
           :key="n"
-          class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 animate-pulse"
+          class="loading-skeleton"
         >
           <!-- Header Skeleton -->
-          <div class="flex items-start justify-between mb-4">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-lg"></div>
-              <div class="space-y-2">
-                <div class="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+          <div class="skeleton-header">
+            <div class="skeleton-icon-container">
+              <div class="skeleton-icon"></div>
+              <div class="skeleton-title-container">
+                <div class="skeleton-title"></div>
               </div>
             </div>
-            <div class="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+            <div class="skeleton-external-icon"></div>
           </div>
           
           <!-- Description Skeleton -->
-          <div class="space-y-2 mb-6">
-            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
-            <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+          <div class="skeleton-description">
+            <div class="skeleton-desc-line full"></div>
+            <div class="skeleton-desc-line three-quarters"></div>
+            <div class="skeleton-desc-line half"></div>
           </div>
           
           <!-- Stats Skeleton -->
-          <div class="flex items-center space-x-4">
-            <div class="flex items-center space-x-1">
-              <div class="w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
-              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+          <div class="skeleton-stats">
+            <div class="skeleton-stat-item">
+              <div class="skeleton-stat-icon"></div>
+              <div class="skeleton-stat-text"></div>
             </div>
-            <div class="flex items-center space-x-1">
-              <div class="w-4 h-4 bg-gray-200 dark:bg-gray-700 rounded"></div>
-              <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded w-8"></div>
+            <div class="skeleton-stat-item">
+              <div class="skeleton-stat-icon"></div>
+              <div class="skeleton-stat-text small"></div>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Error State -->
-      <div v-else-if="error" class="text-center py-16">
-        <Icon name="heroicons:exclamation-triangle" class="w-16 h-16 text-red-400 dark:text-red-300 mx-auto mb-4" />
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Failed to load projects</h3>
-        <p class="text-gray-600 dark:text-gray-400 mb-4">{{ error.message || 'Something went wrong while fetching projects.' }}</p>
+      <div v-else-if="error" class="error-state">
+        <Icon name="heroicons:exclamation-triangle" class="error-icon" />
+        <h3 class="error-title">Failed to load projects</h3>
+        <p class="error-message">{{ error.message || 'Something went wrong while fetching projects.' }}</p>
         <button 
           @click="refresh()" 
-          class="inline-flex items-center px-4 py-2 bg-blue-600 dark:bg-blue-500 text-white rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors duration-200"
+          class="error-retry-button"
         >
-          <Icon name="heroicons:arrow-path" class="w-4 h-4 mr-2" />
+          <Icon name="heroicons:arrow-path" class="error-retry-icon" />
           Try Again
         </button>
       </div>
 
       <!-- Projects Grid -->
-      <div v-else-if="data && data.length > 0" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div v-else-if="data && data.length > 0" class="projects-grid">
         <div
           v-for="(repo, index) in data"
           :key="repo.id"
-          class="group bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-6 hover:shadow-lg dark:hover:shadow-2xl hover:border-gray-300 dark:hover:border-gray-600 transition-all duration-300 hover:-translate-y-1 opacity-0 animate-fade-in"
+          class="project-card animate-fade-in"
           :style="{ animationDelay: `${index * 100}ms` }"
         >
           <!-- Project Icon & Title -->
-          <div class="flex items-start justify-between mb-4">
-            <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-lg flex items-center justify-center group-hover:bg-gray-200 dark:group-hover:bg-gray-600 transition-colors duration-200">
+          <div class="project-header">
+            <div class="project-info">
+              <div class="project-icon-container">
                 <Icon 
                   name="heroicons:cube" 
-                  class="w-6 h-6 text-gray-600 dark:text-gray-300"
+                  class="project-icon"
                 />
               </div>
               <div>
-                <h3 class="text-lg font-semibold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                <h3 class="project-title">
                   {{ repo.name }}
                 </h3>
               </div>
@@ -93,41 +93,42 @@
               :href="repo.html_url"
               target="_blank"
               rel="noopener noreferrer"
-              class="opacity-0 group-hover:opacity-100 transition-opacity duration-200 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg"
+              class="project-external-link"
+              :aria-label="`View ${repo.name} on GitHub`"
             >
               <Icon 
                 name="heroicons:arrow-top-right-on-square" 
-                class="w-4 h-4 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+                class="project-external-icon"
               />
             </a>
           </div>
 
           <!-- Description -->
-          <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-6 line-clamp-3">
+          <p class="project-description line-clamp-3">
             {{ repo.description || 'No description available for this repository.' }}
           </p>
 
           <!-- Project Stats -->
-          <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
-            <div class="flex items-center space-x-4">
+          <div class="project-stats">
+            <div class="project-stats-left">
               <!-- Language -->
-              <div v-if="repo.language" class="flex items-center space-x-1">
+              <div v-if="repo.language" class="project-language">
                 <div 
-                  class="w-3 h-3 rounded-full"
-                  :class="getLanguageColor(repo.language)"
+                  class="language-dot"
+                  :class="getLanguageColorClass(repo.language)"
                 ></div>
                 <span>{{ repo.language }}</span>
               </div>
               
               <!-- Stars -->
-              <div v-if="repo.stargazers_count > 0" class="flex items-center space-x-1">
-                <Icon name="heroicons:star" class="w-4 h-4" />
+              <div v-if="repo.stargazers_count > 0" class="project-stat-item">
+                <Icon name="heroicons:star" class="project-stat-icon" />
                 <span>{{ repo.stargazers_count }}</span>
               </div>
               
               <!-- Forks -->
-              <div v-if="repo.forks_count > 0" class="flex items-center space-x-1">
-                <Icon name="heroicons:code-bracket" class="w-4 h-4" />
+              <div v-if="repo.forks_count > 0" class="project-stat-item">
+                <Icon name="heroicons:code-bracket" class="project-stat-icon" />
                 <span>{{ repo.forks_count }}</span>
               </div>
             </div>
@@ -136,14 +137,18 @@
       </div>
 
       <!-- Empty State -->
-      <div v-else class="text-center py-16">
-        <Icon name="heroicons:cube-transparent" class="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">No projects found</h3>
-        <p class="text-gray-600 dark:text-gray-400">Check back later for new projects!</p>
+      <div v-else class="empty-state">
+        <Icon name="heroicons:cube-transparent" class="empty-icon" />
+        <h3 class="empty-title">No projects found</h3>
+        <p class="empty-message">Check back later for new projects!</p>
       </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+@import './../assets/css/Projects.css';
+</style>
 
 <script setup>
 // Async data fetching with Nuxt 4 features
@@ -167,26 +172,28 @@ const { data, pending, error, refresh } = await useLazyAsyncData('github-repos',
   }
 })
 
-// Function to get language-specific colors
-const getLanguageColor = (language) => {
-  const colors = {
-    'JavaScript': 'bg-yellow-400',
-    'TypeScript': 'bg-blue-500',
-    'Vue': 'bg-green-500',
-    'React': 'bg-cyan-400',
-    'Python': 'bg-blue-600',
-    'Java': 'bg-orange-500',
-    'CSS': 'bg-purple-500',
-    'HTML': 'bg-red-500',
-    'PHP': 'bg-indigo-500',
-    'Go': 'bg-cyan-600',
-    'Rust': 'bg-orange-600',
-    'C++': 'bg-pink-500',
-    'C#': 'bg-purple-600',
-    'Swift': 'bg-orange-400',
-    'Kotlin': 'bg-purple-400'
+// Function to get language-specific color classes
+const getLanguageColorClass = (language) => {
+  const normalizedLanguage = language.toLowerCase().replace(/[^a-z]/g, '')
+  const languageMap = {
+    'javascript': 'language-javascript',
+    'typescript': 'language-typescript',
+    'vue': 'language-vue',
+    'react': 'language-react',
+    'python': 'language-python',
+    'java': 'language-java',
+    'css': 'language-css',
+    'html': 'language-html',
+    'php': 'language-php',
+    'go': 'language-go',
+    'rust': 'language-rust',
+    'c': 'language-cpp',
+    'cpp': 'language-cpp',
+    'csharp': 'language-csharp',
+    'swift': 'language-swift',
+    'kotlin': 'language-kotlin'
   }
-  return colors[language] || 'bg-gray-400'
+  return languageMap[normalizedLanguage] || 'language-default'
 }
 
 // Page meta
@@ -199,61 +206,4 @@ useSeoMeta({
   title: 'Projects - Abdulbarry',
   description: 'Explore my open-source projects and contributions on GitHub',
 })
-</script>
-
-<style scoped>
-/* Line clamp for description text */
-.line-clamp-3 {
-  display: -webkit-box;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-/* Fade in animation for project cards */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.6s ease-out forwards;
-}
-
-/* Pulse animation for loading skeletons */
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-/* Smooth transitions for all interactive elements */
-* {
-  transition-property: all;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Enhanced hover effects */
-.group:hover .group-hover\:scale-110 {
-  transform: scale(1.1);
-}
-
-/* Custom scrollbar for long descriptions */
-.line-clamp-3::-webkit-scrollbar {
-  display: none;
-}
-</style>
+</script> 

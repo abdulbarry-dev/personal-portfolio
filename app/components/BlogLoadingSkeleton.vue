@@ -9,51 +9,47 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <template>
-  <div class="space-y-8">
+  <div class="skeleton-container">
     <!-- Search Bar Skeleton -->
-    <div class="relative">
-      <div class="w-full h-12 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+    <div class="skeleton-search">
+      <div class="skeleton-search-bar"></div>
     </div>
     
     <!-- Tags Skeleton -->
-    <div class="flex items-center flex-wrap gap-2">
-      <div class="h-4 w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-      <div v-for="n in 4" :key="n" class="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+    <div class="skeleton-tags">
+      <div class="skeleton-tags-label"></div>
+      <div v-for="n in 4" :key="n" class="skeleton-tag"></div>
     </div>
     
     <!-- Blog Cards Skeleton Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-      <div 
-        v-for="n in count" 
-        :key="n" 
-        class="animate-pulse"
-      >
-        <div class="bg-gray-200 dark:bg-gray-700 rounded-xl overflow-hidden">
+    <div class="skeleton-grid">
+      <div v-for="n in count" :key="n" class="skeleton-card">
+        <div class="skeleton-card-content">
           <!-- Card Header -->
-          <div class="p-6 sm:p-8 space-y-4">
+          <div class="skeleton-card-body">
             <!-- Date and Reading Time Badges -->
-            <div class="flex space-x-3">
-              <div class="h-6 w-20 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-              <div class="h-6 w-24 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+            <div class="skeleton-badges">
+              <div class="skeleton-badge-date"></div>
+              <div class="skeleton-badge-time"></div>
             </div>
             
             <!-- Title -->
-            <div class="space-y-2">
-              <div class="h-6 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
-              <div class="h-6 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+            <div class="skeleton-title">
+              <div class="skeleton-title-line1"></div>
+              <div class="skeleton-title-line2"></div>
             </div>
             
             <!-- Description -->
-            <div class="space-y-2">
-              <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-full"></div>
-              <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-5/6"></div>
-              <div class="h-4 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
+            <div class="skeleton-description">
+              <div class="skeleton-desc-line1"></div>
+              <div class="skeleton-desc-line2"></div>
+              <div class="skeleton-desc-line3"></div>
             </div>
             
             <!-- Tags -->
-            <div class="flex gap-2 pt-4 border-t border-gray-300 dark:border-gray-600">
-              <div class="h-6 w-16 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-              <div class="h-6 w-20 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+            <div class="skeleton-footer">
+              <div class="skeleton-footer-tag1"></div>
+              <div class="skeleton-footer-tag2"></div>
             </div>
           </div>
         </div>
@@ -61,3 +57,7 @@ const props = withDefaults(defineProps<Props>(), {
     </div>
   </div>
 </template>
+
+<style scoped>
+@import './../assets/css/BlogLoadingSkeleton.css';
+</style>

@@ -1,0 +1,165 @@
+/* === BLOG TAGS FILTER STYLES === */
+
+/* Main Container */
+.tags-filter-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem; /* gap-2 */
+}
+
+/* Filter Label */
+.tags-filter-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: #374151; /* text-gray-700 */
+  margin-right: 0.5rem; /* mr-2 */
+}
+
+.dark .tags-filter-label {
+  color: #d1d5db; /* dark:text-gray-300 */
+}
+
+/* Tag Button - Base */
+.tag-button {
+  padding: 0.25rem 0.75rem; /* px-3 py-1 */
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  border-radius: 9999px; /* rounded-full */
+  transition: all 0.2s ease; /* transition-all duration-200 */
+  border: none;
+  cursor: pointer;
+  transform-origin: center;
+}
+
+.tag-button:hover {
+  transform: scale(1.05); /* hover:scale-105 */
+}
+
+/* Tag Button - Unselected */
+.tag-button-unselected {
+  background-color: #e5e7eb; /* bg-gray-200 */
+  color: #374151; /* text-gray-700 */
+}
+
+.dark .tag-button-unselected {
+  background-color: #374151; /* dark:bg-gray-700 */
+  color: #d1d5db; /* dark:text-gray-300 */
+}
+
+.tag-button-unselected:hover {
+  background-color: #d1d5db; /* hover:bg-gray-300 */
+}
+
+.dark .tag-button-unselected:hover {
+  background-color: #4b5563; /* dark:hover:bg-gray-600 */
+}
+
+/* Tag Button - Selected */
+.tag-button-selected {
+  background-color: #2563eb; /* bg-blue-600 */
+  color: white; /* text-white */
+}
+
+.dark .tag-button-selected {
+  background-color: #3b82f6; /* dark:bg-blue-500 */
+}
+
+/* Clear All Button */
+.clear-all-button {
+  padding: 0.25rem 0.75rem; /* px-3 py-1 */
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  color: #dc2626; /* text-red-600 */
+  background-color: #fef2f2; /* bg-red-50 */
+  border-radius: 9999px; /* rounded-full */
+  transition: colors 0.2s ease; /* transition-colors duration-200 */
+  border: none;
+  cursor: pointer;
+}
+
+.dark .clear-all-button {
+  color: #f87171; /* dark:text-red-400 */
+  background-color: rgba(127, 29, 29, 0.5); /* dark:bg-red-900/50 */
+}
+
+.clear-all-button:hover {
+  background-color: #fee2e2; /* hover:bg-red-100 */
+}
+
+.dark .clear-all-button:hover {
+  background-color: rgba(127, 29, 29, 0.7); /* dark:hover:bg-red-900/70 */
+}
+
+/* === RESPONSIVE ADJUSTMENTS === */
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .tags-filter-container {
+    gap: 0.375rem;
+  }
+  
+  .tags-filter-label {
+    margin-right: 0.375rem;
+    font-size: var(--text-xs);
+  }
+  
+  .tag-button,
+  .clear-all-button {
+    padding: 0.1875rem 0.625rem;
+    font-size: var(--text-xs);
+  }
+}
+
+/* === ACCESSIBILITY ENHANCEMENTS === */
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .tag-button,
+  .clear-all-button {
+    border: 1px solid currentColor;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .tag-button,
+  .clear-all-button {
+    transition: none;
+  }
+  
+  .tag-button:hover {
+    transform: none;
+  }
+}
+
+/* Focus indicators for keyboard navigation */
+.tag-button:focus-visible,
+.clear-all-button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Active state */
+.tag-button:active {
+  transform: scale(0.95);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tag-button:active {
+    transform: none;
+  }
+}
+
+/* === UTILITY CLASSES === */
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+}
+
+.transition-colors {
+  transition-property: background-color, border-color, color;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 0.2s;
+}
