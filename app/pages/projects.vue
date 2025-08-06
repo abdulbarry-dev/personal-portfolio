@@ -26,7 +26,6 @@
                 <div class="skeleton-title"></div>
               </div>
             </div>
-            <div class="skeleton-external-icon"></div>
           </div>
           
           <!-- Description Skeleton -->
@@ -66,11 +65,15 @@
 
       <!-- Projects Grid -->
       <div v-else-if="data && data.length > 0" class="projects-grid">
-        <div
+        <a
           v-for="(repo, index) in data"
           :key="repo.id"
+          :href="repo.html_url"
+          target="_blank"
+          rel="noopener noreferrer"
           class="project-card animate-fade-in"
           :style="{ animationDelay: `${index * 100}ms` }"
+          :aria-label="`View ${repo.name} project on GitHub`"
         >
           <!-- Project Icon & Title -->
           <div class="project-header">
@@ -88,19 +91,13 @@
               </div>
             </div>
             
-            <!-- External Link Icon -->
-            <a
-              :href="repo.html_url"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="project-external-link"
-              :aria-label="`View ${repo.name} on GitHub`"
-            >
+            <!-- GitHub Icon (Visual indicator) -->
+            <div class="project-github-indicator">
               <Icon 
-                name="heroicons:arrow-top-right-on-square" 
-                class="project-external-icon"
+                name="logos:github-icon" 
+                class="project-github-icon"
               />
-            </a>
+            </div>
           </div>
 
           <!-- Description -->
@@ -133,7 +130,7 @@
               </div>
             </div>
           </div>
-        </div>
+        </a>
       </div>
 
       <!-- Empty State -->
@@ -206,4 +203,4 @@ useSeoMeta({
   title: 'Projects - Abdulbarry',
   description: 'Explore my open-source projects and contributions on GitHub',
 })
-</script> 
+</script>

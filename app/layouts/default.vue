@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen flex flex-col bg-white dark:bg-gray-900 transition-colors duration-200 relative">
+  <div>
     <!-- Persistent Navbar with floating behavior -->
     <NavBar />
     
     <!-- Main Content Area - This changes based on route -->
-    <main class="flex-1 pt-20">
+    <main>
       <slot />
     </main>
     

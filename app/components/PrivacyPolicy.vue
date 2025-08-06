@@ -5,6 +5,7 @@
       <div 
         v-if="isVisible" 
         class="privacy-modal-overlay"
+        :class="{ 'dark': isDark }"
         @click.self="closeModal"
       >
         <!-- Modal Content -->
@@ -147,6 +148,9 @@ const emit = defineEmits<{
   close: []
 }>()
 
+// Use theme composable to get current theme
+const { isDark } = useTheme()
+
 // Computed
 const lastUpdated = computed(() => {
   return new Date().toLocaleDateString('en-US', {
@@ -177,13 +181,21 @@ onUnmounted(() => {
   document.removeEventListener('keydown', handleEscape)
 })
 
-// Prevent body scroll when modal is open
+// Prevent body scroll and interactions when modal is open
 watch(() => props.isVisible, (newValue) => {
   if (newValue) {
     document.body.style.overflow = 'hidden'
+    document.body.classList.add('modal-open')
   } else {
     document.body.style.overflow = ''
+    document.body.classList.remove('modal-open')
   }
+})
+
+// Cleanup on unmount
+onUnmounted(() => {
+  document.body.style.overflow = ''
+  document.body.classList.remove('modal-open')
 })
 </script>
 
