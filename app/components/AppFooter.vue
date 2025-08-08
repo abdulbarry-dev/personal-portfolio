@@ -18,6 +18,30 @@
               </div>
             </div>
             
+            <!-- Contact Information -->
+            <div class="footer-contact-info">
+              <div class="footer-contact-item">
+                <Icon name="heroicons:envelope" class="footer-contact-icon" />
+                <a 
+                  href="mailto:contact@abdulbarry.me" 
+                  class="footer-contact-link"
+                  aria-label="Send email to contact@abdulbarry.me"
+                >
+                  contact@abdulbarry.me
+                </a>
+              </div>
+              <div class="footer-contact-item">
+                <Icon name="heroicons:phone" class="footer-contact-icon" />
+                <a 
+                  href="tel:+21626100791" 
+                  class="footer-contact-link"
+                  aria-label="Call +216 26 100 791"
+                >
+                  +216 26 100 791
+                </a>
+              </div>
+            </div>
+            
             <!-- Social Links -->
             <div class="footer-social-links">
               <a 
@@ -90,7 +114,6 @@
     </div>
   </footer>
 </template>
-
 
 <style scoped>
 @import './../assets/css/AppFooter.css';

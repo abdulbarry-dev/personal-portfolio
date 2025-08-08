@@ -96,6 +96,59 @@
   margin: 0;
 }
 
+/* === CONTACT INFORMATION === */
+.footer-contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.footer-contact-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.footer-contact-icon {
+  width: 1.25rem; /* w-5 */
+  height: 1.25rem; /* h-5 */
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.dark .footer-contact-icon {
+  color: var(--color-text-tertiary);
+}
+
+.footer-contact-link {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.footer-contact-link:hover {
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+.footer-contact-link:focus-visible {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.dark .footer-contact-link {
+  color: var(--color-text-tertiary);
+}
+
+.dark .footer-contact-link:hover {
+  color: var(--color-text-inverse);
+}
+
 /* Social Links */
 .footer-social-links {
   display: flex;
@@ -299,6 +352,24 @@
   .footer-profile-info p {
     font-size: var(--text-sm);
   }
+  
+  .footer-contact-info {
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+  
+  .footer-contact-item {
+    gap: var(--space-1);
+  }
+  
+  .footer-contact-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  .footer-contact-link {
+    font-size: var(--text-xs);
+  }
 }
 
 /* Small Screens */
@@ -329,7 +400,8 @@
 /* Smooth transitions for all interactive elements */
 .footer-social-link,
 .footer-theme-toggle,
-.footer-nav-link {
+.footer-nav-link,
+.footer-contact-link {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -353,7 +425,8 @@
   }
   
   .footer-social-link,
-  .footer-nav-link {
+  .footer-nav-link,
+  .footer-contact-link {
     text-decoration: underline;
   }
 }
@@ -362,7 +435,8 @@
 @media (prefers-reduced-motion: reduce) {
   .footer-social-link,
   .footer-theme-toggle,
-  .footer-nav-link {
+  .footer-nav-link,
+  .footer-contact-link {
     transition: none;
   }
   

@@ -1,5 +1,14 @@
 <template>
   <div class="user-profile">
+    <!-- Animated Background Shapes -->
+    <div class="animated-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+    
     <div class="user-profile-container">
       <div class="user-profile-grid">
         
@@ -39,14 +48,11 @@
                 <span class="tech-label">Nuxt.js</span>
               </div>
               
-              
               <!-- TypeScript -->
               <div class="tech-item">
                 <Icon name="logos:typescript-icon" class="tech-icon" />
                 <span class="tech-label">TypeScript</span>
               </div>
-              
-              
             </div>
           </div>
           
@@ -113,8 +119,6 @@
     </div>
   </div>
 </template>
-
-
 
 <script setup>
 const resumeUrl = "https://drive.google.com/file/d/1zkrPXhRKt2WevTkKMRDIOD_tel6tLvuc/view?usp=sharing"

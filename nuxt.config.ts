@@ -10,10 +10,33 @@ export default defineNuxtConfig({
       meta: [
         { charset: 'utf-8' },
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-        { name: 'format-detection', content: 'telephone=no' }
+        { name: 'format-detection', content: 'telephone=no' },
+        
+        // Theme colors for mobile browsers
+        { name: 'theme-color', content: '#3b82f6' },
+        { name: 'msapplication-TileColor', content: '#3b82f6' },
+        
+        // Open Graph meta tags
+        { property: 'og:image', content: '/images/icons/android-chrome-512x512.png' },
+        { name: 'twitter:image', content: '/images/icons/android-chrome-512x512.png' }
       ],
       link: [
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+        // Standard favicon
+        { rel: 'icon', type: 'image/x-icon', href: '/images/icons/favicon.ico' },
+        
+        // PNG favicons for better quality
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/images/icons/favicon-16x16.png' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/images/icons/favicon-32x32.png' },
+        
+        // Apple touch icons
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/images/icons/apple-touch-icon.png' },
+        
+        // Android chrome icons
+        { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/images/icons/android-chrome-192x192.png' },
+        { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/images/icons/android-chrome-512x512.png' },
+        
+        // Web app manifest
+        { rel: 'manifest', href: '/images/icons/site.webmanifest' }
       ]
     }
   },

@@ -1,4 +1,3 @@
 <template>
   <UserProfile />
 </template>
-
