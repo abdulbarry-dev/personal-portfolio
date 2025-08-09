@@ -1,5 +1,8 @@
 <template>
-  <nav class="navbar">
+  <!-- Spacer div to maintain layout when navbar becomes fixed -->
+  <div v-if="isScrolled" class="navbar-spacer"></div>
+  
+  <nav class="navbar" :class="navbarClasses">
     <div class="navbar-container">
       <div class="navbar-flex">
         <!-- Navigation Links -->
@@ -84,10 +87,68 @@
 
 <style scoped>
 @import './../assets/css/NavBar.css';
+
+/* Spacer to maintain layout when navbar becomes fixed */
+.navbar-spacer {
+  height: 6rem; /* Same height as navbar + margins */
+  width: 100%;
+}
+
+/* Responsive spacer heights */
+@media (max-width: 475px) {
+  .navbar-spacer {
+    height: 4.5rem; /* 3.5rem navbar + 1rem margins */
+  }
+}
+
+@media (min-width: 476px) and (max-width: 640px) {
+  .navbar-spacer {
+    height: 5.5rem; /* 4rem navbar + 1.5rem margins */
+  }
+}
+
+@media (min-width: 641px) {
+  .navbar-spacer {
+    height: 6rem; /* 4rem navbar + 2rem margins */
+  }
+}
 </style>
 
 <script setup>
 const route = useRoute()
+
+// Scroll state management
+const isScrolled = ref(false)
+const scrollThreshold = 80
+
+// Computed class for navbar state
+const navbarClasses = computed(() => ({
+  'navbar-fixed': isScrolled.value,
+  'navbar-static': !isScrolled.value
+}))
+
+// Simple scroll handler
+const handleScroll = () => {
+  if (process.client) {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+    isScrolled.value = scrollTop > scrollThreshold
+  }
+}
+
+// Setup scroll listener
+onMounted(() => {
+  if (process.client) {
+    handleScroll()
+    window.addEventListener('scroll', handleScroll, { passive: true })
+  }
+})
+
+// Cleanup scroll listener
+onUnmounted(() => {
+  if (process.client) {
+    window.removeEventListener('scroll', handleScroll)
+  }
+})
 
 const handleBlogClick = () => {
   console.log('Blog link clicked!')
