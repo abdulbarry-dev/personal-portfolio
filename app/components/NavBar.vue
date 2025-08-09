@@ -1,8 +1,5 @@
 <template>
-  <!-- Spacer div to maintain layout when navbar becomes fixed -->
-  <div v-if="isScrolled" class="navbar-spacer"></div>
-  
-  <nav class="navbar" :class="navbarClasses">
+  <nav class="navbar">
     <div class="navbar-container">
       <div class="navbar-flex">
         <!-- Navigation Links -->
@@ -21,7 +18,7 @@
               leave-from-class="nav-leave-from home-text"
               leave-to-class="nav-leave-to"
             >
-              <span v-if="isActiveRoute('/')" class="navbar-text">Home</span>
+              <span v-if="isActiveRoute('/home')" class="navbar-text">Home</span>
             </Transition>
           </NuxtLink>
           
@@ -47,7 +44,6 @@
             to="/blog" 
             class="navbar-link"
             active-class="router-link-active"
-            @click="handleBlogClick"
           >
             <Icon name="heroicons:document-text" class="navbar-icon" />
             <Transition 
@@ -85,85 +81,41 @@
   </nav>
 </template>
 
-<style scoped>
-@import './../assets/css/NavBar.css';
-
-/* Spacer to maintain layout when navbar becomes fixed */
-.navbar-spacer {
-  height: 6rem; /* Same height as navbar + margins */
-  width: 100%;
+<script setup lang="ts">
+// Import types for better type safety
+interface RouteParams {
+  path: string
+  name?: string | null
 }
 
-/* Responsive spacer heights */
-@media (max-width: 475px) {
-  .navbar-spacer {
-    height: 4.5rem; /* 3.5rem navbar + 1rem margins */
-  }
-}
-
-@media (min-width: 476px) and (max-width: 640px) {
-  .navbar-spacer {
-    height: 5.5rem; /* 4rem navbar + 1.5rem margins */
-  }
-}
-
-@media (min-width: 641px) {
-  .navbar-spacer {
-    height: 6rem; /* 4rem navbar + 2rem margins */
-  }
-}
-</style>
-
-<script setup>
+// Get current route
 const route = useRoute()
 
-// Scroll state management
-const isScrolled = ref(false)
-const scrollThreshold = 80
-
-// Computed class for navbar state
-const navbarClasses = computed(() => ({
-  'navbar-fixed': isScrolled.value,
-  'navbar-static': !isScrolled.value
-}))
-
-// Simple scroll handler
-const handleScroll = () => {
-  if (process.client) {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop
-    isScrolled.value = scrollTop > scrollThreshold
+/**
+ * Determines if the current route matches the given path
+ * @param path - The path to check against current route
+ * @returns boolean indicating if the route is active
+ */
+const isActiveRoute = (path: string): boolean => {
+  const currentPath = route.path
+  
+  // Handle home route variations
+  if (path === '/home') {
+    return currentPath === '/' || currentPath === '/home'
   }
-}
-
-// Setup scroll listener
-onMounted(() => {
-  if (process.client) {
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-  }
-})
-
-// Cleanup scroll listener
-onUnmounted(() => {
-  if (process.client) {
-    window.removeEventListener('scroll', handleScroll)
-  }
-})
-
-const handleBlogClick = () => {
-  console.log('Blog link clicked!')
-  console.log('Current route:', route.path)
-}
-
-const isActiveRoute = (path) => {
-  if (path === '/') {
-    return route.path === '/' || route.path === '/home'
-  }
+  
+  // Handle blog route and sub-routes
   if (path === '/blog') {
-    return route.path === '/blog' || route.path.startsWith('/blog/')
+    return currentPath === '/blog' || currentPath.startsWith('/blog/')
   }
-  return route.path === path
+  
+  // Handle exact path matching for other routes
+  return currentPath === path
 }
 </script>
+
+<style scoped>
+@import './../assets/css/NavBar.css';
+</style>
 
 
