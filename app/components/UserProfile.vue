@@ -87,14 +87,17 @@
             <div class="profile-image-container-wrapper">
               <!-- Profile Image -->
               <div class="profile-image-container">
-                <img 
-                  src="./../assets/images/backgrounds/profile-picture.jpeg" 
-                  alt="Abdulbarry - Frontend Developer" 
+                <NuxtImg
+                  src="https://ucarecdn.com/110979a9-b932-4d48-a30d-989f1d2892b6/profilepicture.webp"
+                  :alt="profileImageAlt"
                   class="profile-image"
                   loading="eager"
                   fetchpriority="high"
                   width="320"
                   height="320"
+                  preset="profile"
+                  sizes="(max-width: 475px) 192px, (max-width: 640px) 256px, (max-width: 768px) 288px, (max-width: 1024px) 320px, 384px"
+                  placeholder
                 />
                 <div class="profile-image-overlay"></div>
               </div>
@@ -120,15 +123,34 @@
 </template>
 
 <script setup>
+// SEO and accessibility optimization
+const profileImageAlt = 'Abdulbarry Guenichi - Frontend Developer specializing in Vue.js and Nuxt.js'
+
 // External link optimization
 const resumeUrl = "https://drive.google.com/file/d/1zkrPXhRKt2WevTkKMRDIOD_tel6tLvuc/view?usp=sharing"
 
-// Performance: Preconnect to external domains
+// Performance: Critical resource hints and meta optimization
 useHead({
   link: [
     {
       rel: 'preconnect',
-      href: 'https://drive.google.com'
+      href: 'https://drive.google.com',
+      crossorigin: ''
+    },
+    {
+      rel: 'preconnect',
+      href: 'https://ucarecdn.com',
+      crossorigin: ''
+    },
+    {
+      rel: 'dns-prefetch',
+      href: 'https://ucarecdn.com'
+    }
+  ],
+  meta: [
+    {
+      name: 'format-detection',
+      content: 'telephone=no'
     }
   ]
 })

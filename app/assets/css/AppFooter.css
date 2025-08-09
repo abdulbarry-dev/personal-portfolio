@@ -1,5 +1,34 @@
 /* === APP FOOTER COMPONENT STYLES === */
 
+/* === LIGHTHOUSE PERFORMANCE OPTIMIZATIONS === */
+/* Prevent Cumulative Layout Shift (CLS) for avatar */
+.footer-profile-avatar {
+  width: 3.5rem; /* w-14 */
+  height: 3.5rem; /* h-14 */
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid var(--color-border-primary);
+  aspect-ratio: 1 / 1;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimizeQuality;
+  /* Ensure dimensions are locked */
+  min-width: 3.5rem;
+  min-height: 3.5rem;
+  max-width: 3.5rem;
+  max-height: 3.5rem;
+}
+
+/* Lazy loading optimization */
+.footer-profile-avatar[loading="lazy"] {
+  content-visibility: auto;
+  contain-intrinsic-size: 56px 56px;
+}
+
+.dark .footer-profile-avatar {
+  border-color: var(--color-border-tertiary);
+}
+
 /* Main Footer Container */
 .app-footer {
   background-color: var(--color-bg-primary);
@@ -70,17 +99,7 @@
   margin-bottom: var(--space-6);
 }
 
-.footer-profile-avatar {
-  width: 3.5rem; /* w-14 */
-  height: 3.5rem; /* h-14 */
-  border-radius: var(--radius-full);
-  object-fit: cover;
-  border: 2px solid var(--color-border-primary);
-}
-
-.dark .footer-profile-avatar {
-  border-color: var(--color-border-tertiary);
-}
+/* Avatar styles moved to top for CLS prevention */
 
 .footer-profile-info h3 {
   font-size: var(--text-xl);

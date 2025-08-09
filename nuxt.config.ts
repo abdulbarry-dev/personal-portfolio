@@ -83,10 +83,48 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/content',
     '@nuxt/icon',
+    '@nuxt/image',
     '@nuxtjs/seo',
     '@nuxtjs/sitemap',
     '@nuxt/eslint'
   ],
+
+  // Image module configuration for Lighthouse optimization
+  image: {
+    // Use default providers without custom Uploadcare config
+    // Quality settings
+    quality: 85,
+    // Format optimization
+    format: ['webp', 'avif', 'png', 'jpg'],
+    // Responsive images
+    screens: {
+      xs: 320,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      xxl: 1536
+    },
+    // Performance optimizations
+    presets: {
+      avatar: {
+        modifiers: {
+          format: 'webp',
+          quality: 90,
+          width: 48,
+          height: 48
+        }
+      },
+      profile: {
+        modifiers: {
+          format: 'webp',
+          quality: 85,
+          width: 320,
+          height: 320
+        }
+      }
+    }
+  },
 
   // ESLint module configuration
   eslint: {

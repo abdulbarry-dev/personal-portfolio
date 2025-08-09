@@ -7,11 +7,17 @@
           <!-- Profile Section -->
           <div class="footer-profile-section">
             <div class="footer-profile-header">
-              <img 
-                :src="profileData.avatar || '/images/logos/AGS-logo-v1.png'" 
-                :alt="profileData.name"
+              <NuxtImg
+                src="https://ucarecdn.com/45249dac-c844-4625-9be8-87ff116a6613/AGSlogov1.webp"
+                :alt="logoAlt"
                 class="footer-profile-avatar"
-              >
+                loading="lazy"
+                width="48"
+                height="48"
+                preset="avatar"
+                sizes="48px"
+                placeholder
+              />
               <div class="footer-profile-info">
                 <h3>{{ profileData.name }}</h3>
                 <p>{{ profileData.title }}</p>
@@ -120,11 +126,34 @@
 </style>
 
 <script setup>
+// SEO and accessibility optimization
+const logoAlt = 'AGS Logo - Abdelbari Guenichi Frontend Developer'
+
 const profileData = {
   name: 'Abdelbari Guenichi',
-  title: 'Frontend Developer',
-  avatar: '/images/logos/AGS-logo-v1.png'
+  title: 'Frontend Developer'
 }
+
+// Performance: Enhanced resource hints and caching
+useHead({
+  link: [
+    {
+      rel: 'preconnect',
+      href: 'https://ucarecdn.com',
+      crossorigin: ''
+    },
+    {
+      rel: 'dns-prefetch',
+      href: 'https://ucarecdn.com'
+    }
+  ],
+  meta: [
+    {
+      'http-equiv': 'Cache-Control',
+      content: 'public, max-age=31536000, immutable'
+    }
+  ]
+})
 
 // Current year for copyright
 const currentYear = computed(() => new Date().getFullYear())

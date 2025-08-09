@@ -1,5 +1,31 @@
 /* === USER PROFILE COMPONENT STYLES === */
 
+/* === LIGHTHOUSE PERFORMANCE OPTIMIZATIONS === */
+/* Prevent Cumulative Layout Shift (CLS) */
+.profile-image {
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  object-position: center;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: optimizeQuality;
+  /* Ensure dimensions are locked */
+  min-width: 100%;
+  min-height: 100%;
+}
+
+/* Lazy loading image placeholder */
+.profile-image[loading="lazy"] {
+  content-visibility: auto;
+  contain-intrinsic-size: 320px 320px;
+}
+
+/* WebP support detection */
+@supports (image-set(url() type("image/webp"))) {
+  .profile-image {
+    image-rendering: auto;
+  }
+}
+
 /* Custom breakpoint utilities */
 @media (min-width: 475px) {
   .user-profile .xs\:w-72 {
@@ -768,12 +794,7 @@
     0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
-.profile-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  image-rendering: -webkit-optimize-contrast;
-}
+/* Profile image styles moved to top for CLS prevention */
 
 .profile-image-overlay {
   position: absolute;
