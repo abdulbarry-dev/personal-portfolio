@@ -60,12 +60,12 @@
             <!-- Theme Toggle Button -->
             <div class="footer-theme-toggle-container">
               <button
-                @click="handleThemeToggle"
+                @click="toggleTheme"
                 class="footer-theme-toggle"
-                :title="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
-                :aria-label="isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'"
+                :title="`Switch to ${getThemeLabel} mode`"
+                :aria-label="`Switch to ${getThemeLabel} mode`"
               >
-                <Icon :name="currentThemeIcon" class="footer-theme-icon" />
+                <Icon :name="getThemeIcon" class="footer-theme-icon" />
               </button>
             </div>
             
@@ -129,59 +129,8 @@ const profileData = {
 // Current year for copyright
 const currentYear = computed(() => new Date().getFullYear())
 
-// Theme state management without using the composable initially
-const isDarkMode = ref(false)
-const currentThemeIcon = ref('heroicons:moon')
-
-// Check theme from document class directly
-const checkCurrentTheme = () => {
-  if (process.client) {
-    isDarkMode.value = document.documentElement.classList.contains('dark')
-    currentThemeIcon.value = isDarkMode.value ? 'heroicons:sun' : 'heroicons:moon'
-  }
-}
-
-// Handle theme toggle without composable
-const handleThemeToggle = () => {
-  if (process.client) {
-    const newTheme = !isDarkMode.value
-    
-    // Update document class directly
-    document.documentElement.classList.toggle('dark', newTheme)
-    
-    // Update localStorage
-    localStorage.setItem('theme', newTheme ? 'dark' : 'light')
-    
-    // Update meta theme color
-    const metaThemeColor = document.querySelector('meta[name="theme-color"]')
-    if (metaThemeColor) {
-      metaThemeColor.content = newTheme ? '#1f2937' : '#ffffff'
-    }
-    
-    // Update local state
-    isDarkMode.value = newTheme
-    currentThemeIcon.value = newTheme ? 'heroicons:sun' : 'heroicons:moon'
-  }
-}
-
-// Initialize theme state on mount
-onMounted(() => {
-  checkCurrentTheme()
-  
-  // Watch for external theme changes (from other components)
-  const observer = new MutationObserver(() => {
-    checkCurrentTheme()
-  })
-  
-  observer.observe(document.documentElement, {
-    attributes: true,
-    attributeFilter: ['class']
-  })
-  
-  onUnmounted(() => {
-    observer.disconnect()
-  })
-})
+// Use the theme composable
+const { toggleTheme, getThemeIcon, getThemeLabel } = useTheme()
 
 // Social media links using Nuxt Icon module
 const socialLinks = [

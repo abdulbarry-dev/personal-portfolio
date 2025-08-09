@@ -127,7 +127,10 @@ const checkEmailExists = async (email) => {
 
     return !!data // Return true if data exists, false otherwise
   } catch (error) {
-    console.error('Error checking email:', error)
+    // Only log in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error checking email:', error)
+    }
     throw error
   }
 }
@@ -153,7 +156,10 @@ const subscribeEmail = async (email) => {
     if (error) throw error
     return data
   } catch (error) {
-    console.error('Error subscribing email:', error)
+    // Only log in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Error subscribing email:', error)
+    }
     throw error
   }
 }
@@ -211,7 +217,10 @@ const handleSubmit = async () => {
       }, 2000)
     }
   } catch (error) {
-    console.error('Subscription error:', error)
+    // Only log in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Subscription error:', error)
+    }
     emailError.value = true
     addNotification({
       type: 'error',

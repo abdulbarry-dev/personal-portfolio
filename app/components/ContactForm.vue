@@ -343,7 +343,11 @@ const handleSubmit = async () => {
       message: 'Contact form is not properly configured. Please try again later.',
       duration: 5000
     })
-    console.error('FORMSPREE_ENDPOINT is not configured in environment variables')
+    
+    // Only log in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('FORMSPREE_ENDPOINT is not configured in environment variables')
+    }
     return
   }
 
@@ -426,8 +430,10 @@ const handleSubmit = async () => {
       duration: 5000
     })
     
-    // Log error for debugging
-    console.error('Contact form submission error:', error)
+    // Only log errors in development
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Contact form submission error:', error)
+    }
   } finally {
     isLoading.value = false
   }

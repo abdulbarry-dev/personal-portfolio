@@ -1,12 +1,10 @@
 <template>
   <div class="user-profile">
-    <!-- Animated Background Shapes -->
-    <div class="animated-shapes">
+    <!-- Animated Background Shapes - Reduced for performance -->
+    <div class="animated-shapes" aria-hidden="true">
       <div class="shape shape-1"></div>
       <div class="shape shape-2"></div>
       <div class="shape shape-3"></div>
-      <div class="shape shape-4"></div>
-      <div class="shape shape-5"></div>
     </div>
     
     <div class="user-profile-container">
@@ -93,6 +91,10 @@
                   src="./../assets/images/backgrounds/profile-picture.jpeg" 
                   alt="Abdulbarry - Frontend Developer" 
                   class="profile-image"
+                  loading="eager"
+                  fetchpriority="high"
+                  width="320"
+                  height="320"
                 />
                 <div class="profile-image-overlay"></div>
               </div>
@@ -102,14 +104,11 @@
                 <div class="gradient-background"></div>
               </div>
               
-              <!-- Floating Tech Icons -->
-              <div class="floating-icon floating-icon-vue">
+              <!-- Floating Tech Icons - Reduced for performance -->
+              <div class="floating-icon floating-icon-vue" aria-hidden="true">
                 <Icon name="logos:vue" />
               </div>
-              <div class="floating-icon floating-icon-js">
-                <Icon name="logos:javascript" />
-              </div>
-              <div class="floating-icon floating-icon-nuxt">
+              <div class="floating-icon floating-icon-nuxt" aria-hidden="true">
                 <Icon name="logos:nuxt-icon" />
               </div>
             </div>
@@ -121,7 +120,18 @@
 </template>
 
 <script setup>
+// External link optimization
 const resumeUrl = "https://drive.google.com/file/d/1zkrPXhRKt2WevTkKMRDIOD_tel6tLvuc/view?usp=sharing"
+
+// Performance: Preconnect to external domains
+useHead({
+  link: [
+    {
+      rel: 'preconnect',
+      href: 'https://drive.google.com'
+    }
+  ]
+})
 
 defineOptions({
   name: 'UserProfile'

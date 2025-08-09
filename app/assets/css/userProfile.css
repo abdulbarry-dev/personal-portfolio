@@ -64,6 +64,8 @@
   border-radius: 50%;
   background: linear-gradient(135deg, rgba(96, 165, 250, 0.08), rgba(139, 92, 246, 0.08));
   animation: float-shape 20s ease-in-out infinite;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .dark .shape {
@@ -97,24 +99,7 @@
   animation-duration: 20s;
 }
 
-.shape-4 {
-  width: 70px;
-  height: 70px;
-  bottom: 15%;
-  right: 8%;
-  animation-delay: 15s;
-  animation-duration: 35s;
-}
-
-.shape-5 {
-  width: 30px;
-  height: 30px;
-  top: 45%;
-  left: 45%;
-  transform: translate(-50%, -50%);
-  animation-delay: 7s;
-  animation-duration: 18s;
-}
+/* Removed shape-4 and shape-5 for better performance */
 
 @keyframes float-shape {
   0%, 100% {
@@ -743,6 +728,8 @@
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   animation: morphing-border 15s cubic-bezier(0.445, 0.05, 0.55, 0.95) infinite;
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+  will-change: transform, border-radius;
+  contain: layout style paint;
 }
 
 @media (min-width: 640px) {
@@ -845,6 +832,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 .dark .floating-icon {
@@ -877,23 +866,7 @@
   }
 }
 
-/* JavaScript Icon - Bottom Left */
-.floating-icon-js {
-  bottom: -1rem;
-  left: -1rem;
-  width: 2rem;
-  height: 2rem;
-  animation: float-slower 5s ease-in-out infinite;
-}
-
-@media (min-width: 640px) {
-  .floating-icon-js {
-    bottom: -1.5rem;
-    left: -1.5rem;
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-}
+/* Removed JavaScript floating icon for better performance */
 
 /* Nuxt Icon - Middle Right */
 .floating-icon-nuxt {
@@ -1040,5 +1013,33 @@
   50% {
     transform: scale(1.05);
     opacity: 0.5;
+  }
+}
+
+/* === ACCESSIBILITY & PERFORMANCE === */
+/* Respect user's motion preferences for better performance and accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .shape {
+    animation: none;
+  }
+  
+  .profile-image-container {
+    animation: none;
+  }
+  
+  .floating-icon {
+    animation: none;
+  }
+  
+  .gradient-background {
+    animation: none;
   }
 }

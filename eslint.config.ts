@@ -5,7 +5,7 @@ export default withNuxt(
    {
      files: ['**/*.ts', '**/*.tsx'],
      rules: {
-       'no-console': 'off' // allow console.log in TypeScript files
+       'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn', // No console in production
      }
    }
 )

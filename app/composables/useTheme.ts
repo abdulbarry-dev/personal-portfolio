@@ -1,8 +1,8 @@
-import { computed, onMounted, readonly, watch, onUnmounted } from 'vue'
+import { computed, onMounted, readonly, watch } from 'vue'
 
 export const useTheme = () => {
   const isDark = useState('theme-isDark', () => {
-    if (process.server) return false
+    if (process.server) return true // Always default to dark on server
     
     if (process.client) {
       const sessionTheme = sessionStorage.getItem('__INITIAL_THEME__')
@@ -20,10 +20,11 @@ export const useTheme = () => {
         return storedPreference === 'dark'
       }
       
-      return window.matchMedia('(prefers-color-scheme: dark)').matches
+      // Always default to dark theme (removed system detection)
+      return true
     }
     
-    return false
+    return true // Always default to dark
   })
 
   const hasUserPreference = computed(() => {
@@ -33,13 +34,6 @@ export const useTheme = () => {
     }
     return false
   })
-
-  const getSystemPreference = (): boolean => {
-    if (process.client) {
-      return window.matchMedia('(prefers-color-scheme: dark)').matches
-    }
-    return false
-  }
 
   const updateDocumentClass = (dark: boolean): void => {
     if (process.client) {
@@ -86,14 +80,14 @@ export const useTheme = () => {
     }
   }
 
-  const followSystemTheme = (): void => {
+  const resetToDefaultTheme = (): void => {
     if (process.client) {
       localStorage.removeItem('theme')
       sessionStorage.removeItem('user-theme-preference')
       sessionStorage.removeItem('__INITIAL_THEME__')
       
-      const systemPreference = getSystemPreference()
-      isDark.value = systemPreference
+      // Always reset to dark theme (removed system preference)
+      isDark.value = true
       updateDocumentClass(isDark.value)
     }
   }
@@ -102,38 +96,14 @@ export const useTheme = () => {
   const getThemeIcon = computed(() => isDark.value ? 'heroicons:sun' : 'heroicons:moon')
   const getThemeLabel = computed(() => isDark.value ? 'Light' : 'Dark')
 
-  const setupSystemThemeListener = () => {
-    if (process.client) {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
-      
-      const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-        if (!hasUserPreference.value) {
-          isDark.value = e.matches
-          updateDocumentClass(isDark.value)
-        }
-      }
-      
-      mediaQuery.addEventListener('change', handleSystemThemeChange)
-      return () => mediaQuery.removeEventListener('change', handleSystemThemeChange)
-    }
-    return undefined
-  }
-
   watch(isDark, (newValue) => {
     if (process.client) {
       updateDocumentClass(newValue)
     }
   })
 
-  let cleanup: (() => void) | undefined
-
   onMounted(() => {
     updateDocumentClass(isDark.value)
-    cleanup = setupSystemThemeListener()
-  })
-
-  onUnmounted(() => {
-    if (cleanup) cleanup()
   })
 
   return {
@@ -144,7 +114,6 @@ export const useTheme = () => {
     getThemeLabel,
     toggleTheme,
     setTheme,
-    followSystemTheme,
-    getSystemPreference
+    resetToDefaultTheme
   }
 }
