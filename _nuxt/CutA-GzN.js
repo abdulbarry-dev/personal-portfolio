@@ -1,1 +1,0 @@
-import{_ as o}from"./Dud-Gp_V.js";import{u as r,e as a,o as p}from"./D0A0TxyF.js";import"./DaVCgo8W.js";import"./CvtZ5ncm.js";const f={__name:"home",setup(s){return r({link:[{rel:"preload",href:"/images/backgrounds/profile-picture.jpeg",as:"image",type:"image/jpeg"}]}),(t,m)=>{const e=o;return p(),a(e)}}};export{f as default};
