@@ -36,7 +36,15 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/png', sizes: '512x512', href: '/images/icons/android-chrome-512x512.png' },
         
         // Web app manifest
-        { rel: 'manifest', href: '/images/icons/site.webmanifest' }
+  { rel: 'manifest', href: '/images/icons/site.webmanifest' },
+
+  // Performance: preconnect and DNS prefetch for external origins
+  { rel: 'preconnect', href: 'https://ucarecdn.com', crossorigin: '' },
+  { rel: 'dns-prefetch', href: '//ucarecdn.com' },
+  { rel: 'preconnect', href: 'https://api.github.com', crossorigin: '' },
+  { rel: 'dns-prefetch', href: '//api.github.com' },
+  { rel: 'preconnect', href: 'https://supabase.co', crossorigin: '' },
+  { rel: 'dns-prefetch', href: '//supabase.co' }
       ]
     }
   },
@@ -89,6 +97,48 @@ export default defineNuxtConfig({
     '@nuxt/eslint'
   ],
 
+  // Nuxt Icon configuration: use local collections to prevent prerender timeouts
+  icon: {
+    // Avoid fetching from Iconify during build/prerender
+    fallbackToApi: false,
+    serverBundle: {
+      // Bundle only the collections we use
+      collections: ['heroicons', 'mdi', 'logos'],
+      // Keep JSON external to speed bundling (Node 20+ supports JSON imports)
+      externalizeIconsJson: true
+    },
+    clientBundle: {
+      // Include statically used icons in client to reduce runtime fetches
+      scan: true,
+      includeCustomCollections: true,
+      // Generous limit to avoid failing builds
+      sizeLimitKb: 512
+    }
+  },
+
+  // Nitro server configuration for faster first response
+  nitro: {
+    // Generate brotli/gzip versions of public assets (used when running a Nitro server)
+    compressPublicAssets: true,
+    prerender: {
+      // Ensure key routes are statically generated and crawl linked pages
+  routes: ['/', '/home', '/contact', '/projects', '/blog'],
+      crawlLinks: true
+    }
+  },
+
+  // Route rules for caching, prerendering and headers (applies in Nitro environments)
+  routeRules: {
+  '/': { prerender: true },
+  '/home': { prerender: true },
+    '/contact': { prerender: true },
+    '/projects': { prerender: true },
+    '/blog': { prerender: true },
+    '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/images/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    '/**': { headers: { 'cache-control': 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800' } }
+  },
+
   // Image module configuration for Lighthouse optimization
   image: {
     // Use default providers without custom Uploadcare config
@@ -136,23 +186,13 @@ export default defineNuxtConfig({
     }
   },
 
-  // Content module configuration
-  content: {
-    highlight: {
-      theme: {
-        default: 'github-light',
-        dark: 'github-dark'
-      },
-      preload: ['json', 'js', 'ts', 'html', 'css', 'vue', 'diff', 'shell', 'markdown', 'yaml', 'bash', 'ini']
-    },
-    markdown: {
-      anchorLinks: false
-    }
-  },
+  // Content module configuration (use defaults for compatibility)
+  // content: {},
 
   // SEO module configuration
   seo: {
-    redirectToCanonicalSiteUrl: true
+    // Avoid unexpected extra redirects in non-prod environments
+    redirectToCanonicalSiteUrl: process.env.NODE_ENV === 'production'
   },
 
   // Site configuration
@@ -161,17 +201,8 @@ export default defineNuxtConfig({
     name: process.env.NUXT_SITE_NAME || 'Abdulbarry Personal Portfolio'
   },
 
-  // Sitemap configuration
-  sitemap: {
-    hostname: process.env.NUXT_SITE_URL || 'https://abdulbarry.me',
-    routes: [
-      '/',
-      '/about',
-      '/contact',
-      '/projects',
-      '/blog'
-    ]
-  },
+  // Sitemap configuration (use defaults; site.url is defined above)
+  // sitemap: {},
 
   // Runtime config
   runtimeConfig: {

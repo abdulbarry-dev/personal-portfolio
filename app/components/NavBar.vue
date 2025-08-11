@@ -8,6 +8,8 @@
             to="/home" 
             class="navbar-link"
             active-class="router-link-active"
+            aria-label="Home"
+            title="Home"
           >
             <Icon name="heroicons:home" class="navbar-icon" />
             <Transition 
@@ -26,6 +28,8 @@
             to="/projects" 
             class="navbar-link"
             active-class="router-link-active"
+            aria-label="Projects"
+            title="Projects"
           >
             <Icon name="heroicons:folder" class="navbar-icon" />
             <Transition 
@@ -44,6 +48,8 @@
             to="/blog" 
             class="navbar-link"
             active-class="router-link-active"
+            aria-label="Blog"
+            title="Blog"
           >
             <Icon name="heroicons:document-text" class="navbar-icon" />
             <Transition 
@@ -62,6 +68,8 @@
             to="/contact" 
             class="navbar-link"
             active-class="router-link-active"
+            aria-label="Contact"
+            title="Contact"
           >
             <Icon name="heroicons:envelope" class="navbar-icon" />
             <Transition 
