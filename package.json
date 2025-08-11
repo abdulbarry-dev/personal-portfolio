@@ -39,6 +39,7 @@
     "@iconify-json/logos": "^1.2.5",
     "@iconify-json/mdi": "^1.2.3",
     "@nuxt/eslint": "^1.6.0",
+    "@vite-pwa/nuxt": "^1.0.4",
     "cssnano": "^7.1.0",
     "eslint": "^9.31.0",
     "gh-pages": "^6.3.0",

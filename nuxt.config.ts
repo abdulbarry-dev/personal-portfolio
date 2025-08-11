@@ -94,7 +94,79 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/seo',
     '@nuxtjs/sitemap',
-    '@nuxt/eslint'
+    '@nuxt/eslint',
+    ['@vite-pwa/nuxt', {
+      registerType: 'autoUpdate',
+      injectRegister: 'auto',
+      strategies: 'generateSW',
+      manifest: {
+        name: process.env.NUXT_SITE_NAME || 'Abdulbarry Personal Portfolio',
+        short_name: 'ABD Portfolio',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
+        theme_color: '#0b1221',
+        background_color: '#0b1221',
+        icons: [
+          { src: '/images/logos/AGS-logo-v1.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/images/logos/AGS-logo-v1.png', sizes: '512x512', type: 'image/png', purpose: 'any' }
+        ]
+      },
+      workbox: {
+        navigateFallback: '/200.html',
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,txt,woff2}'],
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/ucarecdn\.com\/.*\.(?:png|jpe?g|webp|avif|gif|svg)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'ucarecdn-images',
+              cacheableResponse: { statuses: [0, 200] },
+              expiration: { maxEntries: 200, maxAgeSeconds: 31536000 }
+            }
+          },
+          {
+            urlPattern: /\.(?:png|jpe?g|webp|gif|svg|ico)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'local-images',
+              cacheableResponse: { statuses: [0, 200] },
+              expiration: { maxEntries: 200, maxAgeSeconds: 31536000 }
+            }
+          },
+          {
+            urlPattern: /^https:\/\/api\.github\.com\/.*/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'github-api',
+              networkTimeoutSeconds: 3,
+              cacheableResponse: { statuses: [0, 200] },
+              expiration: { maxEntries: 100, maxAgeSeconds: 300 }
+            }
+          },
+          {
+            urlPattern: /^https:\/\/.*supabase\.co\/.*/,
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'supabase-api',
+              networkTimeoutSeconds: 5,
+              cacheableResponse: { statuses: [0, 200] },
+              expiration: { maxEntries: 100, maxAgeSeconds: 300 }
+            }
+          },
+          {
+            urlPattern: /\.(?:js|css)$/i,
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'assets', cacheableResponse: { statuses: [0, 200] } }
+          },
+          {
+            urlPattern: /\/(?:home|projects|contact|blog)(?:\/.*)?$/,
+            handler: 'NetworkFirst',
+            options: { cacheName: 'pages', cacheableResponse: { statuses: [0, 200] } }
+          }
+        ]
+      }
+    }]
   ],
 
   // Nuxt Icon configuration: use local collections to prevent prerender timeouts
@@ -194,6 +266,7 @@ export default defineNuxtConfig({
     // Avoid unexpected extra redirects in non-prod environments
     redirectToCanonicalSiteUrl: process.env.NODE_ENV === 'production'
   },
+
 
   // Site configuration
   site: {
