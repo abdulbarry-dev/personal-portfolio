@@ -5,12 +5,68 @@
 .profile-image {
   aspect-ratio: 1 / 1;
   object-fit: cover;
-  object-position: center;
+  object-position: center 20%; /* Focus on face area */
   image-rendering: -webkit-optimize-contrast;
   image-rendering: optimizeQuality;
   /* Ensure dimensions are locked */
   min-width: 100%;
   min-height: 100%;
+  width: 100%;
+  height: 100%;
+  /* Responsive scaling */
+  max-width: 100%;
+  max-height: 100%;
+  /* Smooth transitions for responsive changes */
+  transition: transform 0.3s ease, object-position 0.3s ease;
+}
+
+/* Responsive object positioning for different screen sizes */
+@media (max-width: 320px) {
+  .profile-image {
+    object-position: center 25%; /* Slightly lower for very small screens */
+  }
+}
+
+@media (min-width: 768px) {
+  .profile-image {
+    object-position: center 15%; /* Higher positioning for larger screens */
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile-image {
+    object-position: center 20%; /* Optimal positioning for desktop */
+  }
+}
+
+/* Focus area enhancement on hover */
+.profile-image-container:hover .profile-image {
+  transform: scale(1.02);
+  object-position: center 18%; /* Slight adjustment on hover */
+}
+
+/* Smart face positioning for different orientations */
+@media (orientation: portrait) {
+  .profile-image {
+    object-position: center 22%; /* Show more of upper body in portrait */
+  }
+}
+
+@media (orientation: landscape) {
+  .profile-image {
+    object-position: center 15%; /* Focus more on face in landscape */
+  }
+}
+
+/* Enhanced responsiveness for very small screens */
+@media (max-width: 360px) {
+  .profile-image {
+    object-position: center 30%; /* Lower positioning for tiny screens */
+  }
+  
+  .profile-image-container:hover .profile-image {
+    transform: scale(1.01); /* Less aggressive scaling on small screens */
+  }
 }
 
 /* Lazy loading image placeholder */
@@ -709,35 +765,58 @@
 
 .profile-image-container-wrapper {
   position: relative;
-  width: 12rem;
-  height: 12rem;
+  width: 10rem;
+  height: 10rem;
+  /* Add responsive sizing with fluid scaling */
+  min-width: 8rem;
+  min-height: 8rem;
+  max-width: 24rem;
+  max-height: 24rem;
+  /* Use clamp for fluid responsive sizing */
+  width: clamp(10rem, 15vw + 8rem, 20rem);
+  height: clamp(10rem, 15vw + 8rem, 20rem);
+}
+
+/* Enhanced responsive breakpoints for better scaling */
+@media (max-width: 320px) {
+  .profile-image-container-wrapper {
+    width: 8rem;
+    height: 8rem;
+  }
 }
 
 @media (min-width: 475px) {
   .profile-image-container-wrapper {
-    width: 14rem;
-    height: 14rem;
+    width: clamp(12rem, 12vw + 8rem, 14rem);
+    height: clamp(12rem, 12vw + 8rem, 14rem);
   }
 }
 
 @media (min-width: 640px) {
   .profile-image-container-wrapper {
-    width: 16rem;
-    height: 16rem;
+    width: clamp(14rem, 10vw + 10rem, 16rem);
+    height: clamp(14rem, 10vw + 10rem, 16rem);
   }
 }
 
 @media (min-width: 768px) {
   .profile-image-container-wrapper {
-    width: 18rem;
-    height: 18rem;
+    width: clamp(16rem, 8vw + 12rem, 18rem);
+    height: clamp(16rem, 8vw + 12rem, 18rem);
   }
 }
 
 @media (min-width: 1024px) {
   .profile-image-container-wrapper {
-    width: 20rem;
-    height: 20rem;
+    width: clamp(18rem, 6vw + 14rem, 20rem);
+    height: clamp(18rem, 6vw + 14rem, 20rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  .profile-image-container-wrapper {
+    width: clamp(20rem, 4vw + 16rem, 22rem);
+    height: clamp(20rem, 4vw + 16rem, 22rem);
   }
 }
 
@@ -756,6 +835,10 @@
   border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
   will-change: transform, border-radius;
   contain: layout style paint;
+  /* Ensure responsive container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 @media (min-width: 640px) {

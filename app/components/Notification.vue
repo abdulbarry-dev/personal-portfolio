@@ -112,6 +112,11 @@ const normalizeEmail = (email) => {
 // Check if email exists in database
 const checkEmailExists = async (email) => {
   try {
+    // Additional safety check
+    if (!$supabase) {
+      throw new Error('Supabase client not available')
+    }
+    
     const normalizedEmail = normalizeEmail(email)
     
     const { data, error } = await $supabase
@@ -138,6 +143,11 @@ const checkEmailExists = async (email) => {
 // Subscribe email to newsletter
 const subscribeEmail = async (email) => {
   try {
+    // Additional safety check
+    if (!$supabase) {
+      throw new Error('Supabase client not available')
+    }
+    
     const originalEmail = email.toLowerCase().trim()
     const normalizedEmail = normalizeEmail(email)
     
@@ -184,6 +194,17 @@ const handleSubmit = async () => {
     return
   }
 
+  // Check if Supabase is available
+  if (!$supabase) {
+    addNotification({
+      type: 'error',
+      title: 'Service Unavailable',
+      message: 'Newsletter service is currently unavailable. Please try again later.',
+      duration: 5000
+    })
+    return
+  }
+
   isLoading.value = true
 
   try {
@@ -222,10 +243,19 @@ const handleSubmit = async () => {
       console.error('Subscription error:', error)
     }
     emailError.value = true
+    
+    // Provide more specific error messages
+    let errorMessage = 'Something went wrong. Please try again later.'
+    if (error.message?.includes('CORS') || error.message?.includes('network')) {
+      errorMessage = 'Network error. Please check your connection and try again.'
+    } else if (error.message?.includes('unauthorized') || error.message?.includes('401')) {
+      errorMessage = 'Service configuration error. Please contact support.'
+    }
+    
     addNotification({
       type: 'error',
       title: 'Subscription Failed',
-      message: 'Something went wrong. Please try again later.',
+      message: errorMessage,
       duration: 5000
     })
   } finally {

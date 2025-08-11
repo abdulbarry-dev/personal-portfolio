@@ -96,8 +96,9 @@
                   width="320"
                   height="320"
                   preset="profile"
-                  sizes="(max-width: 475px) 192px, (max-width: 640px) 256px, (max-width: 768px) 288px, (max-width: 1024px) 320px, 384px"
+                  sizes="(max-width: 320px) 160px, (max-width: 475px) 192px, (max-width: 640px) 256px, (max-width: 768px) 288px, (max-width: 1024px) 320px, (max-width: 1280px) 384px, 400px"
                   placeholder
+                  style="object-position: center 20%;"
                 />
                 <div class="profile-image-overlay"></div>
               </div>
