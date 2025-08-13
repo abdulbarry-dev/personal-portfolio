@@ -1,13 +1,17 @@
 import { createClient } from '@supabase/supabase-js'
 
-export default defineNuxtPlugin(() => {
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+export default defineNuxtPlugin<{
+  supabase: SupabaseClient<any, 'public', any> | null
+}>((nuxtApp) => {
   const config = useRuntimeConfig()
 
   const supabaseUrl = config.public.supabaseUrl
   const supabaseAnonKey = config.public.supabaseAnonKey
 
   // Validate environment variables
-  let supabase: ReturnType<typeof createClient> | null = null;
+  let supabase: SupabaseClient<any, 'public', any> | null = null
   if (!supabaseUrl || !supabaseAnonKey) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Supabase configuration missing. Please check your environment variables:', {

@@ -18,9 +18,7 @@ export const useTheme = () => {
       const storedPreference = sessionStorage.getItem('user-theme-preference')
       if (storedPreference !== null) {
         return storedPreference === 'dark'
-      }
-      
-      // Always default to dark theme (removed system detection)
+      }      
       return true
     }
     

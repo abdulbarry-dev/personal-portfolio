@@ -218,8 +218,9 @@
 
 @media (min-width: 1024px) {
   .user-profile-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-8);
+  /* Give more space to the image column (second column) */
+  grid-template-columns: 1fr 1.2fr;
+  gap: calc(var(--space-8) + 0.5rem);
   }
 }
 
@@ -753,14 +754,28 @@
 
 @media (min-width: 1024px) {
   .profile-image-section {
-    order: 2;
-    justify-content: flex-end;
+  order: 2;
+  /* Push image more to the left (towards the content) to reduce whitespace */
+  justify-content: flex-start;
     margin-bottom: 0;
   }
 }
 
 .profile-image-wrapper {
   position: relative;
+}
+
+/* Nudge image a bit to the left on larger screens to reduce right-side whitespace */
+@media (min-width: 1024px) {
+  .profile-image-wrapper {
+    transform: translateX(-1rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  .profile-image-wrapper {
+    transform: translateX(-1.5rem);
+  }
 }
 
 .profile-image-container-wrapper {
@@ -808,15 +823,17 @@
 
 @media (min-width: 1024px) {
   .profile-image-container-wrapper {
-    width: clamp(18rem, 6vw + 14rem, 20rem);
-    height: clamp(18rem, 6vw + 14rem, 20rem);
+  /* Make image larger on desktop */
+  width: clamp(20rem, 8vw + 16rem, 24rem);
+  height: clamp(20rem, 8vw + 16rem, 24rem);
   }
 }
 
 @media (min-width: 1280px) {
   .profile-image-container-wrapper {
-    width: clamp(20rem, 4vw + 16rem, 22rem);
-    height: clamp(20rem, 4vw + 16rem, 22rem);
+  /* Further enlarge on wide screens */
+  width: clamp(22rem, 6vw + 18rem, 28rem);
+  height: clamp(22rem, 6vw + 18rem, 28rem);
   }
 }
 
@@ -985,6 +1002,24 @@
 @media (min-width: 640px) {
   .floating-icon-nuxt {
     right: -2rem;
+    width: 2rem;
+    height: 2rem;
+  }
+}
+
+/* JavaScript Icon - Bottom Left */
+.floating-icon-js {
+  bottom: -1rem;
+  left: -1rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  animation: float-slower 5s ease-in-out infinite;
+}
+
+@media (min-width: 640px) {
+  .floating-icon-js {
+    bottom: -1.5rem;
+    left: -1.5rem;
     width: 2rem;
     height: 2rem;
   }

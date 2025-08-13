@@ -96,7 +96,7 @@
                   width="320"
                   height="320"
                   preset="profile"
-                  sizes="(max-width: 320px) 160px, (max-width: 475px) 192px, (max-width: 640px) 256px, (max-width: 768px) 288px, (max-width: 1024px) 320px, (max-width: 1280px) 384px, 400px"
+                  sizes="(max-width: 320px) 160px, (max-width: 475px) 192px, (max-width: 640px) 256px, (max-width: 768px) 288px, (max-width: 1024px) 360px, (max-width: 1280px) 420px, 480px"
                   placeholder
                   style="object-position: center 20%;"
                 />
@@ -115,6 +115,9 @@
               <div class="floating-icon floating-icon-nuxt" aria-hidden="true">
                 <Icon name="logos:nuxt-icon" />
               </div>
+              <div class="floating-icon floating-icon-js" aria-hidden="true">
+                <Icon name="logos:javascript" />
+              </div>
             </div>
           </div>
         </div>
@@ -123,41 +126,55 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 // SEO and accessibility optimization
-const profileImageAlt = 'Abdulbarry Guenichi - Frontend Developer specializing in Vue.js and Nuxt.js'
+const profileImageAlt: string = 'Abdulbarry Guenichi - Frontend Developer specializing in Vue.js and Nuxt.js';
 
 // External link optimization
-const resumeUrl = "https://drive.google.com/file/d/1zkrPXhRKt2WevTkKMRDIOD_tel6tLvuc/view?usp=sharing"
+const resumeUrl: string = 'https://drive.google.com/file/d/1zkrPXhRKt2WevTkKMRDIOD_tel6tLvuc/view?usp=sharing';
+
+// Tech stack data
+interface TechItem {
+  name: string;
+  icon: string;
+  label: string;
+}
+const techStack: ReadonlyArray<TechItem> = [
+  { name: 'Vue.js', icon: 'logos:vue', label: 'Vue.js' },
+  { name: 'Nuxt.js', icon: 'logos:nuxt-icon', label: 'Nuxt.js' },
+  { name: 'TypeScript', icon: 'logos:typescript-icon', label: 'TypeScript' }
+];
+
+// Profile info
+const profileInfo = {
+  name: 'Abdulbarry',
+  title: 'Frontend Developer',
+  location: 'Tunisia 🇹🇳',
+  available: true
+} as const;
+
+// Main heading lines
+const headingLines: ReadonlyArray<string> = [
+  `I'm`,
+  profileInfo.name,
+  profileInfo.title,
+  `based in ${profileInfo.location}`
+];
 
 // Performance: Critical resource hints and meta optimization
 useHead({
   link: [
-    {
-      rel: 'preconnect',
-      href: 'https://drive.google.com',
-      crossorigin: ''
-    },
-    {
-      rel: 'preconnect',
-      href: 'https://ucarecdn.com',
-      crossorigin: ''
-    },
-    {
-      rel: 'dns-prefetch',
-      href: 'https://ucarecdn.com'
-    }
+    { rel: 'preconnect', href: 'https://drive.google.com', crossorigin: '' },
+    { rel: 'preconnect', href: 'https://ucarecdn.com', crossorigin: '' },
+    { rel: 'dns-prefetch', href: 'https://ucarecdn.com' }
   ],
   meta: [
-    {
-      name: 'format-detection',
-      content: 'telephone=no'
-    }
+    { name: 'format-detection', content: 'telephone=no' }
   ]
-})
+});
 
 defineOptions({
   name: 'UserProfile'
-})
+});
 </script>
 

@@ -13,29 +13,7 @@
 
       <!-- Loading State -->
       <div v-if="pending" class="projects-grid">
-        <div
-          v-for="n in 6"
-          :key="n"
-          class="skeleton-card"
-        >
-          <!-- Header Skeleton -->
-          <div class="skeleton-header">
-            <div class="skeleton-icon-container">
-              <div class="skeleton-icon"></div>
-              <div class="skeleton-title-container">
-                <div class="skeleton-title"></div>
-              </div>
-            </div>
-            <div class="skeleton-github-icon"></div>
-          </div>
-
-          <!-- Description Skeleton -->
-          <div class="skeleton-description">
-            <div class="skeleton-desc-line full"></div>
-            <div class="skeleton-desc-line three-quarters"></div>
-            <div class="skeleton-desc-line half"></div>
-          </div>
-        </div>
+        <ProjectSkeletonCard v-for="n in 6" :key="n" />
       </div>
 
       <!-- Error State -->
@@ -58,46 +36,7 @@
 
       <!-- Projects Grid -->
       <div v-else-if="data && data.length > 0" class="projects-grid">
-        <a
-          v-for="(repo, index) in data"
-          :key="repo.id"
-          :href="repo.html_url"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="project-card animate-fade-in"
-          :style="{ animationDelay: `${index * 100}ms` }"
-          :aria-label="`View ${repo.name} project on GitHub`"
-        >
-          <!-- Project Icon & Title -->
-          <div class="project-header">
-            <div class="project-info">
-              <div class="project-icon-container">
-                <Icon
-                  name="heroicons:cube"
-                  class="project-icon"
-                />
-              </div>
-              <div>
-                <h3 class="project-title">
-                  {{ repo.name }}
-                </h3>
-              </div>
-            </div>
-
-            <!-- GitHub Icon (Visual indicator) -->
-            <div class="project-github-indicator">
-              <Icon
-                name="logos:github-icon"
-                class="project-github-icon"
-              />
-            </div>
-          </div>
-
-          <!-- Description -->
-          <p class="project-description line-clamp-3">
-            {{ repo.description || 'No description available for this repository.' }}
-          </p>
-        </a>
+        <ProjectCard v-for="(repo, index) in data" :key="repo.id" :repo="repo" :index="index" />
       </div>
 
       <!-- Empty State -->
@@ -115,27 +54,8 @@
 </template>
 
 <script setup>
-// Async data fetching with Nuxt 4 features
-const { data, pending, error, refresh } = await useLazyAsyncData('github-repos', async () => {
-  const userName = 'abdulbarry-dev'
-  const reposApiUrl = `https://api.github.com/users/${userName}/repos`
-
-  try {
-    const response = await $fetch(reposApiUrl, {
-      params: {
-        sort: 'updated',
-        per_page: 12,
-      },
-    })
-    return response
-  }
-  catch {
-    throw createError({
-      statusCode: 500,
-      statusMessage: 'Failed to fetch GitHub repositories',
-    })
-  }
-})
+// Fetch repos through the reusable composable
+const { data, pending, error, refresh } = await useLazyAsyncData('github-repos', () => useGithubRepos())
 
 // Function to get language-specific color classes
 const getLanguageColorClass = (language) => {

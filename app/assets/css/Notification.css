@@ -378,3 +378,68 @@
 .newsletter-email-input.success:focus {
   ring: 2px solid #10b981;
 }
+
+/* === ULTRA-SMALL DEVICES (<= 310px) === */
+@media (max-width: 310px) {
+  .newsletter-section {
+    min-height: auto;
+  }
+
+  .newsletter-container {
+    padding: var(--space-2);
+  }
+
+  .newsletter-flex {
+    gap: var(--space-4);
+  }
+
+  .newsletter-heading-section {
+    padding-right: 0;
+  }
+
+  .newsletter-heading {
+    font-size: 1.375rem; /* ~22px */
+    line-height: 1.2;
+    word-break: break-word;
+    hyphens: auto;
+  }
+
+  /* Avoid forced line breaks on ultra-small screens */
+  .newsletter-heading br {
+    display: none;
+  }
+
+  .newsletter-form-section {
+    max-width: 100%;
+  }
+
+  .newsletter-form {
+    gap: var(--space-3);
+  }
+
+  .newsletter-input-container {
+    gap: var(--space-2);
+  }
+
+  .newsletter-email-input {
+    min-width: 0; /* Prevent overflow in flex context */
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.9rem;
+  }
+
+  .newsletter-submit-button {
+    width: 100%;
+    min-width: 0;
+    padding: var(--space-2) var(--space-3);
+    font-size: 0.95rem;
+  }
+
+  .newsletter-loading-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .newsletter-privacy-text {
+    font-size: 0.8rem;
+  }
+}
