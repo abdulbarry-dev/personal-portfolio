@@ -46,5 +46,5 @@ defineProps<{
 </script>
 
 <style scoped>
-/* Uses styles from Projects.css via parent page import */
+@import '../assets/css/ProjectCard.css';
 </style>

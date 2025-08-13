@@ -25,5 +25,5 @@
 </script>
 
 <style scoped>
-/* No additional styles; uses Projects.css */
+@import '../assets/css/ProjectSkeletonCard.css';
 </style>

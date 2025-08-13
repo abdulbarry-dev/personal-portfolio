@@ -94,5 +94,5 @@ useSeoMeta({
 </script>
 
 <style scoped>
-@import './../assets/css/Projects.css';
+@import '../assets/css/ProjectsPage.css';
 </style>
