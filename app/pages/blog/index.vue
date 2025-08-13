@@ -97,14 +97,29 @@
 </style>
 
 <script setup lang="ts">
+// Enhanced SEO for blog listing page
+const { setPageMeta, setBreadcrumbs, setStructuredData } = useSEO()
+
 definePageMeta({
   layout: 'default'
 })
 
-useSeoMeta({
-  title: 'Blog - Abdulbarry',
-  description: 'Discover valuable insights on web development, design, and more.',
+// Set comprehensive SEO meta
+setPageMeta({
+  title: 'Blog - Abdulbarry Guenichi | Web Development Insights',
+  description: 'Discover valuable insights on Vue.js, Nuxt.js, TypeScript, web performance, and modern frontend development techniques. Learn from real-world experience.',
+  keywords: 'Vue.js Blog, Nuxt.js Tutorials, TypeScript Guide, Frontend Development Blog, Web Performance Tips, JavaScript Best Practices',
+  ogTitle: 'Web Development Blog - Abdulbarry Guenichi',
+  ogDescription: 'In-depth articles about Vue.js, Nuxt.js, and modern web development practices.',
+  ogImage: '/images/blog-og.jpg',
+  ogType: 'website'
 })
+
+// Set breadcrumbs
+setBreadcrumbs([
+  { name: 'Home', url: '/' },
+  { name: 'Blog', url: '/blog' }
+])
 
 const { data: posts, pending, error, refresh } = await useLazyAsyncData('blog-posts', async () => {
   try {
@@ -134,6 +149,36 @@ const filteredPosts = computed(() => {
   filtered = filterPostsByTags(filtered, selectedTags.value)
   return filtered
 })
+
+// Add blog structured data when posts are loaded
+watch(validPosts, (posts) => {
+  if (posts && posts.length > 0) {
+    const blogData = {
+      '@context': 'https://schema.org',
+      '@type': 'Blog',
+      name: 'Abdulbarry Guenichi Blog',
+      description: 'Web development insights and tutorials',
+      url: 'https://abdulbarry.dev/blog',
+      author: {
+        '@type': 'Person',
+        name: 'Abdulbarry Guenichi'
+      },
+      blogPost: posts.slice(0, 10).map(post => ({
+        '@type': 'BlogPosting',
+        headline: post.title,
+        description: post.description,
+        datePublished: post.date,
+        url: `https://abdulbarry.dev/blog/${getPostSlug(post.path)}`,
+        author: {
+          '@type': 'Person',
+          name: 'Abdulbarry Guenichi'
+        }
+      }))
+    }
+    
+    setStructuredData(blogData)
+  }
+}, { immediate: true })
 
 const onTagToggle = () => {}
 const onClearTags = () => {}

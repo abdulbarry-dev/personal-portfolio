@@ -136,8 +136,41 @@
 </style>
 
 <script setup>
+// Enhanced ContactForm component with SEO structured data
+const { setStructuredData } = useSEO()
+
 defineOptions({
   name: 'ContactForm'
+})
+
+// Add structured data for the contact form on mount
+onMounted(() => {
+  const contactActionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactAction',
+    name: 'Contact Abdulbarry Guenichi',
+    description: 'Get in touch for frontend development projects and collaboration',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: 'https://abdulbarry.dev/contact',
+      contentType: 'text/html',
+      encodingType: 'application/x-www-form-urlencoded',
+      httpMethod: 'POST'
+    },
+    object: {
+      '@type': 'Person',
+      name: 'Abdulbarry Guenichi',
+      jobTitle: 'Frontend Developer',
+      email: 'contact@abdulbarry.dev',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'Professional',
+        availableLanguage: ['English', 'French', 'Arabic']
+      }
+    }
+  }
+
+  setStructuredData(contactActionSchema)
 })
 
 // Use the notification system

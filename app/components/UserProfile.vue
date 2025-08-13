@@ -127,6 +127,10 @@
 </template>
 
 <script setup lang="ts">
+import { useSEO } from '../composables/useSEO';
+// Enhanced SEO and structured data for the UserProfile component
+const { setStructuredData } = useSEO()
+
 // SEO and accessibility optimization
 const profileImageAlt: string = 'Abdulbarry Guenichi - Frontend Developer specializing in Vue.js and Nuxt.js';
 
@@ -160,6 +164,106 @@ const headingLines: ReadonlyArray<string> = [
   profileInfo.title,
   `based in ${profileInfo.location}`
 ];
+
+// Add comprehensive structured data for the profile
+onMounted(() => {
+  // Person schema with professional details
+  const personSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Abdulbarry Guenichi',
+    givenName: 'Abdulbarry',
+    familyName: 'Guenichi',
+    jobTitle: 'Frontend Developer',
+    description: 'Passionate Frontend Developer specializing in Vue.js, Nuxt.js, and TypeScript. Building fast, modern, and accessible web applications.',
+    url: 'https://abdulbarry.dev',
+    image: 'https://ucarecdn.com/110979a9-b932-4d48-a30d-989f1d2892b6/profilepicture.webp',
+    address: {
+      '@type': 'PostalAddress',
+      addressCountry: 'TN',
+      addressRegion: 'Tunisia'
+    },
+    sameAs: [
+      'https://github.com/abdulbarry-dev',
+      'https://linkedin.com/in/abdulbarry-guenichi',
+      'https://twitter.com/abdulbarry_dev'
+    ],
+    knowsAbout: [
+      'Vue.js',
+      'Nuxt.js',
+      'TypeScript',
+      'JavaScript',
+      'Frontend Development',
+      'Web Performance Optimization',
+      'Responsive Web Design',
+      'User Experience Design'
+    ],
+    hasOccupation: {
+      '@type': 'Occupation',
+      name: 'Frontend Developer',
+      occupationLocation: {
+        '@type': 'Country',
+        name: 'Tunisia'
+      },
+      skills: ['Vue.js', 'Nuxt.js', 'TypeScript', 'JavaScript', 'CSS3', 'HTML5']
+    },
+    worksFor: {
+      '@type': 'Organization',
+      name: 'Freelance'
+    },
+    seeks: {
+      '@type': 'Demand',
+      name: 'Frontend Development Projects',
+      description: 'Available for Vue.js, Nuxt.js, and TypeScript projects'
+    }
+  }
+
+  // Professional service schema
+  const serviceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ProfessionalService',
+    name: 'Frontend Development Services',
+    description: 'Professional Vue.js, Nuxt.js, and TypeScript development services',
+    provider: {
+      '@type': 'Person',
+      name: 'Abdulbarry Guenichi'
+    },
+    areaServed: 'Worldwide',
+    serviceType: 'Web Development',
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Development Services',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Vue.js Development',
+            description: 'Custom Vue.js application development'
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Nuxt.js Development',
+            description: 'Full-stack Nuxt.js application development'
+          }
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'TypeScript Development',
+            description: 'Type-safe JavaScript application development'
+          }
+        }
+      ]
+    }
+  }
+
+  setStructuredData([personSchema, serviceSchema])
+})
 
 // Performance: Critical resource hints and meta optimization
 useHead({

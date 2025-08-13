@@ -54,8 +54,58 @@
 </template>
 
 <script setup>
+// Enhanced SEO for projects page
+const { setPageMeta, setBreadcrumbs, setStructuredData } = useSEO()
+
 // Fetch repos through the reusable composable
 const { data, pending, error, refresh } = await useLazyAsyncData('github-repos', () => useGithubRepos())
+
+// Set comprehensive SEO meta
+setPageMeta({
+  title: 'Projects - Abdulbarry Guenichi | Open Source Portfolio',
+  description: 'Explore my open-source projects and contributions on GitHub. Vue.js, Nuxt.js, and TypeScript applications showcasing modern web development practices.',
+  keywords: 'GitHub Projects, Vue.js Projects, Nuxt.js Applications, TypeScript Projects, Open Source, Frontend Portfolio, Web Development Projects',
+  ogTitle: 'Projects Portfolio - Abdulbarry Guenichi',
+  ogDescription: 'Discover innovative web applications and open-source contributions using Vue.js, Nuxt.js, and modern web technologies.',
+  ogImage: '/images/projects-og.jpg',
+  ogType: 'website'
+})
+
+// Set breadcrumbs
+setBreadcrumbs([
+  { name: 'Home', url: '/' },
+  { name: 'Projects', url: '/projects' }
+])
+
+// Add collection page structured data
+watch(data, (repos) => {
+  if (repos && repos.length > 0) {
+    const projectsData = {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      name: 'Projects by Abdulbarry Guenichi',
+      description: 'A collection of open-source projects and contributions',
+      numberOfItems: repos.length,
+      itemListElement: repos.slice(0, 10).map((repo, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'SoftwareApplication',
+          name: repo.name,
+          description: repo.description || 'No description available',
+          url: repo.html_url,
+          programmingLanguage: repo.language || 'JavaScript',
+          author: {
+            '@type': 'Person',
+            name: 'Abdulbarry Guenichi'
+          }
+        }
+      }))
+    }
+    
+    setStructuredData(projectsData)
+  }
+}, { immediate: true })
 
 // Function to get language-specific color classes
 const getLanguageColorClass = (language) => {
@@ -84,12 +134,6 @@ const getLanguageColorClass = (language) => {
 // Page meta
 definePageMeta({
   layout: 'default',
-})
-
-// SEO
-useSeoMeta({
-  title: 'Projects - Abdulbarry',
-  description: 'Explore my open-source projects and contributions on GitHub',
 })
 </script>
 

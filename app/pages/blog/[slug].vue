@@ -139,6 +139,9 @@
 </template>
 
 <script setup lang="ts">
+// Enhanced SEO for individual blog posts
+const { setPageMeta, setOpenGraph, setTwitterCard, setArticleStructuredData, setBreadcrumbs } = useSEO()
+
 // Get the current URL slug
 const route = useRoute()
 const slug = route.params.slug as string
@@ -204,15 +207,58 @@ const nextPost = computed(() => blogData.value?.nextPost)
 const formattedDate = computed(() => formatDate(post.value?.date || ''))
 const readingTime = computed(() => calculateReadingTime(post.value?.body?.toString() || ''))
 
-// Set SEO Metadata
-useSeoMeta({
-  title: () => post.value?.title || 'Post Not Found',
-  description: () => post.value?.description || 'This blog post could not be found.',
-  ogTitle: () => post.value?.title,
-  ogDescription: () => post.value?.description,
-  ogImage: () => post.value?.image || '/default-blog-image.jpg',
-  twitterCard: 'summary_large_image',
-})
+// Enhanced SEO for blog posts
+watch(post, (currentPost) => {
+  if (currentPost) {
+    const postImage = currentPost.image || '/images/blog-default-og.jpg'
+    const postUrl = `/blog/${slug}`
+    
+    // Set comprehensive SEO meta
+    setPageMeta({
+      title: `${currentPost.title} - Abdulbarry Guenichi Blog`,
+      description: currentPost.description || `Read about ${currentPost.title} and learn from practical web development insights.`,
+      keywords: `${currentPost.title}, Vue.js, Nuxt.js, Web Development, Frontend Development, ${currentPost.tags?.join(', ') || ''}`,
+      author: 'Abdulbarry Guenichi',
+      canonical: `https://abdulbarry.dev${postUrl}`
+    })
+    
+    // Set Open Graph meta
+    setOpenGraph({
+      title: currentPost.title,
+      description: currentPost.description || `Learn about ${currentPost.title}`,
+      image: postImage,
+      type: 'article',
+      url: `https://abdulbarry.dev${postUrl}`,
+      siteName: 'Abdulbarry Guenichi Blog'
+    })
+    
+    // Set Twitter Card meta
+    setTwitterCard({
+      card: 'summary_large_image',
+      title: currentPost.title,
+      description: currentPost.description || `Learn about ${currentPost.title}`,
+      image: postImage
+    })
+    
+    // Set breadcrumbs
+    setBreadcrumbs([
+      { name: 'Home', url: '/' },
+      { name: 'Blog', url: '/blog' },
+      { name: currentPost.title, url: postUrl }
+    ])
+    
+    // Set article structured data
+    setArticleStructuredData({
+      title: currentPost.title,
+      description: currentPost.description || '',
+      datePublished: currentPost.date,
+      dateModified: currentPost.updatedAt || currentPost.date,
+      image: postImage,
+      author: 'Abdulbarry Guenichi',
+      url: `https://abdulbarry.dev${postUrl}`
+    })
+  }
+}, { immediate: true })
 
 // Progress bar for reading
 const scrollProgress = ref(0)

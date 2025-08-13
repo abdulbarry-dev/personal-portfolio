@@ -21,3 +21,10 @@ logs
 # Local env files
 .env
 .vercel
+
+# Auto-generated documentation files (if you don't want them)
+DEPLOYMENT.md
+BLOG_ARCHITECTURE.md
+
+# Node version file (if you don't want version pinning)
+# .nvmrc
