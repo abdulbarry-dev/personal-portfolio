@@ -13,7 +13,7 @@
         
         <!-- Right side - Form -->
         <div class="newsletter-form-section">
-          <form @submit.prevent="handleSubmit" class="newsletter-form" :class="{ loading: isLoading }">
+          <form @submit.prevent="handleSubmit" class="newsletter-form" :class="{ loading: state.isLoading }">
             <!-- Email Input and Button -->
             <div class="newsletter-input-container">
               <input 
@@ -23,20 +23,20 @@
                 id="email" 
                 placeholder="Enter your email"
                 required
-                :disabled="isLoading"
+                :disabled="state.isLoading"
                 class="newsletter-email-input"
                 :class="{ 
-                  error: emailError, 
-                  success: emailSuccess 
+                  error: state.emailError, 
+                  success: state.emailSuccess 
                 }"
               />
               <button 
                 type="submit"
-                :disabled="isLoading || !email"
+                :disabled="state.isLoading || !email"
                 class="newsletter-submit-button"
               >
-                <Icon v-if="isLoading" name="svg-spinners:8-dots-rotate" class="newsletter-loading-icon" />
-                <span>{{ isLoading ? 'Adding...' : 'Notify me' }}</span>
+                <Icon v-if="state.isLoading" name="svg-spinners:8-dots-rotate" class="newsletter-loading-icon" />
+                <span>{{ state.isLoading ? 'Adding...' : 'Notify me' }}</span>
               </button>
             </div>
             
@@ -69,197 +69,24 @@ defineOptions({
   name: 'NewsletterSubscription'
 })
 
-// Use the global notification system
-const { addNotification } = useNotifications()
+// Use the newsletter composable
+const { state, subscribeToNewsletter } = useNewsletter()
 
 // Reactive variables
 const email = ref('')
-const isLoading = ref(false)
 const showPrivacyModal = ref(false)
-const emailError = ref(false)
-const emailSuccess = ref(false)
-
-// Get Supabase instance
-const { $supabase } = useNuxtApp()
-
-// Email validation function
-const isValidEmail = (email) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(email)
-}
-
-// Normalize email addresses (handle Gmail dot variations)
-const normalizeEmail = (email) => {
-  const trimmedEmail = email.toLowerCase().trim()
-  const [localPart, domain] = trimmedEmail.split('@')
-  
-  // Gmail domains that ignore dots in local part
-  const gmailDomains = [
-    'gmail.com',
-    'googlemail.com' // Alternative Gmail domain in some countries
-  ]
-  
-  // If it's a Gmail address, remove dots from local part
-  if (gmailDomains.includes(domain)) {
-    const normalizedLocalPart = localPart.replace(/\./g, '')
-    return `${normalizedLocalPart}@${domain}`
-  }
-  
-  // For other email providers, return as is
-  return trimmedEmail
-}
-
-// Check if email exists in database
-const checkEmailExists = async (email) => {
-  try {
-    // Additional safety check
-    if (!$supabase) {
-      throw new Error('Supabase client not available')
-    }
-    
-    const normalizedEmail = normalizeEmail(email)
-    
-    const { data, error } = await $supabase
-      .from('newsletter_subscribers')
-      .select('email, normalized_email')
-      .eq('normalized_email', normalizedEmail)
-      .single()
-
-    if (error && error.code !== 'PGRST116') {
-      // PGRST116 is "No rows found" which means email doesn't exist
-      throw error
-    }
-
-    return !!data // Return true if data exists, false otherwise
-  } catch (error) {
-    // Only log in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error checking email:', error)
-    }
-    throw error
-  }
-}
-
-// Subscribe email to newsletter
-const subscribeEmail = async (email) => {
-  try {
-    // Additional safety check
-    if (!$supabase) {
-      throw new Error('Supabase client not available')
-    }
-    
-    const originalEmail = email.toLowerCase().trim()
-    const normalizedEmail = normalizeEmail(email)
-    
-    const { data, error } = await $supabase
-      .from('newsletter_subscribers')
-      .insert([
-        {
-          email: originalEmail, // Store the original email as entered
-          normalized_email: normalizedEmail, // Store normalized version for duplicate checking
-          subscribed_at: new Date().toISOString(),
-          is_active: true
-        }
-      ])
-      .select()
-
-    if (error) throw error
-    return data
-  } catch (error) {
-    // Only log in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error subscribing email:', error)
-    }
-    throw error
-  }
-}
 
 // Handle form submission
 const handleSubmit = async () => {
-  if (!email.value || isLoading.value) return
+  if (!email.value || state.isLoading) return
 
-  // Reset states
-  emailError.value = false
-  emailSuccess.value = false
-
-  // Validate email format
-  if (!isValidEmail(email.value)) {
-    emailError.value = true
-    addNotification({
-      type: 'error',
-      title: 'Invalid Email',
-      message: 'Please enter a valid email address.',
-      duration: 4000
-    })
-    return
-  }
-
-  // Check if Supabase is available
-  if (!$supabase) {
-    addNotification({
-      type: 'error',
-      title: 'Service Unavailable',
-      message: 'Newsletter service is currently unavailable. Please try again later.',
-      duration: 5000
-    })
-    return
-  }
-
-  isLoading.value = true
-
-  try {
-    // Check if email already exists (using normalized comparison)
-    const emailExists = await checkEmailExists(email.value)
-
-    if (emailExists) {
-      // Email already subscribed
-      addNotification({
-        type: 'warning',
-        title: 'Already Subscribed',
-        message: 'Your email is already subscribed to our newsletter.',
-        duration: 5000
-      })
-    } else {
-      // Subscribe new email
-      await subscribeEmail(email.value)
-      
-      emailSuccess.value = true
-      addNotification({
-        type: 'success',
-        title: 'Successfully Subscribed! 🎉',
-        message: 'Thank you for subscribing to our newsletter.',
-        duration: 5000
-      })
-
-      // Clear the email input after a delay
-      setTimeout(() => {
-        email.value = ''
-        emailSuccess.value = false
-      }, 2000)
-    }
-  } catch (error) {
-    // Only log in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Subscription error:', error)
-    }
-    emailError.value = true
-    
-    // Provide more specific error messages
-    let errorMessage = 'Something went wrong. Please try again later.'
-    if (error.message?.includes('CORS') || error.message?.includes('network')) {
-      errorMessage = 'Network error. Please check your connection and try again.'
-    } else if (error.message?.includes('unauthorized') || error.message?.includes('401')) {
-      errorMessage = 'Service configuration error. Please contact support.'
-    }
-    
-    addNotification({
-      type: 'error',
-      title: 'Subscription Failed',
-      message: errorMessage,
-      duration: 5000
-    })
-  } finally {
-    isLoading.value = false
+  const success = await subscribeToNewsletter(email.value)
+  
+  if (success) {
+    // Clear the email input after successful subscription
+    setTimeout(() => {
+      email.value = ''
+    }, 2000)
   }
 }
 </script>

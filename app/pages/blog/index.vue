@@ -106,10 +106,10 @@ definePageMeta({
 
 // Set comprehensive SEO meta
 setPageMeta({
-  title: 'Blog - Abdulbarry Guenichi | Web Development Insights',
+  title: 'Abdulbarry - Blog',
   description: 'Discover valuable insights on Vue.js, Nuxt.js, TypeScript, web performance, and modern frontend development techniques. Learn from real-world experience.',
   keywords: 'Vue.js Blog, Nuxt.js Tutorials, TypeScript Guide, Frontend Development Blog, Web Performance Tips, JavaScript Best Practices',
-  ogTitle: 'Web Development Blog - Abdulbarry Guenichi',
+  ogTitle: 'Abdulbarry - Web Development Blog',
   ogDescription: 'In-depth articles about Vue.js, Nuxt.js, and modern web development practices.',
   ogImage: '/images/blog-og.jpg',
   ogType: 'website'
@@ -156,7 +156,7 @@ watch(validPosts, (posts) => {
     const blogData = {
       '@context': 'https://schema.org',
       '@type': 'Blog',
-      name: 'Abdulbarry Guenichi Blog',
+      name: 'Abdulbarry Blog',
       description: 'Web development insights and tutorials',
       url: 'https://abdulbarry.dev/blog',
       author: {

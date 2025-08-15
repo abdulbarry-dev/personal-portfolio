@@ -84,6 +84,12 @@ export default defineNuxtConfig({
         '~': '.',
         'assets': './app/assets'
       }
+    },
+    define: {
+      __VUE_PROD_DEVTOOLS__: false
+    },
+    build: {
+      sourcemap: process.env.NODE_ENV === 'development'
     }
   },
 
@@ -139,7 +145,7 @@ export default defineNuxtConfig({
             handler: 'NetworkFirst',
             options: {
               cacheName: 'github-api',
-              networkTimeoutSeconds: 3,
+              networkTimeoutSeconds: 8, // Match composable timeout
               cacheableResponse: { statuses: [0, 200] },
               expiration: { maxEntries: 100, maxAgeSeconds: 300 }
             }
@@ -206,8 +212,13 @@ export default defineNuxtConfig({
     '/contact': { prerender: true },
     '/projects': { prerender: true },
     '/blog': { prerender: true },
+    // Static assets
     '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     '/images/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
+    // Handle DevTools files
+    '/installHook.js.map': { redirect: { to: '/', statusCode: 302 } },
+    '/hook.js.map': { redirect: { to: '/', statusCode: 302 } },
+    // Default caching for all other routes
     '/**': { headers: { 'cache-control': 'public, max-age=600, s-maxage=86400, stale-while-revalidate=604800' } }
   },
 
@@ -294,7 +305,12 @@ export default defineNuxtConfig({
 
   // Compatibility settings
   compatibilityDate: '2024-04-03',
-  devtools: { enabled: false },
+  devtools: { 
+    enabled: process.env.NODE_ENV === 'development',
+    timeline: {
+      enabled: true
+    }
+  },
   
   // SSR Settings
   ssr: true

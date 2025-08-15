@@ -203,6 +203,25 @@ const post = computed(() => blogData.value?.currentPost)
 const previousPost = computed(() => blogData.value?.previousPost)
 const nextPost = computed(() => blogData.value?.nextPost)
 
+// Handle 404 errors by redirecting to home page with notification
+const { addNotification } = useNotifications()
+
+watch(error, (currentError) => {
+  if (currentError && currentError.statusCode === 404) {
+    addNotification({
+      type: 'warning',
+      title: 'Blog Post Not Found',
+      message: `The blog post "${slug}" does not exist or may have been removed. You've been redirected to the home page.`,
+      duration: 7000
+    })
+    
+    // Redirect to home page after a short delay
+    setTimeout(() => {
+      navigateTo('/home', { replace: true })
+    }, 2000)
+  }
+}, { immediate: true })
+
 // Computed values using utility functions
 const formattedDate = computed(() => formatDate(post.value?.date || ''))
 const readingTime = computed(() => calculateReadingTime(post.value?.body?.toString() || ''))
@@ -215,7 +234,7 @@ watch(post, (currentPost) => {
     
     // Set comprehensive SEO meta
     setPageMeta({
-      title: `${currentPost.title} - Abdulbarry Guenichi Blog`,
+      title: `Abdulbarry - ${currentPost.title}`,
       description: currentPost.description || `Read about ${currentPost.title} and learn from practical web development insights.`,
       keywords: `${currentPost.title}, Vue.js, Nuxt.js, Web Development, Frontend Development, ${currentPost.tags?.join(', ') || ''}`,
       author: 'Abdulbarry Guenichi',
@@ -224,18 +243,18 @@ watch(post, (currentPost) => {
     
     // Set Open Graph meta
     setOpenGraph({
-      title: currentPost.title,
+      title: `Abdulbarry - ${currentPost.title}`,
       description: currentPost.description || `Learn about ${currentPost.title}`,
       image: postImage,
       type: 'article',
       url: `https://abdulbarry.dev${postUrl}`,
-      siteName: 'Abdulbarry Guenichi Blog'
+      siteName: 'Abdulbarry Blog'
     })
     
     // Set Twitter Card meta
     setTwitterCard({
       card: 'summary_large_image',
-      title: currentPost.title,
+      title: `Abdulbarry - ${currentPost.title}`,
       description: currentPost.description || `Learn about ${currentPost.title}`,
       image: postImage
     })
