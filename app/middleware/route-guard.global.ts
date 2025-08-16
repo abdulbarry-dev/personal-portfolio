@@ -14,34 +14,49 @@ export default defineNuxtRouteMiddleware((to) => {
     /^\/blog\/[a-zA-Z0-9\-]+$/, // Blog posts: /blog/post-slug
   ]
 
+  // Helper function to normalize paths (remove trailing slashes)
+  const normalizePath = (path: string): string => {
+    if (path === '/') return path // Keep root as is
+    return path.replace(/\/$/, '') // Remove trailing slash for all other paths
+  }
+
   // Helper function to check if route is valid
   const isValidRoute = (path: string): boolean => {
+    const normalizedPath = normalizePath(path)
+    
     // Check exact matches
-    if (validRoutes.includes(path)) {
+    if (validRoutes.includes(normalizedPath)) {
       return true
     }
 
     // Check dynamic route patterns
-    if (validDynamicRoutes.some(pattern => pattern.test(path))) {
+    if (validDynamicRoutes.some(pattern => pattern.test(normalizedPath))) {
       return true
     }
 
     return false
   }
 
-  // Only run on client-side navigation
-  if (process.client) {
-    // Check if the route exists
-    if (!isValidRoute(to.path)) {
-      // Throw a 404 error which will be caught by error.vue
-      throw createError({
-        statusCode: 404,
-        statusMessage: `Page not found: ${to.path}`,
-        data: {
-          path: to.path,
-          timestamp: new Date().toISOString()
-        }
-      })
+  // Handle trailing slash redirects
+  if (to.path !== '/' && to.path.endsWith('/')) {
+    const cleanPath = normalizePath(to.path)
+    
+    // Only redirect if the clean path is a valid route
+    if (isValidRoute(cleanPath)) {
+      return navigateTo(cleanPath, { redirectCode: 301 })
     }
+  }
+
+  // Check if the route exists (after normalization)
+  if (!isValidRoute(to.path)) {
+    // Throw a 404 error which will be caught by error.vue
+    throw createError({
+      statusCode: 404,
+      statusMessage: `Page not found: ${to.path}`,
+      data: {
+        path: to.path,
+        timestamp: new Date().toISOString()
+      }
+    })
   }
 })
