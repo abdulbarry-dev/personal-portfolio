@@ -18,6 +18,7 @@
     "deploy": "gh-pages -d .output/public -b gh-pages",
     "deploy:clean": "gh-pages -d .output/public -b gh-pages --remove '**/*'",
     "deploy:github-actions": "npm run generate",
+    "validate-build": "./scripts/validate-build.sh",
     "vercel-build": "nuxt build",
     "clean": "rm -rf .nuxt .output node_modules package-lock.json",
     "fresh-install": "npm run clean && npm install",

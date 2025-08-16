@@ -1,4 +1,4 @@
-import { ContactSchema, type ContactForm } from '~/schemas/contact'
+import { ContactSchema, type ContactForm } from '../../../app/schemas/contact'
 import { getRequestIP, getHeader } from 'h3'
 
 // Simple in-memory rate limiting

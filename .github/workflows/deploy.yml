@@ -64,17 +64,46 @@ jobs:
           # Verify package-lock.json is in sync with package.json
           npm ls --depth=0
           echo "Package integrity validated"
+          
+          # Check for any missing peer dependencies
+          npm ls --depth=1 --dev
+          
+      - name: Debug build environment
+        run: |
+          echo "Current working directory: $(pwd)"
+          echo "Node modules location: $(find . -name 'node_modules' -type d | head -5)"
+          echo "App directory contents:"
+          ls -la app/ || echo "App directory not found"
+          echo "Schemas directory:"
+          ls -la app/schemas/ || echo "Schemas directory not found"
+
+      - name: Pre-build validation
+        run: |
+          chmod +x scripts/validate-build.sh
+          ./scripts/validate-build.sh
 
       - name: Build application
         run: |
           # Generate static site for GitHub Pages
-          npm run generate
+          echo "Starting build process..."
+          npm run generate 2>&1 | tee build.log
+          
+          # Check if build was successful
+          if [ ${PIPESTATUS[0]} -ne 0 ]; then
+            echo "❌ Build failed. Showing last 50 lines of build log:"
+            tail -50 build.log
+            exit 1
+          fi
+          
+          echo "✅ Build completed successfully"
         env:
           # Set environment variables for build
           NODE_ENV: production
           NITRO_PRESET: github-pages
           # Prevent memory issues during build
           NODE_OPTIONS: "--max_old_space_size=4096"
+          # Ensure proper path resolution
+          NODE_PATH: "./node_modules"
 
       - name: Verify build output
         run: |

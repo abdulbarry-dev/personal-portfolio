@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { EmailValidationSchema } from '~/schemas/newsletter'
-import { NewsletterService } from '~/services/newsletter'
+import { EmailValidationSchema } from '../../../app/schemas/newsletter'
+import { NewsletterService } from '../../../app/services/newsletter'
 import { createClient } from '@supabase/supabase-js'
 import { getRequestIP, getHeader } from 'h3'
 

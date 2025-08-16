@@ -198,8 +198,6 @@ export default defineNuxtConfig({
   nitro: {
     // Generate brotli/gzip versions of public assets (used when running a Nitro server)
     compressPublicAssets: true,
-    // Error handling configuration
-    errorHandler: '~/error',
     // GitHub Pages specific configuration
     output: {
       publicDir: 'dist'
