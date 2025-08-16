@@ -6,6 +6,7 @@ export default defineNuxtRouteMiddleware((to) => {
     '/projects',
     '/contact',
     '/blog',
+    '/error',
     '/privacy-policy'
   ]
 

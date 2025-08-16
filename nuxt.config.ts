@@ -215,8 +215,6 @@ export default defineNuxtConfig({
     '/contact': { prerender: true },
     '/projects': { prerender: true },
     '/blog': { prerender: true },
-    // Error pages
-    '/error': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
     // Static assets
     '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     '/images/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
