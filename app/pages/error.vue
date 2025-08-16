@@ -2,9 +2,12 @@
   <div class="error-container">
     <div class="error-content">
       <div class="error-section">
-        <h1 class="error-code error-code-500">500</h1>
-        <h2 class="error-title">Something went wrong</h2>
-        <p class="error-description">An unexpected error has occurred. Please try again later.</p>
+        <h1 class="error-code error-code-404">404</h1>
+        <h2 class="error-title">Page Not Found</h2>
+        <p class="error-description">
+          The page you are looking for might have been removed, had its name changed, 
+          or is temporarily unavailable.
+        </p>
       </div>
       
       <div class="error-actions">
@@ -21,13 +24,6 @@
         >
           Go Back
         </button>
-        
-        <button 
-          @click="handleReload"
-          class="error-tertiary-button"
-        >
-          Reload Page
-        </button>
       </div>
     </div>
   </div>
@@ -41,21 +37,17 @@ const { setPageMeta } = useSEO()
 
 // Enhanced navigation handlers
 const handleGoBack = () => {
-  if (window.history.length > 1) {
+  if (process.client && window.history.length > 1) {
     window.history.back()
   } else {
     navigateTo('/', { replace: true })
   }
 }
 
-const handleReload = () => {
-  window.location.reload()
-}
-
-// SEO
+// SEO for error page
 setPageMeta({
-  title: 'Abdulbarry - Server Error',
-  description: 'An unexpected error has occurred. Please try again later or contact support.',
+  title: 'Abdulbarry - Page Not Found',
+  description: 'The page you are looking for does not exist. Please check the URL or navigate back to the homepage.',
   robots: 'noindex, nofollow'
 })
 
@@ -64,7 +56,7 @@ defineOptions({
 })
 
 definePageMeta({
-  layout: false
+  layout: 'default'
 })
 </script>
 
