@@ -201,10 +201,6 @@ export default defineNuxtConfig({
   nitro: {
     // Generate brotli/gzip versions of public assets (used when running a Nitro server)
     compressPublicAssets: true,
-    // GitHub Pages specific configuration
-    output: {
-      publicDir: 'dist'
-    },
     prerender: {
       // Ensure key routes are statically generated and crawl linked pages
       routes: ['/', '/home', '/contact', '/projects', '/blog'],
