@@ -70,12 +70,13 @@
             @change="validateField('query')"
           >
             <option value="" disabled>Pick one</option>
-            <option value="general">General Inquiry</option>
-            <option value="project">Project Collaboration</option>
-            <option value="freelance">Freelance Work</option>
-            <option value="job">Job Opportunity</option>
-            <option value="consultation">Consultation</option>
-            <option value="other">Other</option>
+            <option 
+              v-for="option in ContactQueryOptions" 
+              :key="option.value" 
+              :value="option.value"
+            >
+              {{ option.label }}
+            </option>
           </select>
           <!-- Custom dropdown arrow -->
           <div class="select-arrow">
@@ -152,6 +153,9 @@ const {
   handleNameInput,
   submitForm
 } = useContactForm()
+
+// Import query options from schema
+const { ContactQueryOptions } = await import('../schemas/contact')
 
 // Add structured data for the contact form on mount
 onMounted(() => {

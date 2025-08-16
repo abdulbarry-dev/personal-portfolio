@@ -198,9 +198,15 @@ export default defineNuxtConfig({
   nitro: {
     // Generate brotli/gzip versions of public assets (used when running a Nitro server)
     compressPublicAssets: true,
+    // Error handling configuration
+    errorHandler: '~/error',
+    // GitHub Pages specific configuration
+    output: {
+      publicDir: 'dist'
+    },
     prerender: {
       // Ensure key routes are statically generated and crawl linked pages
-  routes: ['/', '/home', '/contact', '/projects', '/blog'],
+      routes: ['/', '/home', '/contact', '/projects', '/blog'],
       crawlLinks: true
     }
   },
@@ -212,6 +218,8 @@ export default defineNuxtConfig({
     '/contact': { prerender: true },
     '/projects': { prerender: true },
     '/blog': { prerender: true },
+    // Error pages
+    '/error': { headers: { 'X-Robots-Tag': 'noindex, nofollow' } },
     // Static assets
     '/_nuxt/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },
     '/images/**': { headers: { 'cache-control': 'public, max-age=31536000, immutable' } },

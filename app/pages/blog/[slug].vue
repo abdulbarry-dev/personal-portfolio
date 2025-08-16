@@ -203,25 +203,6 @@ const post = computed(() => blogData.value?.currentPost)
 const previousPost = computed(() => blogData.value?.previousPost)
 const nextPost = computed(() => blogData.value?.nextPost)
 
-// Handle 404 errors by redirecting to home page with notification
-const { addNotification } = useNotifications()
-
-watch(error, (currentError) => {
-  if (currentError && currentError.statusCode === 404) {
-    addNotification({
-      type: 'warning',
-      title: 'Blog Post Not Found',
-      message: `The blog post "${slug}" does not exist or may have been removed. You've been redirected to the home page.`,
-      duration: 7000
-    })
-    
-    // Redirect to home page after a short delay
-    setTimeout(() => {
-      navigateTo('/home', { replace: true })
-    }, 2000)
-  }
-}, { immediate: true })
-
 // Computed values using utility functions
 const formattedDate = computed(() => formatDate(post.value?.date || ''))
 const readingTime = computed(() => calculateReadingTime(post.value?.body?.toString() || ''))

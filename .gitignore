@@ -24,8 +24,13 @@ logs
 .vercel
 
 # Auto-generated documentation files (if you don't want them)
-DEPLOYMENT.md
 BLOG_ARCHITECTURE.md
+
+# GitHub Actions artifacts (local testing)
+.github-actions/
+
+# Lighthouse CI reports (generated locally)
+.lighthouseci/
 
 # Node version file (if you don't want version pinning)
 # .nvmrc

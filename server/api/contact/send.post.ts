@@ -1,13 +1,5 @@
-import { z } from 'zod'
+import { ContactSchema, type ContactForm } from '~/schemas/contact'
 import { getRequestIP, getHeader } from 'h3'
-
-// Contact form validation schema
-const ContactSchema = z.object({
-  name: z.string().min(2).max(50).regex(/^[a-zA-ZÀ-ÿ\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF\s\-'\.]+$/),
-  email: z.string().email().max(100),
-  query: z.enum(['general', 'project', 'freelance', 'job', 'consultation', 'other']),
-  message: z.string().min(10).max(500)
-})
 
 // Simple in-memory rate limiting
 const rateLimit = new Map<string, number[]>()
@@ -25,7 +17,7 @@ const isRateLimited = (ip: string): boolean => {
   return false
 }
 
-const sendEmail = async (data: z.infer<typeof ContactSchema>) => {
+const sendEmail = async (data: ContactForm) => {
   const { formspreeEndpoint } = useRuntimeConfig().public
   
   if (!formspreeEndpoint) {
@@ -33,7 +25,10 @@ const sendEmail = async (data: z.infer<typeof ContactSchema>) => {
   }
   
   const form = new FormData()
-  Object.entries(data).forEach(([key, value]) => form.append(key, value))
+  form.append('name', data.name)
+  form.append('email', data.email)
+  form.append('query', data.query)
+  form.append('message', data.message)
   form.append('_subject', `Contact: ${data.query}`)
   form.append('_replyto', data.email)
   

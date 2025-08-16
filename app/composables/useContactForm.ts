@@ -1,20 +1,10 @@
-import { z } from 'zod'
-
-// Shared validation schema
-const ContactSchema = z.object({
-  name: z.string().min(2).max(50).regex(/^[a-zA-ZÀ-ÿ\u0100-\u017F\u0180-\u024F\u1E00-\u1EFF\s\-'\.]+$/),
-  email: z.string().email().max(100),
-  query: z.enum(['general', 'project', 'freelance', 'job', 'consultation', 'other']),
-  message: z.string().min(10).max(500)
-})
-
-type ContactForm = z.infer<typeof ContactSchema>
-type ContactFormState = {
-  name: string
-  email: string
-  query: string
-  message: string
-}
+import { 
+  ContactSchema, 
+  ContactFieldSchema,
+  type ContactForm, 
+  type ContactFormState, 
+  type ContactFormField 
+} from '../schemas/contact'
 
 export const useContactForm = () => {
   const { addNotification } = useNotifications()
@@ -30,12 +20,12 @@ export const useContactForm = () => {
   const state = reactive({
     isLoading: false,
     hasSubmitted: false,
-    errors: {} as Record<keyof ContactFormState, string>,
-    successMessages: {} as Record<keyof ContactFormState, string>
+    errors: {} as Record<ContactFormField, string>,
+    successMessages: {} as Record<ContactFormField, string>
   })
   
   // Validation helpers
-  const validateField = (field: keyof ContactFormState) => {
+  const validateField = (field: ContactFormField) => {
     try {
       // Skip validation for empty query field if not submitted yet
       if (field === 'query' && !state.hasSubmitted && !form.query) {
@@ -44,7 +34,7 @@ export const useContactForm = () => {
         return true
       }
       
-      const result = ContactSchema.shape[field].safeParse(form[field])
+      const result = ContactFieldSchema[field].safeParse(form[field])
       
       if (result.success) {
         state.errors[field] = ''
@@ -62,7 +52,7 @@ export const useContactForm = () => {
     }
   }
   
-  const getFieldClass = (field: keyof ContactFormState) => {
+  const getFieldClass = (field: ContactFormField) => {
     if (state.errors[field]) return 'error'
     if (state.successMessages[field]) return 'success'
     return ''
@@ -81,7 +71,7 @@ export const useContactForm = () => {
     state.hasSubmitted = true
     
     // Validate all fields
-    const isValid = Object.keys(form).every(field => validateField(field as keyof ContactFormState))
+    const isValid = Object.keys(form).every(field => validateField(field as ContactFormField))
     
     if (!isValid) {
       addNotification({

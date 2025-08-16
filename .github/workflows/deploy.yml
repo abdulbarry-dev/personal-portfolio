@@ -1,0 +1,153 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Trigger deployment on push to main branch
+  push:
+    branches: [ main ]
+  
+  # Allow manual triggering from Actions tab
+  workflow_dispatch:
+
+# Set permissions for GitHub token
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [20.x]
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history for better Git operations
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          # Use npm cache for faster builds
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+
+      - name: Verify Node.js and npm versions
+        run: |
+          node --version
+          npm --version
+          echo "Node.js and npm versions verified"
+
+      - name: Install dependencies
+        run: |
+          # Clean install for consistent builds
+          npm ci --prefer-offline --no-audit
+        env:
+          # Prevent npm from sending analytics
+          NPM_CONFIG_ANALYTICS: false
+          # Reduce npm log level for cleaner output
+          NPM_CONFIG_LOGLEVEL: error
+
+      - name: Validate package integrity
+        run: |
+          # Verify package-lock.json is in sync with package.json
+          npm ls --depth=0
+          echo "Package integrity validated"
+
+      - name: Build application
+        run: |
+          # Generate static site for GitHub Pages
+          npm run generate
+        env:
+          # Set environment variables for build
+          NODE_ENV: production
+          NITRO_PRESET: github-pages
+          # Prevent memory issues during build
+          NODE_OPTIONS: "--max_old_space_size=4096"
+
+      - name: Verify build output
+        run: |
+          # Check if build output exists
+          if [ ! -d ".output/public" ]; then
+            echo "❌ Build output directory not found"
+            exit 1
+          fi
+          
+          # Check for critical files
+          if [ ! -f ".output/public/index.html" ]; then
+            echo "❌ index.html not found in build output"
+            exit 1
+          fi
+          
+          echo "✅ Build verification completed"
+          echo "Build output size:"
+          du -sh .output/public
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.output/public'
+
+  # Deploy job
+  deploy:
+    # Add a dependency to the build job
+    needs: build
+    
+    # Deploy to the github-pages environment
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Optional: Lighthouse CI job for performance monitoring
+  lighthouse:
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' # Only run on push events
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Wait for deployment
+        run: |
+          echo "Waiting 30 seconds for deployment to be ready..."
+          sleep 30
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: |
+            https://abdulbarry-dev.github.io/personal-portfolio/
+            https://abdulbarry-dev.github.io/personal-portfolio/projects
+            https://abdulbarry-dev.github.io/personal-portfolio/blog
+            https://abdulbarry-dev.github.io/personal-portfolio/contact
+          configPath: './.lighthouserc.js'
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+        continue-on-error: true # Don't fail the workflow if Lighthouse fails

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redirecting...</title>
+  <meta name="robots" content="noindex">
+  <script>
+    // GitHub Pages SPA redirect handling
+    // Store the current path and redirect to index.html
+    (function() {
+      var path = location.pathname.slice(0, -1);
+      var query = location.search;
+      var hash = location.hash;
+      
+      if (path) {
+        sessionStorage.redirect = location.pathname + query + hash;
+        location.replace(location.origin + '/personal-portfolio/');
+      }
+    })();
+  </script>
+</head>
+<body>
+  <noscript>
+    <p>This site requires JavaScript to run. Please enable JavaScript and refresh the page.</p>
+  </noscript>
+</body>
+</html>

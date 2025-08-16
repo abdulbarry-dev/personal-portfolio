@@ -5,25 +5,6 @@
 <script setup>
 // Enhanced SEO implementation
 const { setPageMeta, setPersonStructuredData, setWebsiteStructuredData } = useSEO()
-const { addNotification } = useNotifications()
-const route = useRoute()
-
-// Check if user was redirected from a 404 page
-onMounted(() => {
-  const fromPath = route.query.from
-  if (fromPath && typeof fromPath === 'string') {
-    addNotification({
-      type: 'warning',
-      title: 'Page Not Found',
-      message: `The path "${fromPath}" does not exist. You've been redirected to the home page.`,
-      duration: 6000
-    })
-    
-    // Clean up the URL by removing the query parameter
-    const router = useRouter()
-    router.replace({ query: {} })
-  }
-})
 
 // Set comprehensive SEO meta
 setPageMeta({
