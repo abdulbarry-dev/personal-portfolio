@@ -5,7 +5,7 @@
   <title>Redirecting...</title>
   <meta name="robots" content="noindex">
   <script>
-    // GitHub Pages SPA redirect handling
+    // GitHub Pages SPA redirect handling for custom domain
     // Store the current path and redirect to index.html
     (function() {
       var path = location.pathname.slice(0, -1);
@@ -14,7 +14,8 @@
       
       if (path) {
         sessionStorage.redirect = location.pathname + query + hash;
-        location.replace(location.origin + '/personal-portfolio/');
+        // Redirect to root of custom domain, not /personal-portfolio/
+        location.replace(location.origin + '/');
       }
     })();
   </script>

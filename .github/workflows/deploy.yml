@@ -71,6 +71,9 @@ jobs:
           NUXT_TELEMETRY_DISABLED: 1
           # Prevent memory issues during build
           NODE_OPTIONS: "--max_old_space_size=4096"
+          # Force correct site URL for custom domain
+          NUXT_SITE_URL: 'https://abdulbarry.me'
+          NUXT_PUBLIC_SITE_URL: 'https://abdulbarry.me'
 
       - name: Verify build output
         run: |
