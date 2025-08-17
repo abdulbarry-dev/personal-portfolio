@@ -6,15 +6,16 @@
   <meta name="robots" content="noindex">
   <script>
     // GitHub Pages SPA redirect handling for custom domain
-    // Store the current path and redirect to index.html
+    // Store the current path and redirect to index.html to let Nuxt handle routing
     (function() {
-      var path = location.pathname.slice(0, -1);
+      var path = location.pathname;
       var query = location.search;
       var hash = location.hash;
       
-      if (path) {
-        sessionStorage.redirect = location.pathname + query + hash;
-        // Redirect to root of custom domain, not /personal-portfolio/
+      // Only redirect if it's not the root path and not already an error path
+      if (path && path !== '/' && path !== '/error') {
+        sessionStorage.redirect = path + query + hash;
+        // Redirect to root to load the Nuxt app, which will then handle the stored route
         location.replace(location.origin + '/');
       }
     })();

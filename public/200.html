@@ -10,7 +10,9 @@
     (function() {
       var redirect = sessionStorage.redirect;
       delete sessionStorage.redirect;
-      if (redirect && redirect != location.href) {
+      
+      if (redirect && redirect !== location.href) {
+        // Restore the URL and let Nuxt handle it
         history.replaceState(null, null, redirect);
       }
     })();

@@ -49,6 +49,14 @@ export default defineNuxtRouteMiddleware((to) => {
 
   // Check if the route exists (after normalization)
   if (!isValidRoute(to.path)) {
+    // On client side, check if we came from GitHub Pages redirect
+    if (process.client) {
+      // Clear any stored redirect to prevent loops
+      if (typeof sessionStorage !== 'undefined') {
+        sessionStorage.removeItem('redirect')
+      }
+    }
+    
     // Throw a 404 error which will be caught by error.vue
     throw createError({
       statusCode: 404,
