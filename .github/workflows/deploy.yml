@@ -143,7 +143,6 @@ jobs:
             https://abdulbarry.me/projects
             https://abdulbarry.me/blog
             https://abdulbarry.me/contact
-          configPath: './.lighthouserc.js'
           uploadArtifacts: true
           temporaryPublicStorage: true
         continue-on-error: true # Don't fail the workflow if Lighthouse fails
