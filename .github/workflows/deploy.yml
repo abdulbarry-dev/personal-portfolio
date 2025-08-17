@@ -79,7 +79,6 @@ jobs:
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           # Formspree configuration (for contact form)
           NUXT_FORMSPREE_ENDPOINT: ${{ secrets.FORMSPREE_ENDPOINT }}
-          NUXT_PUBLIC_SITE_URL: 'https://abdulbarry.me'
 
       - name: Verify build output
         run: |
