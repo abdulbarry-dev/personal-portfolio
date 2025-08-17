@@ -129,7 +129,7 @@ export const useContactForm = () => {
       
       addNotification({
         type: 'success',
-        title: 'Message Sent! 🎉',
+        title: 'Message Sent!',
         message: "Thank you! I'll get back to you soon.",
         duration: 6000
       })
