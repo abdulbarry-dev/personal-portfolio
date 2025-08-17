@@ -23,6 +23,23 @@ export const useNewsletter = () => {
   })
 
   /**
+   * Check if newsletter service is properly configured and available
+   */
+  const isServiceAvailable = (): boolean => {
+    if (!$supabase) {
+      console.warn('Newsletter: Supabase client not available')
+      return false
+    }
+    
+    if (!newsletterService) {
+      console.warn('Newsletter: Service not initialized')
+      return false
+    }
+    
+    return true
+  }
+
+  /**
    * Validate email with enhanced checks
    */
   const validateEmail = (email: string): { isValid: boolean; error?: string } => {
@@ -73,12 +90,19 @@ export const useNewsletter = () => {
 
     try {
       // Check if newsletter service is available
-      if (!newsletterService) {
-        throw new Error('Newsletter service is not available. Please check your configuration.')
+      if (!isServiceAvailable()) {
+        // Instead of throwing an error, provide a graceful fallback message
+        addNotification({
+          type: 'info',
+          title: 'Newsletter Currently Unavailable',
+          message: 'Newsletter subscription is temporarily disabled. Please try again later or contact us directly.',
+          duration: 6000
+        })
+        return false
       }
 
       // Check if email already exists
-      const emailExists = await newsletterService.checkEmailExists(email)
+      const emailExists = await newsletterService!.checkEmailExists(email)
 
       if (emailExists) {
         addNotification({
@@ -91,7 +115,7 @@ export const useNewsletter = () => {
       }
 
       // Subscribe new email
-      await newsletterService.subscribeEmail(email)
+      await newsletterService!.subscribeEmail(email)
       
       state.emailSuccess = true
       addNotification({
@@ -151,11 +175,17 @@ export const useNewsletter = () => {
     }
 
     try {
-      if (!newsletterService) {
-        throw new Error('Newsletter service is not available. Please check your configuration.')
+      if (!isServiceAvailable()) {
+        addNotification({
+          type: 'info',
+          title: 'Service Unavailable',
+          message: 'Newsletter service is temporarily unavailable. Please contact us directly to unsubscribe.',
+          duration: 6000
+        })
+        return false
       }
 
-      await newsletterService.unsubscribeEmail(email)
+      await newsletterService!.unsubscribeEmail(email)
       
       addNotification({
         type: 'success',
@@ -199,6 +229,7 @@ export const useNewsletter = () => {
 
   return {
     state: readonly(state),
+    isServiceAvailable,
     validateEmail,
     subscribeToNewsletter,
     unsubscribeFromNewsletter,
