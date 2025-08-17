@@ -139,10 +139,10 @@ jobs:
         uses: treosh/lighthouse-ci-action@v11
         with:
           urls: |
-            https://abdulbarry-dev.github.io/personal-portfolio/
-            https://abdulbarry-dev.github.io/personal-portfolio/projects
-            https://abdulbarry-dev.github.io/personal-portfolio/blog
-            https://abdulbarry-dev.github.io/personal-portfolio/contact
+            https://abdulbarry.me/
+            https://abdulbarry.me/projects
+            https://abdulbarry.me/blog
+            https://abdulbarry.me/contact
           configPath: './.lighthouserc.js'
           uploadArtifacts: true
           temporaryPublicStorage: true

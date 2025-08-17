@@ -6,8 +6,7 @@ export default defineNuxtRouteMiddleware((to) => {
     '/projects',
     '/contact',
     '/blog',
-    '/error',
-    '/privacy-policy'
+    '/error'
   ]
 
   // Check for valid dynamic routes
