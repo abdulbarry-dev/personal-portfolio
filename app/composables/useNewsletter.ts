@@ -72,56 +72,15 @@ export const useNewsletter = () => {
     state.isLoading = true
 
     try {
-      // Try client-side service if available, otherwise use server-side API
-      if (newsletterService) {
-        try {
-          // Check if email already exists
-          const emailExists = await newsletterService.checkEmailExists(email)
-
-          if (emailExists) {
-            addNotification({
-              type: 'warning',
-              title: 'Already Subscribed',
-              message: 'Your email is already subscribed to our newsletter.',
-              duration: 5000
-            })
-            return false
-          }
-
-          // Subscribe new email
-          await newsletterService.subscribeEmail(email)
-          
-          state.emailSuccess = true
-          addNotification({
-            type: 'success',
-            title: 'Successfully Subscribed!',
-            message: 'Thank you for subscribing to our newsletter.',
-            duration: 5000
-          })
-
-          return true
-        } catch (clientError) {
-          console.info('Client-side subscription failed, trying server-side API...', clientError)
-          // Fall through to server-side API
-        }
+      // Check if newsletter service is available
+      if (!newsletterService) {
+        throw new Error('Newsletter service is not available. Please check your configuration.')
       }
 
-      // Use server-side API (fallback or primary method)
-      const response = await $fetch('/api/newsletter/subscribe', {
-        method: 'POST',
-        body: { email }
-      }) as { success: boolean; message: string; code?: string }
+      // Check if email already exists
+      const emailExists = await newsletterService.checkEmailExists(email)
 
-      if (response.success) {
-        state.emailSuccess = true
-        addNotification({
-          type: 'success',
-          title: 'Successfully Subscribed!',
-          message: 'Thank you for subscribing to our newsletter.',
-          duration: 5000
-        })
-        return true
-      } else if (response.code === 'ALREADY_SUBSCRIBED') {
+      if (emailExists) {
         addNotification({
           type: 'warning',
           title: 'Already Subscribed',
@@ -129,9 +88,20 @@ export const useNewsletter = () => {
           duration: 5000
         })
         return false
-      } else {
-        throw new Error(response.message || 'Server-side subscription failed')
       }
+
+      // Subscribe new email
+      await newsletterService.subscribeEmail(email)
+      
+      state.emailSuccess = true
+      addNotification({
+        type: 'success',
+        title: 'Successfully Subscribed!',
+        message: 'Thank you for subscribing to our newsletter.',
+        duration: 5000
+      })
+
+      return true
     } catch (error: any) {
       console.error('Newsletter subscription error:', error)
       state.emailError = true
@@ -141,12 +111,15 @@ export const useNewsletter = () => {
       
       if (error.message?.includes('already subscribed')) {
         errorMessage = 'This email is already subscribed to our newsletter.'
+      } else if (error.message?.includes('not available') || error.message?.includes('not configured')) {
+        errorMessage = 'Newsletter service is temporarily unavailable. Please try again later.'
       } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
         errorMessage = 'Network error. Please check your connection and try again.'
-      } else if (error.statusCode === 429) {
-        errorMessage = 'Too many requests. Please try again in a few minutes.'
-      } else if (error.statusCode === 503) {
-        errorMessage = 'Newsletter service is temporarily unavailable. Please try again later.'
+      } else if (error.code === '23505') {
+        // PostgreSQL unique constraint violation
+        errorMessage = 'This email is already subscribed to our newsletter.'
+      } else if (error.message?.includes('Failed to subscribe')) {
+        errorMessage = error.message
       }
       
       addNotification({
@@ -178,12 +151,11 @@ export const useNewsletter = () => {
     }
 
     try {
-      if (newsletterService) {
-        await newsletterService.unsubscribeEmail(email)
-      } else {
-        // Use server-side API for unsubscribe (would need to be implemented)
-        throw new Error('Unsubscribe functionality not available')
+      if (!newsletterService) {
+        throw new Error('Newsletter service is not available. Please check your configuration.')
       }
+
+      await newsletterService.unsubscribeEmail(email)
       
       addNotification({
         type: 'success',
@@ -194,10 +166,17 @@ export const useNewsletter = () => {
 
       return true
     } catch (error: any) {
+      console.error('Newsletter unsubscribe error:', error)
+      
+      let errorMessage = 'Failed to unsubscribe. Please try again later.'
+      if (error.message?.includes('not available') || error.message?.includes('not configured')) {
+        errorMessage = 'Newsletter service is temporarily unavailable. Please try again later.'
+      }
+      
       addNotification({
         type: 'error',
         title: 'Unsubscribe Failed',
-        message: 'Failed to unsubscribe. Please try again later.',
+        message: errorMessage,
         duration: 5000
       })
       return false
