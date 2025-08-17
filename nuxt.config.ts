@@ -301,8 +301,8 @@ export default defineNuxtConfig({
       siteUrl: process.env.NUXT_SITE_URL || 'https://abdulbarry.me',
       siteName: process.env.NUXT_SITE_NAME || 'My Awesome Portfolio Website',
       formspreeEndpoint: process.env.NUXT_FORMSPREE_ENDPOINT || 'https://formspree.io/f/manbjooj',
-      supabaseUrl: process.env.SUPABASE_URL,
-      supabaseAnonKey: process.env.SUPABASE_ANON_KEY
+      supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL,
+      supabaseAnonKey: process.env.NUXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY
     }
   },
 
