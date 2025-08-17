@@ -86,15 +86,46 @@ export const useContactForm = () => {
     state.isLoading = true
     
     try {
-      // Convert form state to validated ContactForm type
-      const formData: ContactForm = {
-        name: form.name,
-        email: form.email,
-        query: form.query as ContactForm['query'],
-        message: form.message
+      // Get runtime config for Formspree endpoint
+      const { formspreeEndpoint } = useRuntimeConfig().public
+      
+      if (!formspreeEndpoint) {
+        throw new Error('Email service not configured')
       }
       
-      await $fetch('/api/contact/send', { method: 'POST', body: formData })
+      // Convert form state to validated ContactForm type
+      const formData: ContactForm = {
+        name: form.name.trim(),
+        email: form.email.trim().toLowerCase(),
+        query: form.query as ContactForm['query'],
+        message: form.message.trim()
+      }
+      
+      // Validate the form data with Zod
+      const validatedData = ContactSchema.parse(formData)
+      
+      // Create FormData for Formspree submission
+      const submitData = new FormData()
+      submitData.append('name', validatedData.name)
+      submitData.append('email', validatedData.email)
+      submitData.append('query', validatedData.query)
+      submitData.append('message', validatedData.message)
+      submitData.append('_subject', `Contact: ${validatedData.query}`)
+      submitData.append('_replyto', validatedData.email)
+      
+      // Submit directly to Formspree
+      const response = await fetch(formspreeEndpoint, {
+        method: 'POST',
+        body: submitData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      })
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new Error(errorData.error || 'Failed to send message')
+      }
       
       addNotification({
         type: 'success',
@@ -109,9 +140,18 @@ export const useContactForm = () => {
       
       return true
     } catch (error: any) {
-      const message = error.statusCode === 429 
-        ? 'Too many requests. Please try again in 15 minutes.'
-        : error.statusMessage || 'An error occurred. Please try again.'
+      console.error('Contact form submission error:', error)
+      
+      let message = 'An error occurred. Please try again.'
+      
+      // Handle different error types
+      if (error.message?.includes('not configured')) {
+        message = 'Email service is not configured. Please try again later.'
+      } else if (error.message?.includes('Failed to send')) {
+        message = error.message
+      } else if (error.name === 'ZodError') {
+        message = 'Please check your input and try again.'
+      }
       
       addNotification({
         type: 'error',
