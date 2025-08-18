@@ -12,13 +12,23 @@ export default defineNuxtPlugin<{
   // Validate environment variables
   let supabase: SupabaseClient<any, 'public', any> | null = null
   
+  // Debug environment variables during build
+  if (process.env.NODE_ENV !== 'development') {
+    console.log('Supabase config check:', {
+      hasUrl: !!supabaseUrl,
+      hasKey: !!supabaseAnonKey,
+      urlLength: supabaseUrl?.length || 0,
+      keyLength: supabaseAnonKey?.length || 0
+    })
+  }
+  
   if (!supabaseUrl || !supabaseAnonKey) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('Supabase configuration missing. Newsletter functionality will be disabled.', {
-        url: supabaseUrl ? '✓ configured' : '✗ missing',
-        key: supabaseAnonKey ? '✓ configured' : '✗ missing'
-      })
-    }
+    const logLevel = process.env.NODE_ENV === 'development' ? 'warn' : 'log'
+    console[logLevel]('Supabase configuration missing. Newsletter functionality will be disabled.', {
+      url: supabaseUrl ? '✓ configured' : '✗ missing',
+      key: supabaseAnonKey ? '✓ configured' : '✗ missing',
+      environment: process.env.NODE_ENV
+    })
     // supabase remains null - graceful degradation
   } else {
     try {

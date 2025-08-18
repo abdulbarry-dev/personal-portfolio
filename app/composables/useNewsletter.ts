@@ -28,6 +28,19 @@ export const useNewsletter = () => {
   const isServiceAvailable = (): boolean => {
     if (!$supabase) {
       console.warn('Newsletter: Supabase client not available')
+      
+      // Add more detailed debugging in non-development environments
+      if (process.env.NODE_ENV !== 'development') {
+        const config = useRuntimeConfig()
+        console.log('Newsletter debug:', {
+          hasSupabaseUrl: !!config.public.supabaseUrl,
+          hasSupabaseKey: !!config.public.supabaseAnonKey,
+          urlLength: config.public.supabaseUrl?.length || 0,
+          keyLength: config.public.supabaseAnonKey?.length || 0,
+          environment: process.env.NODE_ENV
+        })
+      }
+      
       return false
     }
     
@@ -35,15 +48,6 @@ export const useNewsletter = () => {
       console.warn('Newsletter: Service not initialized')
       return false
     }
-    
-    // Debug: Log Supabase configuration
-    const runtimeConfig = useRuntimeConfig()
-    console.log('Newsletter Debug:', {
-      hasSupabase: !!$supabase,
-      hasService: !!newsletterService,
-      supabaseUrl: runtimeConfig.public.supabaseUrl,
-      supabaseKey: runtimeConfig.public.supabaseAnonKey ? '[CONFIGURED]' : '[MISSING]'
-    })
     
     return true
   }
