@@ -83,7 +83,9 @@ A modern, high-performance personal portfolio built with **Nuxt 4** and **Vue 3*
 
 ---
 
-## Key Features
+## Features
+
+- ✅ **Static Site Generation**: Optimized for GitHub Pages deployment
 
 | Feature | Description | Status |
 |---------|-------------|--------|
