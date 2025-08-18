@@ -36,6 +36,15 @@ export const useNewsletter = () => {
       return false
     }
     
+    // Debug: Log Supabase configuration
+    const runtimeConfig = useRuntimeConfig()
+    console.log('Newsletter Debug:', {
+      hasSupabase: !!$supabase,
+      hasService: !!newsletterService,
+      supabaseUrl: runtimeConfig.public.supabaseUrl,
+      supabaseKey: runtimeConfig.public.supabaseAnonKey ? '[CONFIGURED]' : '[MISSING]'
+    })
+    
     return true
   }
 

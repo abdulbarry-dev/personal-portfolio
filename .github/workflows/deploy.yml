@@ -75,10 +75,10 @@ jobs:
           NUXT_SITE_URL: 'https://abdulbarry.me'
           NUXT_PUBLIC_SITE_URL: 'https://abdulbarry.me'
           # Formspree configuration (for contact form)
-          NUXT_FORMSPREE_ENDPOINT: ${{ secrets.FORMSPREE_ENDPOINT }}
+          NUXT_FORMSPREE_ENDPOINT: ${{ secrets.FORMSPREE_ENDPOINT || '' }}
           # Supabase configuration (for newsletter functionality)
-          NUXT_PUBLIC_SUPABASE_URL: ${{ secrets.NUXT_PUBLIC_SUPABASE_URL }}
-          NUXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NUXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NUXT_PUBLIC_SUPABASE_URL: ${{ secrets.NUXT_PUBLIC_SUPABASE_URL || '' }}
+          NUXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NUXT_PUBLIC_SUPABASE_ANON_KEY || '' }}
 
       - name: Verify build output
         run: |
