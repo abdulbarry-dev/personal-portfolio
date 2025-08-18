@@ -1,21 +1,23 @@
 #!/bin/bash
 
-# Build validation script for GitHub Actions
-echo "🔍 Validating build environment..."
+# Build validation script for static site deployment
+echo "🔍 Validating static site build environment..."
 
 # Check Node.js and npm versions
 echo "Node.js version: $(node --version)"
 echo "npm version: $(npm --version)"
 
-# Check if critical files exist
+# Check if critical files exist for static site
 CRITICAL_FILES=(
   "nuxt.config.ts"
   "package.json"
+  "app/app.vue"
   "app/schemas/contact.ts"
   "app/schemas/newsletter.ts"
   "app/composables/useContactForm.ts"
-  "server/api/contact/send.post.ts"
-  "server/api/newsletter/subscribe.post.ts"
+  "app/composables/useNewsletter.ts"
+  "app/composables/useGithubRepos.ts"
+  "app/plugins/supabase.client.ts"
 )
 
 echo "📁 Checking critical files..."
@@ -28,22 +30,20 @@ for file in "${CRITICAL_FILES[@]}"; do
   fi
 done
 
-# Validate import paths in server files
-echo "🔗 Validating import paths..."
-if grep -r "~/schemas" server/ 2>/dev/null; then
-  echo "❌ Found problematic ~ imports in server files"
-  grep -rn "~/schemas" server/
-  exit 1
+# Validate environment variable configuration
+echo "� Checking environment variable configuration..."
+if grep -q "NUXT_PUBLIC_SUPABASE_URL" nuxt.config.ts; then
+  echo "✅ Supabase URL configuration found"
 else
-  echo "✅ No problematic ~ imports found in server files"
+  echo "❌ Missing Supabase URL configuration"
+  exit 1
 fi
 
-if grep -r "~/services" server/ 2>/dev/null; then
-  echo "❌ Found problematic ~ imports in server files"
-  grep -rn "~/services" server/
-  exit 1
+if grep -q "NUXT_PUBLIC_SUPABASE_ANON_KEY" nuxt.config.ts; then
+  echo "✅ Supabase key configuration found" 
 else
-  echo "✅ No problematic ~ imports found in server files"
+  echo "❌ Missing Supabase key configuration"
+  exit 1
 fi
 
 # Check TypeScript compilation
@@ -53,4 +53,11 @@ npx tsc --noEmit --skipLibCheck || {
   exit 1
 }
 
-echo "✅ All validations passed! Build should succeed."
+# Validate static site build
+echo "🏗️ Testing static site generation..."
+npm run generate || {
+  echo "❌ Static site generation failed"
+  exit 1
+}
+
+echo "✅ All validations passed! Static site build should succeed on GitHub Pages."
